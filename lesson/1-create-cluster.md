@@ -1,5 +1,5 @@
 
-1. cluster.yaml 설정 파일 (자동 프로비저닝용)
+### 1. cluster.yaml 설정 파일 (자동 프로비저닝용) ###
 이 파일은 Ray Cluster Launcher가 어떤 사양의 EC2를 몇 대 띄울지 정의하는 설계도입니다
 ```
 # 클러스터 식별 이름
@@ -33,5 +33,26 @@ available_node_types:
 
 # 헤드 노드를 우선 시작하도록 설정
 head_node_type: head_node
-
 ```
+
+### 2. 프로비저닝 실행 명령어 ###
+로컬 환경에 AWS 자격 증명(aws configure)이 설정되어 있어야 합니다.
+```
+# YAML 설정을 바탕으로 EC2 생성 및 Ray 설치 진행
+ray up cluster.yaml -y
+```
+
+### 3. 클러스터 대시보드 연결 (로컬에서 확인): ###
+```
+# 로컬의 8265 포트를 클러스터 헤드 노드로 터널링
+ray dashboard cluster.yaml
+```
+
+### 4.작업 제출 (Python 스크립트 실행): ###
+```
+ray job submit --address http://localhost:8265 -- python data_job.py
+```
+
+
+
+
