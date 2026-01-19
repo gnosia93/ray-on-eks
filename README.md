@@ -68,6 +68,8 @@ Session 7	대규모 전처리 벤치마크	100GB급 텍스트 데이터를 30대
 Wrap-up	인프라 Clean-up	ray down 및 Terraform/CfN 리소스 일괄 삭제로 클라우드 자원 관리 마무리	30분
 ```
 
+* 오토스케일링 로그: /tmp/ray/session_latest/logs/monitor.out
+* 노드 초기화 로그: /tmp/ray/session_latest/logs/raylet.out
 
 
 
