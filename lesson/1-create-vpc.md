@@ -11,9 +11,9 @@ AMI=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023
 MY_IP="$(curl -s https://checkip.amazonaws.com)"
 echo ${AMI} ${MY_IP}
 
-# sed -i "s/\${AMI}/$AMI/g" $(pwd)/lesson/template/ray-vpc.yaml
-sed -i "" "s|\${AMI}|$AMI|g" $(pwd)/lesson/template/ray-vpc.yaml
-sed -i "" "s|\${MY_IP}|$MY_IP|g" $(pwd)/lesson/template/ray-vpc.yaml
+# sed -i "s/\${AMI}/$AMI/g" $(pwd)/cf/ray-vpc.yaml
+sed -i "" "s|\${AMI}|$AMI|g" $(pwd)/cf/ray-vpc.yaml
+sed -i "" "s|\${MY_IP}|$MY_IP|g" $(pwd)/cf/ray-vpc.yaml
 
 aws cloudformation create-stack \
   --region ${AWS_REGION} \
