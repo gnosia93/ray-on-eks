@@ -13,6 +13,49 @@
 ray up ray-cluster.yaml -y
 ```
 
+```
+cluster_name: multi-arch-heavy-cluster
+max_workers: 30
+
+available_node_types:
+    # 1. Head Node: 관리 안정성을 위해 Intel 온디맨드 사용
+    ray.head.default:
+        resources: {"CPU": 16, "intel": 1}
+        node_config:
+          InstanceType: c7i.4xlarge
+          ImageId: ami-intel-xxxxxx # x86_64 전용 Ubuntu AMI
+          IamInstanceProfile: {Name: ray-instance-profile}
+
+    # 2. Worker Node (Intel): 고성능 연산용
+    intel_workers:
+        min_workers: 5
+        max_workers: 15
+        resources: {"CPU": 16, "intel": 1} # 'intel' 커스텀 자원 부여
+        node_config:
+          InstanceType: c7i.4xlarge
+          ImageId: ami-intel-xxxxxx
+          IamInstanceProfile: {Name: ray-instance-profile}
+          # 스팟 인스턴스로 비용 절감
+          UseSpotInstances: True
+
+    # 3. Worker Node (Graviton): 가성비 전처리용
+    graviton_workers:
+        min_workers: 5
+        max_workers: 15
+        resources: {"CPU": 16, "arm": 1} # 'arm' 커스텀 자원 부여
+        node_config:
+          InstanceType: c7g.4xlarge
+          ImageId: ami-arm-xxxxxx # arm64 전용 Ubuntu AMI
+          IamInstanceProfile: {Name: ray-instance-profile}
+          UseSpotInstances: True
+
+# 아키텍처별로 필요한 라이브러리가 다를 수 있으므로 setup_commands에서 분기 처리 가능
+setup_commands:
+    - pip install -U "ray[default]" pandas s3fs
+```
+
+
+
 ### 3단계: Upscaling 폭격 (EC2 30대 소환)
 이제 160코어의 한계를 시험하며 EC2 자원을 최대치로 땡기는 핵심 실습입니다.
 * 스트레스 테스트 스크립트 실행
