@@ -4,11 +4,18 @@ export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZon
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 export CLUSTER_NAME="ray-on-aws"
 export VPC_ID=$(aws ec2 describe-vpcs --filters Name=tag:Name,Values="${CLUSTER_NAME}" --query "Vpcs[].VpcId" --output text)
+
+pip install -U "ray[default]"
 ```
-```
-pip 사용 시: pip install -U "ray[default]"
-Conda 사용 시: conda install -c conda-forge "ray-default" 
-```
+pip 로 ray default 패키지를 설치한다. 
+
+* Ray Dashboard: 클러스터의 상태, 리소스 사용량(CPU, GPU, 메모리), 로그 등을 웹 브라우저에서 실시간으로 확인할 수 있는 UI 도구입니다.
+* Cluster Launcher: AWS, GCP, Azure 같은 클라우드 환경이나 Kubernetes에서 Ray 클러스터를 자동으로 생성하고 관리하는 CLI 도구입니다.
+* 기타 필수 의존성:
+  * grpcio: 노드 간 통신을 위한 라이브러리.
+  * aiohttp / requests: 대시보드 서버 및 HTTP 통신용.
+  * opencensus: 메트릭 및 분산 트레이싱 지원.
+  * prometheus_client: 메트릭 수집용
 
 ### 2. ray Role 생성 ###
 Ray Head 노드가 Worker 노드들을 생성/삭제할 수 있도록 ray-instance-profile을 생성한다.
