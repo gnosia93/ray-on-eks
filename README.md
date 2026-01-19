@@ -2,6 +2,57 @@
 먼저 사전에 정의한 CloudFormation과 Terraform을 실행하여 판을 깝니다.
 * VPC 인프라: AWS CloudFormation으로 Public(Bastion 위치) 및 Private(Ray 위치) 서브넷을 생성합니다.
 * IAM 권한: 앞서 작성한 Terraform 코드를 실행하여 ray-instance-profile을 만듭니다.
+
+Ray Head 노드가 Worker 노드들을 생성/삭제할 수 있도록 ray-instance-profile을 생성합니다.
+```
+cat <<EOF > ray-trust-policy.json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": { "Service": "ec2.amazonaws.com" },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+aws iam create-role \
+  --role-name ray-autoscaling-role \
+  --assume-role-policy-document file://ray-trust-policy.json
+cat <<EOF > ray-autoscaling-policy.json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:RunInstances",
+        "ec2:TerminateInstances",
+        "ec2:DescribeInstances",
+        "ec2:DescribeSubnets",
+        "ec2:CreateTags"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+
+aws iam put-role-policy \
+  --role-name ray-autoscaling-role \
+  --policy-name ray-autoscaling-policy \
+  --policy-document file://ray-autoscaling-policy.json
+# 인스턴스 프로파일 생성
+aws iam create-instance-profile --instance-profile-name ray-instance-profile
+
+# 프로파일에 역할 추가
+aws iam add-role-to-instance-profile \
+  --instance-profile-name ray-instance-profile \
+  --role-name ray-autoscaling-role
+
+```
+
 * 강조: 이 프로파일이 있어야 Ray가 스스로 EC2를 사고팔며(?) 오토스케일링을 할 수 있습니다.
 
 ### 2단계: 배스천 접속 및 Ray 클러스터 가동 ###
