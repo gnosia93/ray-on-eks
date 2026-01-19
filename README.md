@@ -1,6 +1,6 @@
-# ray-on-aws 
+# raydata-on-aws 
 
-* [C1. VPC 생성]()
+* [C1. VPC 생성](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/1-create-vpc.md)
 
 ### 2단계: 배스천 접속 및 Ray 클러스터 가동 ###
 교육생들이 각자의 로컬 PC에서 배스천에 로그인하여 사령관이 되는 단계입니다.
