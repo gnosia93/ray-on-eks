@@ -5,7 +5,6 @@ Parameters:
   KeyPairName:
     Description: 'EC2 접속용 기존 키페어 이름'
     Type: AWS::EC2::KeyPair::KeyName
-    Default: "ap-northeast-1"                 # 기본값 (본인이 만든 이름으로 수정 가능)
 
 Resources:
   # 1. 네트워크 구성
