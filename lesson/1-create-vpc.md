@@ -8,7 +8,7 @@ pwd
 
 AMI=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64 \
   --region ${AWS_REGION} --query "Parameters[0].Value" --output text)
-MY_IP="$(curl -s https://checkip.amazonaws.com)"
+MY_IP="$(curl -s https://checkip.amazonaws.com)""/32"
 echo ${AMI} ${MY_IP}
 
 # sed -i "s/\${AMI}/$AMI/g" $(pwd)/cf/ray-vpc.yaml
@@ -20,7 +20,7 @@ vpc 를 생성한다.
 aws cloudformation create-stack \
   --region ${AWS_REGION} \
   --stack-name ray-vpc \
-  --template-body file://$(pwd)/lesson/template/ray-vpc.yaml \
+  --template-body file://$(pwd)/cf/ray-vpc.yaml \
   --parameters ParameterKey=KeyPairName,ParameterValue=${KEYPAIR_NAME} \
   --capabilities CAPABILITY_IAM \
   --tags Key=Project,Value=ray-on-aws
