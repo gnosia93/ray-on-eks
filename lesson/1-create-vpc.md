@@ -2,13 +2,12 @@
 ### 1. vpc 생성 ###
 ```
 export KEYPAIR_NAME="aws-kp-1"
-
-cd ~/ray-on-aws/lesson
+cd ~/ray-on-aws
 pwd
 
 aws cloudformation create-stack \
   --stack-name ray-vpc \
-  --template-body file://$(pwd)/template/ray-vpc.yaml \
+  --template-body file://$(pwd)/lesson/template/ray-vpc.yaml \
   --parameters ParameterKey=KeyPairName,ParameterValue=${KEYPAIR_NAME} \
   --capabilities CAPABILITY_IAM \
   --tags Key=Project,Value=ray-on-aws
