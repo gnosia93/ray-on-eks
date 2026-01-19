@@ -9,9 +9,8 @@ Conda 사용 시: conda install -c conda-forge "ray-default"
 export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 export CLUSTER_NAME="ray-on-aws"
-export K8S_VERSION="1.34"
-export KARPENTER_VERSION="1.8.1"
 export VPC_ID=$(aws ec2 describe-vpcs --filters Name=tag:Name,Values="${CLUSTER_NAME}" --query "Vpcs[].VpcId" --output text)
+
 ```
 
 ### 3. 클러스터 설정하기 (cluster.yaml) ###
