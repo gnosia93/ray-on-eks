@@ -43,6 +43,7 @@ available_node_types:
 
 head_node_type: head_node                              # 정의한 여러 노드 타입 중 어떤 것이 클러스터의 전체 제어를 담당할 '헤드'인지 확정
 ```
+보안 그룹 (Security Group): 헤드 노드와 워커 노드 간에 모든 TCP 포트가 서로 열려 있어야 합니다. 보통 동일한 보안 그룹을 부여하고 Security Group 자기 참조 규칙 (Self-reference)을 추가하여 해결합니다.
 
 ### 2. 프로비저닝 실행 명령어 ###
 로컬 환경에 AWS 자격 증명(aws configure)이 설정되어 있어야 합니다.
