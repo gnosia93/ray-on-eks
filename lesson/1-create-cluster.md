@@ -4,7 +4,7 @@ pip 사용 시: pip install -U "ray[default]"
 Conda 사용 시: conda install -c conda-forge "ray-default" 
 ```
 
-### 2. cluster.yaml 설정 파일 (자동 프로비저닝용) ###
+### 2. cluster.yaml 설정하기 ###
 이 파일은 Ray Cluster Launcher가 어떤 사양의 EC2를 몇 대 띄울지 정의하는 설계도입니다
 ```
 cluster_name: ray-data-workshop
