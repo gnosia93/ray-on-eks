@@ -1,10 +1,10 @@
-### ray 설치하기 ###
+### 1. ray 설치하기 ###
 ```
 pip 사용 시: pip install -U "ray[default]"
 Conda 사용 시: conda install -c conda-forge "ray-default" 
 ```
 
-### 1. cluster.yaml 설정 파일 (자동 프로비저닝용) ###
+### 2. cluster.yaml 설정 파일 (자동 프로비저닝용) ###
 이 파일은 Ray Cluster Launcher가 어떤 사양의 EC2를 몇 대 띄울지 정의하는 설계도입니다
 ```
 cluster_name: ray-data-workshop
@@ -45,19 +45,19 @@ head_node_type: head_node                              # 정의한 여러 노드
 ```
 보안 그룹 (Security Group): 헤드 노드와 워커 노드 간에 모든 TCP 포트가 서로 열려 있어야 합니다. 보통 동일한 보안 그룹을 부여하고 Security Group 자기 참조 규칙 (Self-reference)을 추가하여 해결합니다.
 
-### 2. 프로비저닝 실행 명령어 ###
+### 3. ray 클러스터 생성하기 ###
 로컬 환경에 AWS 자격 증명(aws configure)이 설정되어 있어야 합니다.
 ```
 # YAML 설정을 바탕으로 EC2 생성 및 Ray 설치 진행
 ray up cluster.yaml -y
 ```
 
-### 3.작업 제출 (Python 스크립트 실행): ###
+### 4.작업 제출 (Python 스크립트 실행): ###
 ```
 ray job submit --address http://<헤드노드_사설IP>:8265 -- python data_job.py
 ```
 
-### 4. 작업 확인 (PC에서 확인): ###
+### 5. 작업 확인 (PC에서 확인): ###
 베스천 호스트에서 다음 명령어를 실행한다. 
 ```
 ray dashboard cluster.yaml
@@ -67,9 +67,8 @@ PC 에서 터널링을 뚫어주고, 웹브라우저로 http://localhost:8265 �
 ssh -i <로컬PC의_프라이빗_키_파일_경로> -L 8265:<헤드노드의_사설_IP>:8265 <사용자>@<배스천_호스트의_공인_IP>
 ```
 
-### 5. 클러스터 종료 ###
+### 6. 클러스터 삭제하기 ###
 ```
-# 모든 EC2 인스턴스 삭제
 ray down cluster.yaml -y
 ```
 
