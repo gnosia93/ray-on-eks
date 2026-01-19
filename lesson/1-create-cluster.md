@@ -59,5 +59,5 @@ ray job submit --address http://localhost:8265 -- python data_job.py
 ray down cluster.yaml -y
 ```
 
-
+*  S3 대용량 데이터 로드 및 분산 처리 예제 코드입니다. 이 코드는 EC2 클러스터의 모든 CPU 코어를 활용하여 병렬로 동작합니다
 
