@@ -54,6 +54,26 @@ setup_commands:
     - pip install -U "ray[default]" pandas s3fs
 ```
 
+```
+import ray
+
+# 1. Intel 노드에서만 실행 (AMX 가속 등을 가정)
+@ray.remote(resources={"intel": 1})
+def run_on_intel():
+    import platform
+    return f"Intel 노드 실행 중: {platform.machine()}"
+
+# 2. Graviton 노드에서 실행 (가성비 전처리)
+@ray.remote(resources={"arm": 1})
+def run_on_arm():
+    import platform
+    return f"Graviton 노드 실행 중: {platform.machine()}"
+
+# 3. 결과 확인
+print(ray.get([run_on_intel.remote(), run_on_arm.remote()]))
+
+```
+
 
 
 ### 3단계: Upscaling 폭격 (EC2 30대 소환)
