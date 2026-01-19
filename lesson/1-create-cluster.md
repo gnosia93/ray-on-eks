@@ -26,9 +26,9 @@ available_node_types:
     head_node:
         node_config:
             InstanceType: m6i.xlarge
-            ImageId: ami-0c9c942bd7bf113a2 # Ubuntu 22.04 (서울 리전 기준 확인 필요)
-        min_workers: 0
-        max_workers: 0
+            ImageId: ami-0c9c942bd7bf113a2          # Ubuntu 22.04 (서울 리전 기준 확인 필요)
+        min_workers: 0                              # min_workers/max_workers: 0 - 헤드 노드는 관리용이므로 스스로 워커 역할을 겸하지 않도록 설정
+        max_workers: 0                             
     # 2. 워커 노드 (데이터 처리용)
     worker_node:
         node_config:
