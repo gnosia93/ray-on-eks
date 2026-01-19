@@ -72,6 +72,17 @@ Wrap-up	인프라 Clean-up	ray down 및 Terraform/CfN 리소스 일괄 삭제로
 * 노드 초기화 로그: /tmp/ray/session_latest/logs/raylet.out
 
 
+## 아키텍처별 가이드 ##
+네, 엄청난 차이가 있습니다. Ray는 분산 컴퓨팅 프레임워크이기 때문에 하드웨어 아키텍처의 특성을 아주 정직하게 타는 편입니다. 특히 님께서 선택하신 c7i(Intel)와 비교했을 때 아키텍처별로 다음과 같은 실습 포인트들이 생깁니다.
+* 1. Intel (c7i) vs AMD (c7a)
+- Intel (c7i): 가장 표준적입니다. 특히 AMX(Advanced Matrix Extensions) 가속기 덕분에 텍스트 임베딩이나 행렬 연산에서 압도적입니다. Intel Ray 가속 가이드를 참고하면 최적화 라이브러리 설정법이 나옵니다.
+- AMD (c7a): 순수 연산 속도(Raw Clock)와 가성비가 좋습니다. 단순 텍스트 정규화나 정규식 처리 위주라면 Intel보다 저렴하면서 성능은 비슷하게 나옵니다.
+
+* 2. Graviton (AWS 자체 칩 - arm64)
+- 성능/비용: 가성비 끝판왕입니다. 동일 성능 대비 비용이 약 20% 저렴합니다.
+- 주의사항: pip install 시 arm64 전용 바이너리를 내려받아야 하므로 AMI(Amazon Machine Image) 설정이 달라집니다.
+- 교육 포인트: "비용 절감을 위해 아키텍처를 arm64로 전환하는 실습"을 넣으면 아주 고급 컨텐츠가 됩니다. AWS Graviton 가이드를 참고하세요.
+
 
 ## 데이터 ##
 ```
