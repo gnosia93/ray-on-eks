@@ -53,6 +53,11 @@ ray dashboard cluster.yaml
 ray job submit --address http://localhost:8265 -- python data_job.py
 ```
 
+### 5. 클러스터 종료 ###
+```
+# 모든 EC2 인스턴스 삭제
+ray down cluster.yaml -y
+```
 
 
 
