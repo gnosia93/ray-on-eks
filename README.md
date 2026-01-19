@@ -1,5 +1,7 @@
 
-
+```
+aws s3 ls s3://ray-example-data/ --no-sign-request
+```
 
 ## 레퍼런스 ##
 * https://docs.ray.io/en/latest/ray-overview/installation.html
