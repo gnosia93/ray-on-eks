@@ -27,6 +27,10 @@ provider:
 setup_commands:
     - pip install -U "ray[default,data]" pandas pyarrow boto3
 
+auth:
+    ssh_user: ec2-user                                 # AL2023 노드 사용 시
+    ssh_private_key: ~/.ssh/your-key.pem
+
 # 노드별 상세 사양
 available_node_types:
     # 헤드 노드
