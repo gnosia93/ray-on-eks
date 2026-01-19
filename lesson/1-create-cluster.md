@@ -13,8 +13,9 @@ cluster_name: ray-data-workshop
 # 인스턴스를 띄울 리전
 provider:
     type: aws
-    region: ap-northeast-2 # 서울 리전
+    region: ap-northeast-2                             # 서울 리전
     availability_zone: ap-northeast-2a
+    use_internal_ips: true                             # 이 줄을 추가하세요!
 
 # 각 노드에서 실행될 설정 (Python 설치 등)
 setup_commands:
@@ -26,17 +27,22 @@ available_node_types:
     head_node:
         node_config:
             InstanceType: m6i.xlarge
-            ImageId: ami-0c9c942bd7bf113a2          # Ubuntu 22.04 (서울 리전 기준 확인 필요)
-        min_workers: 0                              # min_workers/max_workers: 0 - 헤드 노드는 관리용이므로 스스로 워커 역할을 겸하지 않도록 설정
+            ImageId: ami-0c9c942bd7bf113a2             # Ubuntu 22.04 (서울 리전 기준 확인 필요)
+            SubnetId: subnet-xxxxxxxxxxxxxxxxx         # 프라이빗 서브넷 ID 입력
+            SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
+                - sg-xxxxxxxxxxxxxxxxx
+        min_workers: 0                                 # min_workers/max_workers: 0 - 헤드 노드는 관리용이므로 스스로 워커 역할을 겸하지 않도록 설정
         max_workers: 0                             
     # 2. 워커 노드 (데이터 처리용)
     worker_node:
         node_config:
             InstanceType: m6i.2xlarge
-        min_workers: 4                              # 기본 4대 실행
-        max_workers: 8                              # 필요시 8대까지 자동 확장
+            SubnetId: subnet-xxxxxxxxxxxxxxxxx         # 프라이빗 서브넷 ID 입력
+            SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
+        min_workers: 4                                 # 기본 4대 실행
+        max_workers: 8                                 # 필요시 8대까지 자동 확장
 
-head_node_type: head_node                           # 정의한 여러 노드 타입 중 어떤 것이 클러스터의 전체 제어를 담당할 '헤드'인지 확정
+head_node_type: head_node                              # 정의한 여러 노드 타입 중 어떤 것이 클러스터의 전체 제어를 담당할 '헤드'인지 확정
 ```
 
 ### 2. 프로비저닝 실행 명령어 ###
