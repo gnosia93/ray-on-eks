@@ -1,19 +1,70 @@
-### 1. Ray 클러스터 런처 설치하기 ###
+### 1. ray Role 생성 ###
+Ray Head 노드가 Worker 노드들을 생성/삭제할 수 있도록 ray-instance-profile을 생성한다.
+```
+cat <<EOF > ray-trust-policy.json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": { "Service": "ec2.amazonaws.com" },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+
+aws iam create-role \
+  --role-name ray-autoscaling-role \
+  --assume-role-policy-document file://ray-trust-policy.json
+cat <<EOF > ray-autoscaling-policy.json
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:RunInstances",
+        "ec2:TerminateInstances",
+        "ec2:DescribeInstances",
+        "ec2:DescribeSubnets",
+        "ec2:CreateTags"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+
+aws iam put-role-policy \
+  --role-name ray-autoscaling-role \
+  --policy-name ray-autoscaling-policy \
+  --policy-document file://ray-autoscaling-policy.json
+
+# 인스턴스 프로파일 생성
+aws iam create-instance-profile --instance-profile-name ray-instance-profile
+
+# 프로파일에 역할 추가
+aws iam add-role-to-instance-profile \
+  --instance-profile-name ray-instance-profile \
+  --role-name ray-autoscaling-role
+```
+
+### 2. Ray 클러스터 런처 설치하기 ###
 ```
 pip 사용 시: pip install -U "ray[default]"
 Conda 사용 시: conda install -c conda-forge "ray-default" 
 ```
 
-### 2. 환경설정하기 ###
+### 3. 환경설정하기 ###
 ```
 export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 export CLUSTER_NAME="ray-on-aws"
 export VPC_ID=$(aws ec2 describe-vpcs --filters Name=tag:Name,Values="${CLUSTER_NAME}" --query "Vpcs[].VpcId" --output text)
-
 ```
 
-### 3. 클러스터 설정하기 (cluster.yaml) ###
+### 4. ray 클러스터 설정하기 ###
 ```
 cluster_name: ${CLUSTER_NAME}
 
@@ -57,25 +108,8 @@ available_node_types:
 
 head_node_type: head_node                              # 정의한 여러 노드 타입 중 어떤 것이 클러스터의 전체 제어를 담당할 '헤드'인지 확정
 ```
-보안 그룹 (Security Group): 헤드 노드와 워커 노드 간에 모든 TCP 포트가 서로 열려 있어야 합니다. 보통 동일한 보안 그룹을 부여하고 Security Group 자기 참조 규칙 (Self-reference)을 추가하여 해결합니다.
-AWS 보안 그룹 설정 시, 내부 통신(Self-reference) 외에 배스천 호스트의 보안 그룹으로부터 오는 22번(SSH)과 8265번(대시보드) 포트 허용도 꼭 확인하세요!
-
-### 4. ray 클러스터 생성하기 ###
+클러스터를 생성한다.
 ```
-# 1. 에이전트 실행
-eval `ssh-agent -s`
-# 2. 키 등록
-ssh-add ~/.ssh/my-key.pem
-
-# -A: ForwardAgent 활성화 [내 노트북 → 배스천] 포워딩 옵션으로 접속
-ssh -A ec2-user@<배스천_공인_IP>
-
-ssh-add -l
-```
-
-code-server ssh 콘솔에서 아래 명령어 클러스터를 설치한다.  
-```
-# YAML 설정을 바탕으로 EC2 생성 및 Ray 설치 진행
 ray up cluster.yaml -y
 ```
 
@@ -84,21 +118,9 @@ ray up cluster.yaml -y
 ray job submit --address http://<헤드노드_사설IP>:8265 -- python data_job.py
 ```
 
-### 6. 작업 확인 (PC에서 확인): ###
-베스천 호스트에서 다음 명령어를 실행한다. 
-```
-ray dashboard cluster.yaml
-```
-PC 에서 터널링을 뚫어주고, 웹브라우저로 http://localhost:8265 으로 접속한다.  
-```
-ssh -i <로컬PC의_프라이빗_키_파일_경로> -L 8265:<헤드노드의_사설_IP>:8265 <사용자>@<배스천_호스트의_공인_IP>
-```
-
-### 7. 클러스터 삭제하기 ###
+### 참고 - 클러스터 삭제하기 ###
 ```
 ray down cluster.yaml -y
 ```
 
-*  S3 대용량 데이터 로드 및 분산 처리 예제 코드입니다. 이 코드는 EC2 클러스터의 모든 CPU 코어를 활용하여 병렬로 동작합니다
-* 꿀팁: VS Code에서 대시보드 바로 보기
-ray up이 성공하면, VS Code 하단 [Ports] 탭에 자동으로 8265 포트가 생길 수 있습니다. 안 생긴다면 [Forward a Port]를 눌러 8265를 추가하세요. 그러면 로컬 브라우저에서 배스천 IP가 아닌 http://localhost:8265로 바로 대시보드가 열립니다!
+
