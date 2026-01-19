@@ -1,4 +1,16 @@
-### 1. ray Role 생성 ###
+### 1. 환경 설정 ###
+```
+export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
+export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+export CLUSTER_NAME="ray-on-aws"
+export VPC_ID=$(aws ec2 describe-vpcs --filters Name=tag:Name,Values="${CLUSTER_NAME}" --query "Vpcs[].VpcId" --output text)
+```
+```
+pip 사용 시: pip install -U "ray[default]"
+Conda 사용 시: conda install -c conda-forge "ray-default" 
+```
+
+### 2. ray Role 생성 ###
 Ray Head 노드가 Worker 노드들을 생성/삭제할 수 있도록 ray-instance-profile을 생성한다.
 ```
 cat <<EOF > ray-trust-policy.json
@@ -50,21 +62,7 @@ aws iam add-role-to-instance-profile \
   --role-name ray-autoscaling-role
 ```
 
-### 2. Ray 클러스터 런처 설치하기 ###
-```
-pip 사용 시: pip install -U "ray[default]"
-Conda 사용 시: conda install -c conda-forge "ray-default" 
-```
-
-### 3. 환경설정하기 ###
-```
-export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
-export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
-export CLUSTER_NAME="ray-on-aws"
-export VPC_ID=$(aws ec2 describe-vpcs --filters Name=tag:Name,Values="${CLUSTER_NAME}" --query "Vpcs[].VpcId" --output text)
-```
-
-### 4. ray 클러스터 설정하기 ###
+### 3. ray 클러스터 설정하기 ###
 ```
 cluster_name: ${CLUSTER_NAME}
 
@@ -113,7 +111,7 @@ head_node_type: head_node                              # 정의한 여러 노드
 ray up cluster.yaml -y
 ```
 
-### 5.작업 제출 (Python 스크립트 실행): ###
+### 4.작업 제출 (Python 스크립트 실행): ###
 ```
 ray job submit --address http://<헤드노드_사설IP>:8265 -- python data_job.py
 ```
