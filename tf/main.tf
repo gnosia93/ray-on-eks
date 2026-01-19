@@ -138,7 +138,7 @@ data "aws_ami" "al2023_x86_64" {
   }
 }
 
-resource "aws_security_group" "ray-codeserver-sg" {
+resource "aws_security_group" "ray_codeserver_sg" {
   vpc_id = aws_vpc.main.id
   name   = "ray-codeserver-sg"
 
@@ -198,11 +198,50 @@ resource "aws_security_group" "ray-codeserver-sg" {
   }
 }
 
+# 1. Ray 클러스터 전용 보안 그룹 생성
+resource "aws_security_group" "ray_cluster_sg" {
+  vpc_id = aws_vpc.main.id
+  name   = "ray-cluster-sg"
+  tags   = { Name = "ray-cluster-sg" }
+
+  # 인바운드 1: 레이 노드들끼리의 모든 내부 통신 허용 (Self-Reference)
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    self        = true
+  }
+
+  # 인바운드 2: 배스천(codeserver)으로부터의 SSH 접속 허용
+  ingress {
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ray_codeserver_sg.id]
+  }
+
+  # 인바운드 3: 배스천(codeserver)으로부터의 대시보드/API 접속 허용
+  ingress {
+    from_port       = 8265
+    to_port         = 8265
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ray_codeserver_sg.id]
+  }
+
+  # 아웃바운드: NAT Gateway 등을 통한 외부 통신 허용
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
 resource "aws_instance" "x86_box" {
   ami                         = data.aws_ami.al2023_x86_64.id
   instance_type               = var.x86_type
   subnet_id                   = aws_subnet.public[0].id
-  vpc_security_group_ids      = [aws_security_group.ray-codeserver-sg.id]
+  vpc_security_group_ids      = [aws_security_group.ray_codeserver_sg.id]
   associate_public_ip_address = true
   key_name                    = var.key_name
 
