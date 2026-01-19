@@ -2,6 +2,7 @@
 ### 1. vpc 생성 ###
 ```
 cd ~/ray-on-aws/lesson
+pwd
 
 aws cloudformation create-stack \
   --stack-name ray-vpc \
