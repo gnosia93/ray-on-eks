@@ -100,6 +100,24 @@ Resources:
         - Key: Project
           Value: ray-on-aws
 
+  BastionInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: [ec2.amazonaws.com]
+            Action: ['sts:AssumeRole']
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess  # Admin 권한 부여
+
+  BastionInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles: [!Ref BastionInstanceRole]
+
   BastionHost:
     Type: AWS::EC2::Instance
     Properties:
@@ -108,6 +126,7 @@ Resources:
       SubnetId: !Ref PublicSubnet
       SecurityGroupIds: [!Ref BastionSG]
       KeyName: !Ref KeyPairName
+      IamInstanceProfile: !Ref BastionInstanceProfile
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
