@@ -89,6 +89,29 @@ Wrap-up	인프라 Clean-up	ray down 및 Terraform/CfN 리소스 일괄 삭제로
 * 관전 포인트: "왜 특정 작업에선 Intel이 빠르고, 다른 작업에선 AMD가 가성비가 좋을까?"
 * EC2 활용 극대화: 인스턴스 타입을 섞어 쓰기 때문에 Mixed Instances Policy를 완벽하게 실습하게 됩니다
 
+```
+키텍처	추천 인스턴스	핵심 특징 (Deep Dive)	전처리 적합도
+Intel	c7i.4xlarge	AMX 가속기 탑재. 복잡한 수치 연산 및 LLM 텍스트 임베딩 전처리에 최강. 가장 호환성이 높음.	⭐⭐⭐⭐⭐
+AMD	c7a.4xlarge	최신 젠4 기반. 단순 정규식(Regex) 처리나 대량의 문자열 파싱에서 순수 연산 속도가 뛰어남.	⭐⭐⭐⭐
+Graviton	c7g.4xlarge	AWS 전용 ARM 칩. 가격 대비 성능비(Price/Perf) 최고. 인스턴스 30대를 돌려도 비용 부담이 가장 적음.	⭐⭐⭐⭐⭐ (가성비)
+```
+
+```
+실습 시나리오 적용 팁 (강사 가이드)
+1. "Intel vs AMD" 속도 경쟁 (30분)
+실습: 5대는 c7i, 5대는 c7a로 띄워 동일한 Common Voice 텍스트 전처리를 돌립니다.
+관전 포인트: 특정 정규식 처리 속도는 AMD가 빠를 수 있으나, 라이브러리 최적화(MKL 등)가 들어간 연산은 Intel이 앞서는 모습을 Ray Dashboard로 비교합니다.
+2. "Graviton 전환" 비용 절감 세션
+내용: "비용이 20% 줄어든다면 성능을 조금 포기하시겠습니까?"라는 질문을 던집니다.
+실습: AWS Graviton 가이드를 참고해 arm64 전용 AMI로 클러스터를 다시 띄우게 합니다. (이 과정에서 아키텍처 호환성 트러블슈팅 경험치 급상승)
+3. "Mixed Instance Policy"의 정당화
+논리: "재고가 부족한 스팟 인스턴스 환경에서는 Intel, AMD를 가리지 않고 닥치는 대로(?) 가져와서 클러스터를 유지하는 능력이 실력입니다."
+방법: YAML 설정에 InstanceType: "c7i.4xlarge, c7a.4xlarge, c6i.4xlarge"를 모두 넣어 가용성을 극대화합니다.
+```
+
+
+
+
 
 ## 데이터 ##
 ```
