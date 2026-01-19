@@ -13,6 +13,25 @@
 ray up ray-cluster.yaml -y
 ```
 
+### 3단계: Upscaling 폭격 (EC2 30대 소환)
+이제 160코어의 한계를 시험하며 EC2 자원을 최대치로 땡기는 핵심 실습입니다.
+* 스트레스 테스트 스크립트 실행
+```
+# 배스천에서 실행 (stress.py)
+import ray, time
+ray.init(address="auto")
+
+@ray.remote(num_cpus=1)
+def heavy_task():
+    time.sleep(300) # 5분간 코어 점유
+    return True
+
+# 480개(30대 분량)의 작업을 한꺼번에 투척!
+ray.get([heavy_task.remote() for _ in range(480)])
+```
+현상 관찰:
+* Ray Status: Pending: 320 Tasks 발생 -> Autoscaler가 Launching 20 Nodes 시작.
+* AWS Console: EC2 인스턴스 페이지에 c7i.4xlarge 20대가 한꺼번에 생성되며 Pending 상태가 되는 장관을 확인합니다
 
 
 
