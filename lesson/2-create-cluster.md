@@ -116,6 +116,11 @@ ray up cluster.yaml -y
 ray job submit --address http://<헤드노드_사설IP>:8265 -- python data_job.py
 ```
 
+### 5. 대시보드 접근 ###
+```
+
+```
+
 ### 참고 - 클러스터 삭제하기 ###
 ```
 ray down cluster.yaml -y
