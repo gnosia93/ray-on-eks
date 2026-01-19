@@ -197,6 +197,11 @@ aws s3 ls s3://ray-example-data/common_voice_17/parquet/
 2025-09-27 04:00:23  476320458 9.parquet
 ```
 
+## 전처리 ##
+* 텍스트 전처리
+* 이미지 전처리
+* 보이스 전처리
+
 ## 레퍼런스 ##
 * https://docs.ray.io/en/latest/ray-overview/installation.html
 * https://github.com/dmatrix/ray-core-tutorial/blob/ad5f1fa700d87a9af1e21027f06f02cfdcc937f3//ex_07_ray_data.ipynb
