@@ -35,7 +35,12 @@ ray.get([heavy_task.remote() for _ in range(480)])
 
 
 
-
+* static
+* 오토 스케일링 설정
+* spot 사용하기
+* on-demand / spot 믹스하기
+* ray 는 spot 회쉬되더라도 교체해서 동작한다. 어떻게?
+  
 
 
 
