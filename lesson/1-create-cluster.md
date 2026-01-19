@@ -36,8 +36,7 @@ available_node_types:
         min_workers: 4                              # 기본 4대 실행
         max_workers: 8                              # 필요시 8대까지 자동 확장
 
-# 헤드 노드를 우선 시작하도록 설정
-head_node_type: head_node
+head_node_type: head_node                           # 정의한 여러 노드 타입 중 어떤 것이 클러스터의 전체 제어를 담당할 '헤드'인지 확정
 ```
 
 ### 2. 프로비저닝 실행 명령어 ###
