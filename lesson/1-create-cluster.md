@@ -33,8 +33,8 @@ available_node_types:
     worker_node:
         node_config:
             InstanceType: m6i.2xlarge
-        min_workers: 2 # 기본 2대 실행
-        max_workers: 5 # 필요시 5대까지 자동 확장
+        min_workers: 4                              # 기본 4대 실행
+        max_workers: 8                              # 필요시 8대까지 자동 확장
 
 # 헤드 노드를 우선 시작하도록 설정
 head_node_type: head_node
