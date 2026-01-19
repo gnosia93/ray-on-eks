@@ -1,11 +1,13 @@
 
 ### 1. vpc 생성 ###
 ```
+export AWS_REGION="ap-northeast-1"
 export KEYPAIR_NAME="aws-kp-1"
 cd ~/ray-on-aws
 pwd
 
 aws cloudformation create-stack \
+  --region ${AWS_REGION} \
   --stack-name ray-vpc \
   --template-body file://$(pwd)/lesson/template/ray-vpc.yaml \
   --parameters ParameterKey=KeyPairName,ParameterValue=${KEYPAIR_NAME} \
