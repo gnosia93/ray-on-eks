@@ -1,4 +1,4 @@
-# ray-on-eks
+# ray-on-aws
 
 
 LLM 훈련/파인튜닝 시 Ray가 기존 Kubeflow 방식보다 유리한 포인트 3가지는 이렇습니다:
