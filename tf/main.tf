@@ -166,10 +166,10 @@ resource "aws_security_group" "instance_sg" {
     cidr_blocks = [aws_vpc.main.cidr_block] 
   }
 
-  # Spring Web 용.
+  # ray 대시보드 API 접속 허용
   ingress {
-    from_port   = 8081
-    to_port     = 8090
+    from_port   = 8265
+    to_port     = 8265
     protocol    = "tcp"
     cidr_blocks = [aws_vpc.main.cidr_block] 
   }
