@@ -1,4 +1,4 @@
-# ray-on-aws 
+# ray-on-aws (EC2 bi-monthly Workshop)
 
 * [C1. VPC 생성](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/1-create-vpc.md)
 
