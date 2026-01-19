@@ -7,10 +7,8 @@ Conda 사용 시: conda install -c conda-forge "ray-default"
 ### 1. cluster.yaml 설정 파일 (자동 프로비저닝용) ###
 이 파일은 Ray Cluster Launcher가 어떤 사양의 EC2를 몇 대 띄울지 정의하는 설계도입니다
 ```
-# 클러스터 식별 이름
 cluster_name: ray-data-workshop
 
-# 인스턴스를 띄울 리전
 provider:
     type: aws
     region: ap-northeast-2                             # 서울 리전
@@ -23,7 +21,7 @@ setup_commands:
 
 # 노드별 상세 사양
 available_node_types:
-    # 1. 헤드 노드 (관리용)
+    # 헤드 노드
     head_node:
         node_config:
             InstanceType: m6i.xlarge
@@ -33,10 +31,11 @@ available_node_types:
                 - sg-xxxxxxxxxxxxxxxxx
         min_workers: 0                                 # min_workers/max_workers: 0 - 헤드 노드는 관리용이므로 스스로 워커 역할을 겸하지 않도록 설정
         max_workers: 0                             
-    # 2. 워커 노드 (데이터 처리용)
+    # 워커 노드 (데이터 처리용)
     worker_node:
         node_config:
             InstanceType: m6i.2xlarge
+            ImageId: ami-0c9c942bd7bf113a2 # 헤드 노드와 동일한 이미지 사용
             SubnetId: subnet-xxxxxxxxxxxxxxxxx         # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
         min_workers: 4                                 # 기본 4대 실행
