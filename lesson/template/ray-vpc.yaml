@@ -79,7 +79,7 @@ Resources:
       GatewayId: !Ref InternetGateway
 
   PublicSubnetAssociation:
-    Type: AWS::EC2::SubnetRouteAssociation
+    Type: AWS::EC2::SubnetRouteTableAssociation
     Properties: { SubnetId: !Ref PublicSubnet, RouteTableId: !Ref PublicRouteTable }
 
   # 2. 고성능 Bastion & VS Code Server
@@ -152,5 +152,5 @@ Resources:
       NatGatewayId: !Ref RayNatGateway
 
   PrivateSubnetAssociation:
-    Type: AWS::EC2::SubnetRouteAssociation
+    Type: AWS::EC2::SubnetRouteTableAssociation
     Properties: { SubnetId: !Ref PrivateSubnet, RouteTableId: !Ref PrivateRouteTable }
