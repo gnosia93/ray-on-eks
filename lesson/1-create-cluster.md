@@ -27,9 +27,11 @@ provider:
 setup_commands:
     - pip install -U "ray[default,data]" pandas pyarrow boto3
 
+# IAM 권한 확인: 배스천 호스트의 Role에 ec2-instance-connect:OpenTunnel 권한이 있는지 확인.
+# AWS CLI 버전 확인: aws --version 명령어로 v2인지 확인하세요. (EICE 터널링 기능은 v2에서 지원).
 auth:
     ssh_user: ec2-user
-ssh_proxy_command: "aws ec2-instance-connect open-tunnel --instance-id %h"
+    ssh_proxy_command: "aws ec2-instance-connect open-tunnel --instance-id %h"
 
 # 노드별 상세 사양
 available_node_types:
