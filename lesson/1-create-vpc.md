@@ -10,7 +10,7 @@ aws cloudformation create-stack \
 ```
 
 ### 2. Role 생성 ###
-
+Ray Head 노드가 Worker 노드들을 생성/삭제할 수 있도록 ray-instance-profile을 생성한다.
 ```
 cat <<EOF > ray-trust-policy.json
 {
@@ -59,5 +59,4 @@ aws iam create-instance-profile --instance-profile-name ray-instance-profile
 aws iam add-role-to-instance-profile \
   --instance-profile-name ray-instance-profile \
   --role-name ray-autoscaling-role
-
 ```
