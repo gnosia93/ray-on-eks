@@ -1,4 +1,28 @@
+### 1단계: 인프라 프로비저닝 (Terraform & CfN) ###
+먼저 사전에 정의한 CloudFormation과 Terraform을 실행하여 판을 깝니다.
+* VPC 인프라: AWS CloudFormation으로 Public(Bastion 위치) 및 Private(Ray 위치) 서브넷을 생성합니다.
+* IAM 권한: 앞서 작성한 Terraform 코드를 실행하여 ray-instance-profile을 만듭니다.
+* 강조: 이 프로파일이 있어야 Ray가 스스로 EC2를 사고팔며(?) 오토스케일링을 할 수 있습니다.
 
+### 2단계: 배스천 접속 및 Ray 클러스터 가동 ###
+교육생들이 각자의 로컬 PC에서 배스천에 로그인하여 사령관이 되는 단계입니다.
+* 배스천 점프: ssh -A ec2-user@<Bastion-IP> (키 포워딩 필수)
+* YAML 설정: ray-cluster.yaml에 max_workers: 30과 IamInstanceProfile을 기입합니다.
+* 클러스터 런칭:
+```
+ray up ray-cluster.yaml -y
+```
+
+
+
+
+
+
+
+
+
+
+## 데이터 ##
 ```
 aws s3 ls s3://ray-example-data/ --no-sign-request
 ```
