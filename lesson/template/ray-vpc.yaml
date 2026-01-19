@@ -24,7 +24,8 @@ Resources:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags: 
-        - Key: Project, Value: ray-on-aws
+        - Key: Project
+          Value: ray-on-aws
 
   VPCGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
