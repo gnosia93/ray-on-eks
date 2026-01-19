@@ -63,6 +63,12 @@ ray dashboard cluster.yaml
 ray job submit --address http://localhost:8265 -- python data_job.py
 ```
 
+### 5. 대시보드 확인하기 ###
+```
+ssh -i <로컬PC의_프라이빗_키_파일_경로> -L 8265:<헤드노드의_사설_IP>:8265 <사용자>@<배스천_호스트의_공인_IP>
+```
+로컬 PC 에서 브라우저를 열어서 확인한다..
+
 ### 5. 클러스터 종료 ###
 ```
 # 모든 EC2 인스턴스 삭제
