@@ -104,7 +104,7 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: c7i.4xlarge
-      ImageId: ami-0c0b11d1f3924a14a # Amazon Linux 2023 (리전 확인 필수)
+      ImageId: ${AMI}
       SubnetId: !Ref PublicSubnet
       SecurityGroupIds: [!Ref BastionSG]
       KeyName: !Ref KeyPairName
