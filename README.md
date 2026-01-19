@@ -34,7 +34,7 @@ ray.get([heavy_task.remote() for _ in range(480)])
 * AWS Console: EC2 인스턴스 페이지에 c7i.4xlarge 20대가 한꺼번에 생성되며 Pending 상태가 되는 장관을 확인합니다
 
 
-
+---
 * static
 * 오토 스케일링 설정
 * spot 사용하기
