@@ -28,8 +28,8 @@ setup_commands:
     - pip install -U "ray[default,data]" pandas pyarrow boto3
 
 auth:
-    ssh_user: ec2-user                                 # AL2023 노드 사용 시
-    ssh_private_key: ~/.ssh/your-key.pem
+    ssh_user: ec2-user
+ssh_proxy_command: "aws ec2-instance-connect open-tunnel --instance-id %h"
 
 # 노드별 상세 사양
 available_node_types:
