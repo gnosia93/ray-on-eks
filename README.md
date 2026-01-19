@@ -84,6 +84,12 @@ Wrap-up	인프라 Clean-up	ray down 및 Terraform/CfN 리소스 일괄 삭제로
 - 교육 포인트: "비용 절감을 위해 아키텍처를 arm64로 전환하는 실습"을 넣으면 아주 고급 컨텐츠가 됩니다. AWS Graviton 가이드를 참고하세요.
 
 
+#### [Section 8] 아키텍처 벤치마킹 실습 (추가 제안) ###
+* 교육 시간을 조금 더 쓰고 싶다면, 10대는 c7i(Intel), 10대는 c7a(AMD)로 띄워서 동일한 텍스트 전처리 속도를 비교하게 해보세요.
+* 관전 포인트: "왜 특정 작업에선 Intel이 빠르고, 다른 작업에선 AMD가 가성비가 좋을까?"
+* EC2 활용 극대화: 인스턴스 타입을 섞어 쓰기 때문에 Mixed Instances Policy를 완벽하게 실습하게 됩니다
+
+
 ## 데이터 ##
 ```
 aws s3 ls s3://ray-example-data/ --no-sign-request
