@@ -9,7 +9,8 @@ pwd
 AMI=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64 \
   --region ${AWS_REGION} --query "Parameters[0].Value" --output text)
 echo ${AMI}
-sed -i "s/\${AMI}/$AMI_ID/g" $(pwd)/lesson/template/ray-vpc.yaml
+# sed -i "s/\${AMI}/$AMI_ID/g" $(pwd)/lesson/template/ray-vpc.yaml
+sed -i "" "s#\${AMI}#$AMI_ID#g" $(pwd)/lesson/template/ray-vpc.yaml
 
 aws cloudformation create-stack \
   --region ${AWS_REGION} \
