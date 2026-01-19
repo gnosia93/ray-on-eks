@@ -175,3 +175,15 @@ Resources:
   PrivateSubnetAssociation:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties: { SubnetId: !Ref PrivateSubnet, RouteTableId: !Ref PrivateRouteTable }
+
+Outputs:
+  BastionDNS:
+    Description: "배스천 호스트 접속용 퍼블릭 DNS"
+    Value: !GetAtt BastionHost.PublicDnsName
+  VSCodeURL:
+    Description: "VS Code 서버 접속 URL"
+    Value: !Sub "http://${BastionHost.PublicDnsName}:8080"
+  PrivateSubnetId:
+    Description: "Ray 노드들이 위치할 Private 서브넷 ID"
+    Value: !Ref PrivateSubnet
+
