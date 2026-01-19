@@ -12,6 +12,10 @@ aws cloudformation create-stack \
   --tags Key=Project,Value=ray-on-aws
 ```
 
+```
+aws cloudformation describe-stacks --stack-name ray-vpc --query "Stacks[0].StackStatus"
+```
+
 ### 2. Role 생성 ###
 Ray Head 노드가 Worker 노드들을 생성/삭제할 수 있도록 ray-instance-profile을 생성한다.
 ```
