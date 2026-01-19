@@ -14,7 +14,9 @@ echo ${AMI} ${MY_IP}
 # sed -i "s/\${AMI}/$AMI/g" $(pwd)/cf/ray-vpc.yaml
 sed -i "" "s|\${AMI}|$AMI|g" $(pwd)/cf/ray-vpc.yaml
 sed -i "" "s|\${MY_IP}|$MY_IP|g" $(pwd)/cf/ray-vpc.yaml
-
+```
+vpc 를 생성한다.
+```
 aws cloudformation create-stack \
   --region ${AWS_REGION} \
   --stack-name ray-vpc \
