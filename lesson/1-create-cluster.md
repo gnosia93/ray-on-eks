@@ -52,22 +52,20 @@ head_node_type: head_node                              # 정의한 여러 노드
 ray up cluster.yaml -y
 ```
 
-### 3. 클러스터 대시보드 연결 (로컬에서 확인): ###
+### 3.작업 제출 (Python 스크립트 실행): ###
 ```
-# 로컬의 8265 포트를 클러스터 헤드 노드로 터널링
+ray job submit --address http://<헤드노드_사설IP>:8265 -- python data_job.py
+```
+
+### 4. 작업 확인 (PC에서 확인): ###
+베스천 호스트에서 다음 명령어를 실행한다. 
+```
 ray dashboard cluster.yaml
 ```
-
-### 4.작업 제출 (Python 스크립트 실행): ###
-```
-ray job submit --address http://localhost:8265 -- python data_job.py
-```
-
-### 5. 대시보드 확인하기 ###
+PC 에서 터널링을 뚫어주고, 웹브라우저로 http://localhost:8265 으로 접속한다.  
 ```
 ssh -i <로컬PC의_프라이빗_키_파일_경로> -L 8265:<헤드노드의_사설_IP>:8265 <사용자>@<배스천_호스트의_공인_IP>
 ```
-로컬 PC 에서 브라우저를 열어서 확인한다..
 
 ### 5. 클러스터 종료 ###
 ```
