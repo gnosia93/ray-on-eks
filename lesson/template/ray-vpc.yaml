@@ -15,8 +15,10 @@ Resources:
       CidrBlock: 10.0.0.0/16
       EnableDnsHostnames: true
       Tags: 
-        - Key: Name, Value: RayVPC
-        - Key: Project, Value: ray-on-aws
+        - Key: Name
+          Value: RayVPC
+        - Key: Project
+          Value: ray-on-aws
 
   InternetGateway:
     Type: AWS::EC2::InternetGateway
