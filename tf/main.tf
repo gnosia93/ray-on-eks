@@ -138,9 +138,9 @@ data "aws_ami" "al2023_x86_64" {
   }
 }
 
-resource "aws_security_group" "instance_sg" {
+resource "aws_security_group" "ray-codeserver-sg" {
   vpc_id = aws_vpc.main.id
-  name   = "ray-host-sg"
+  name   = "ray-codeserver-sg"
 
   # SSH 접속 허용
   ingress {
@@ -202,7 +202,7 @@ resource "aws_instance" "x86_box" {
   ami                         = data.aws_ami.al2023_x86_64.id
   instance_type               = var.x86_type
   subnet_id                   = aws_subnet.public[0].id
-  vpc_security_group_ids      = [aws_security_group.instance_sg.id]
+  vpc_security_group_ids      = [aws_security_group.ray-codeserver-sg.id]
   associate_public_ip_address = true
   key_name                    = var.key_name
 
