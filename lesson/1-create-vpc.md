@@ -25,15 +25,24 @@ aws cloudformation create-stack \
   --capabilities CAPABILITY_IAM \
   --tags Key=Project,Value=ray-on-aws
 ```
-결과를 조회한다. 
+vpc 생성 진행 과정을 조회한다. 
 ```
 aws cloudformation describe-stacks --stack-name ray-vpc --query "Stacks[0].StackStatus"
+```
+
+생성 결과를 출력한다. 
+```
+aws cloudformation describe-stacks \
+  --stack-name ray-vpc \
+  --query "Stacks[0].Outputs[?OutputKey=='BastionDNS' || OutputKey=='VSCodeURL'].OutputValue" \
+  --output text
 ```
 
 * 참고 - 스택 삭제하기
 ```
 aws cloudformation delete-stack --stack-name ray-vpc
 ```
+
 
 ### 2. Role 생성 ###
 Ray Head 노드가 Worker 노드들을 생성/삭제할 수 있도록 ray-instance-profile을 생성한다.
