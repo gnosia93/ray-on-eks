@@ -2,58 +2,9 @@
 
 * [C1. VPC 생성](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/1-create-vpc.md)
 
-### 2단계: 배스천 접속 및 Ray 클러스터 가동 ###
-교육생들이 각자의 로컬 PC에서 배스천에 로그인하여 사령관이 되는 단계입니다.
-* 배스천 점프: ssh -A ec2-user@<Bastion-IP> (키 포워딩 필수)
-* YAML 설정: ray-cluster.yaml에 max_workers: 30과 IamInstanceProfile을 기입합니다.
-* 클러스터 런칭:
-```
-ray up ray-cluster.yaml -y
-```
+* [C2. ray 클러스터 생성]()
 
-```
-cluster_name: multi-arch-heavy-cluster
-max_workers: 30
 
-available_node_types:
-    # 1. Head Node: 관리 안정성을 위해 Intel 온디맨드 사용
-    ray.head.default:
-        resources: {"CPU": 16, "intel": 1}
-        node_config:
-          InstanceType: c7i.4xlarge
-          ImageId: ami-intel-xxxxxx # x86_64 전용 Ubuntu AMI
-          IamInstanceProfile: {Name: ray-instance-profile}
-
-    # 2. Worker Node (Intel): 고성능 연산용
-    intel_workers:
-        min_workers: 5
-        max_workers: 15
-        resources: {"CPU": 16, "intel": 1} # 'intel' 커스텀 자원 부여
-        node_config:
-          InstanceType: c7i.4xlarge
-          ImageId: ami-intel-xxxxxx
-          IamInstanceProfile: {Name: ray-instance-profile}
-          # 스팟 인스턴스로 비용 절감
-          UseSpotInstances: True
-
-    # 3. Worker Node (Graviton): 가성비 전처리용
-    graviton_workers:
-        min_workers: 5
-        max_workers: 15
-        resources: {"CPU": 16, "arm": 1} # 'arm' 커스텀 자원 부여
-        node_config:
-          InstanceType: c7g.4xlarge
-          ImageId: ami-arm-xxxxxx # arm64 전용 Ubuntu AMI
-          IamInstanceProfile: {Name: ray-instance-profile}
-          UseSpotInstances: True
-
-# 아키텍처별로 필요한 라이브러리가 다를 수 있으므로 setup_commands에서 분기 처리 가능
-setup_commands:
-    - pip install -U "ray[default]" pandas s3fs
-```
-* CPU: 16 (물리적 자원): 실제 인스턴스의 하드웨어 스펙입니다. 태스크가 실행될 때마다 이 숫자가 차감되며, 0이 되면 더 이상 작업을 받지 않습니다.
-* intel: 1 (논리적 태그): 사용자가 임의로 붙인 "이 노드는 인텔 칩셋임"이라는 인증 마크입니다. 물리적인 개수와 상관없이, 이 노드의 정체성을 나타내는 '입장권'이 1장 있다고 선언하는 것입니다.
-ray 에서 하나의 task 는 하나의 코어를 점유한다.
 
 ```
 import ray
