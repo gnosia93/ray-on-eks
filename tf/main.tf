@@ -241,15 +241,12 @@ resource "aws_security_group" "ray_cluster_sg" {
 # EICE 엔드포인트 생성
 resource "aws_ec2_instance_connect_endpoint" "ray_eice" {
   subnet_id          = aws_subnet.private[0].id # Ray 노드들이 뜰 프라이빗 서브넷
-  security_group_ids = [aws_security_group.ray-codeserver-sg.id] # EICE 자체 보안 그룹
+  security_group_ids = [aws_security_group.ray_codeserver_sg.id] # EICE 자체 보안 그룹
 
   tags = {
     Name = "ray-eice"
   }
 }
-
-
-
 
 resource "aws_instance" "x86_box" {
   ami                         = data.aws_ami.al2023_x86_64.id
