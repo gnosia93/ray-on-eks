@@ -1,0 +1,142 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Ray Infra: c7i.4xlarge Bastion with VS Code Server & Full Tagging'
+
+Parameters:
+  KeyPairName:
+    Description: 'EC2 접속용 기존 키페어 이름'
+    Type: AWS::EC2::KeyPair::KeyName
+    Default: "ap-northeast-1"                 # 기본값 (본인이 만든 이름으로 수정 가능)
+
+Resources:
+  # 1. 네트워크 구성
+  RayVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      Tags: 
+        - Key: Name, Value: RayVPC
+        - Key: Project, Value: ray-on-aws
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags: 
+        - Key: Project, Value: ray-on-aws
+
+  VPCGatewayAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref RayVPC
+      InternetGatewayId: !Ref InternetGateway
+
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref RayVPC
+      CidrBlock: 10.0.1.0/24
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      Tags: 
+        - Key: Name, Value: Ray-Public-Subnet
+        - Key: Project, Value: ray-on-aws
+
+  NatEIP:
+    Type: AWS::EC2::EIP
+    Properties: 
+      Domain: vpc
+      Tags: 
+        - Key: Project, Value: ray-on-aws
+
+  RayNatGateway:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId: !GetAtt NatEIP.AllocationId
+      SubnetId: !Ref PublicSubnet
+      Tags: 
+        - Key: Project, Value: ray-on-aws
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties: 
+      VpcId: !Ref RayVPC
+      Tags: 
+        - Key: Project, Value: ray-on-aws
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  PublicSubnetAssociation:
+    Type: AWS::EC2::SubnetRouteAssociation
+    Properties: { SubnetId: !Ref PublicSubnet, RouteTableId: !Ref PublicRouteTable }
+
+  # 2. 고성능 Bastion & VS Code Server
+  BastionSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow SSH and VS Code Server
+      VpcId: !Ref RayVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 8080
+          ToPort: 8080
+          CidrIp: 0.0.0.0/0
+      Tags: 
+        - Key: Project, Value: ray-on-aws
+
+  BastionHost:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: c7i.4xlarge
+      ImageId: ami-0c0b11d1f3924a14a # Amazon Linux 2023 (리전 확인 필수)
+      SubnetId: !Ref PublicSubnet
+      SecurityGroupIds: [!Ref BastionSG]
+      KeyName: !Ref KeyPairName
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          curl -fsSL https://code-server.dev | sh
+          systemctl enable --now code-server@ec2-user
+          sed -i 's/bind-addr: 127.0.0.1:8080/bind-addr: 0.0.0.0:8080/' /home/ec2-user/.config/code-server/config.yaml
+          sed -i 's/auth: password/auth: none/' /home/ec2-user/.config/code-server/config.yaml
+          systemctl restart code-server@ec2-user
+      Tags: 
+        - Key: Name, Value: Ray-Bastion-VSCode
+        - Key: Project, Value: ray-on-aws
+
+  # 3. Private Subnet (Ray Worker 영역)
+  PrivateSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref RayVPC
+      CidrBlock: 10.0.2.0/24
+      AvailabilityZone: !Select [ 0, !GetAZs '' ]
+      Tags: 
+        - Key: Name, Value: Ray-Private-Subnet
+        - Key: Project, Value: ray-on-aws
+
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties: 
+      VpcId: !Ref RayVPC
+      Tags: 
+        - Key: Project, Value: ray-on-aws
+
+  PrivateRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PrivateRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId: !Ref RayNatGateway
+
+  PrivateSubnetAssociation:
+    Type: AWS::EC2::SubnetRouteAssociation
+    Properties: { SubnetId: !Ref PrivateSubnet, RouteTableId: !Ref PrivateRouteTable }
