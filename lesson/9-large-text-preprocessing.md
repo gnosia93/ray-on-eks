@@ -1,7 +1,21 @@
 이 코드는 S3에 저장된 대용량 텍스트(JSON 또는 Parquet)를 불러와 분산 환경에서 전처리하는 샘플이다.
 
 ### S3 버킷 생성 ###
+```
+export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
+export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+export CLUSTER_NAME="ray-on-aws"
 
+# 버킷 이름을 변수로 지정 (예: ray-data-benchmark-12345)
+BUCKET_NAME="ray-on-aws-$(date +%s)"
+
+# 버킷 생성
+aws s3api create-bucket --bucket ${BUCKET_NAME} --region ${AWS_REGION} \
+  --create-bucket-configuration LocationConstraint=${AWS_REGION}
+```
+```
+aws s3 ls | grep ${BUCKET_NAME}
+```
 
 ### 샘플 데이터 생성 ###
 ```
