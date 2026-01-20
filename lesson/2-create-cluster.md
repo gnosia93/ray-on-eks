@@ -40,9 +40,17 @@ cat <<EOF > ray-autoscaling-policy.json
         "ec2:TerminateInstances",
         "ec2:DescribeInstances",
         "ec2:DescribeSubnets",
+        "ec2:DescribeSecurityGroups",
+        "ec2:DescribeImages",
+        "ec2:DescribeVpcs",
         "ec2:CreateTags"
       ],
       "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": "iam:PassRole",
+      "Resource": "arn:aws:iam::${AWS_ACCOUNT_ID}:role/ray-autoscaling-role"
     }
   ]
 }
