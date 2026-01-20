@@ -9,7 +9,7 @@ cat <<EOF > test-job.py
 import ray
 import platform
 
-ray.init()
+ray.init(runtime_env={"excludes": [".cache", ".local"]})
 
 @ray.remote(resources={"Intel": 1})
 def run_on_intel():
