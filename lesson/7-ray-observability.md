@@ -1,3 +1,4 @@
+## 익스포터 ##
 
 ### 1. Ray 내장 익스포터 (Ray Metrics) ###
 * 설치 위치: 모든 노드에 자동으로 포함되어 있습니다.
@@ -16,9 +17,7 @@ setup_commands:
     - ./node_exporter-1.7.0.linux-amd64/node_exporter &  # 백그라운드 실행
 ```
 
----
-
-### Prometheus 스택 설치 ###
+## Docker Compose 로 Prometheus 스택 설치 ###
 * 사전 준비 (헤드 노드)
 ```
 sudo dnf install -y docker
