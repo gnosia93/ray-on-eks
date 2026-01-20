@@ -69,7 +69,7 @@ pip install boto3
 ```
 프라이빗 서브넷의 ID 값을 가져온다.
 ```
-PRIV_SUBNET_ID=$(aws ec2 describe-subnets \
+export PRIV_SUBNET_ID=$(aws ec2 describe-subnets \
     --filters "Name=tag:Name,Values=Ray-Private-Subnet" "Name=vpc-id,Values=${VPC_ID}" \
     --query "Subnets[*].{ID:SubnetId}" --output text)
 
@@ -81,14 +81,55 @@ echo "private subnet: ${PRIV_SUBNET_ID}"
 * 워커 노드: 헤드와 워커 노드 사이에는 모든 TCP 포트가 서로 통신 가능하도록 해당 보안 그룹이 자기 자신을 소스(Self-reference)로 허용해야 한다.
 ```
 # 1. Head SG 생성
-HEAD_SG_ID=$(aws ec2 create-security-group --group-name RayHeadSG \
-  --description "Security group for Ray Head Node" --vpc-id $VPC_ID --query 'GroupId' --output text)
+#HEAD_SG_ID=$(aws ec2 create-security-group --group-name RayHeadSG \
+#  --description "Security group for Ray Head Node" --vpc-id $VPC_ID --query 'GroupId' --output text)
+
+HEAD_SG_ID=$(aws ec2 describe-security-groups \
+  --filters "Name=group-name,Values=RayHeadSG" "Name=vpc-id,Values=$VPC_ID" \
+  --query "SecurityGroups[0].GroupId" --output text)
+
+if [ "$HEAD_SG_ID" == "None" ] || [ -z "$HEAD_SG_ID" ]; then
+  echo "RayHeadSG가 존재하지 않아 새로 생성합니다..."
+  HEAD_SG_ID=$(aws ec2 create-security-group \
+    --group-name RayHeadSG \
+    --description "Security group for Ray Head Node" \
+    --vpc-id $VPC_ID \
+    --query 'GroupId' --output text)
+else
+  echo "기존 RayHeadSG를 발견했습니다: $HEAD_SG_ID"
+fi
+
+echo "Head SG ID: $HEAD_SG_ID"
+
+
+# 1. 기존 Worker SG ID 조회 시도
+WORKER_SG_ID=$(aws ec2 describe-security-groups \
+  --filters "Name=group-name,Values=RayWorkerSG" "Name=vpc-id,Values=$VPC_ID" \
+  --query "SecurityGroups[0].GroupId" --output text)
+
+# 2. 존재하지 않을 경우 생성
+if [ "$WORKER_SG_ID" == "None" ] || [ -z "$WORKER_SG_ID" ]; then
+  echo "RayWorkerSG가 존재하지 않아 새로 생성합니다..."
+  WORKER_SG_ID=$(aws ec2 create-security-group \
+    --group-name RayWorkerSG \
+    --description "Security group for Ray Worker Nodes" \
+    --vpc-id $VPC_ID \
+    --query 'GroupId' --output text)
+else
+  echo "기존 RayWorkerSG를 발견했습니다: $WORKER_SG_ID"
+fi
+
+echo "Worker SG ID: $WORKER_SG_ID"
+
+
+
+
 
 # 2. Worker SG 생성
-WORKER_SG_ID=$(aws ec2 create-security-group --group-name RayWorkerSG \
-  --description "Security group for Ray Worker Nodes" --vpc-id $VPC_ID --query 'GroupId' --output text)
+#WORKER_SG_ID=$(aws ec2 create-security-group --group-name RayWorkerSG \
+#  --description "Security group for Ray Worker Nodes" --vpc-id $VPC_ID --query 'GroupId' --output text)
 
-echo "Head SG: $HEAD_SG_ID / Worker SG: $WORKER_SG_ID"
+#echo "Head SG: $HEAD_SG_ID / Worker SG: $WORKER_SG_ID"
 
 
 # A. 내부 통신 허용: Head <-> Worker (모든 TCP 포트)
