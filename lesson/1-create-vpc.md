@@ -31,7 +31,7 @@ aws cloudformation create-stack \
   --capabilities CAPABILITY_IAM \
   --tags Key=Project,Value=ray-on-aws
 ```
-vpc 생성 진행 과정을 조회한다. 
+vpc 생성 진행 과정을 조회하고 완료될때 까지 대기한다. 
 ```
 aws cloudformation describe-stacks --stack-name ray-vpc --query "Stacks[0].StackStatus"
 ```
