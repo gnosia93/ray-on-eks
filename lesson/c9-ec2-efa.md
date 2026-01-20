@@ -198,8 +198,9 @@ ray up cluster-efa.yaml -y
 ray exec ~/cluster-efa.yaml "tail -f /tmp/ray/session_latest/logs/monitor.out"
 ```
 
+클러스터 상태를 확인한다.
 ```
-ray exec ~/cluster.yaml "ray status"
+ray exec ~/cluster-efa.yaml "ray status"
 ```
 
 
