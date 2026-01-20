@@ -62,6 +62,9 @@ aws iam add-role-to-instance-profile --instance-profile-name ray-instance-profil
 ### 3. ray 클러스터 설정하기 ###
 ray 패키지를 설치한다. 
 ```
+sudo dnf install -y python-unversioned-command
+sudo dnf install -y python3-pip
+
 pip install -U "ray[default]"
 ```
 프라이빗 서브넷의 ID 값을 가져온다.
