@@ -66,14 +66,13 @@ cluster_name: ${CLUSTER_NAME}
 
 provider:
     type: aws
-    region: ${AWS_REGION}                              # 서울 리전
-    availability_zone: ap-northeast-2a
-    use_internal_ips: true                             # 이 줄을 추가하세요!
+    region: ${AWS_REGION}                              
+    availability_zone: ${AWS_REGION}"a"
+    use_internal_ips: true
 
 # 각 노드에서 실행될 설정 (Python 설치 등)
 setup_commands:
     - pip install -U "ray[default,data]" pandas pyarrow boto3
-
 
 # 노드별 상세 사양
 available_node_types:
