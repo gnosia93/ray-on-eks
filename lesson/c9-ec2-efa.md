@@ -193,7 +193,11 @@ ssh -A ec2-user@${VS_CODE}
 ray up cluster-efa.yaml -y
 ```
 
-### 검증 ###
+### 로그 확인 ###
+```
+ray exec ~/cluster-efa.yaml "tail -f /tmp/ray/session_latest/logs/monitor.out"
+```
+
 검노드 접속 후 fi_info -p efa 명령어로 EFA 장치가 인식되는지 확인한다.
 
 
