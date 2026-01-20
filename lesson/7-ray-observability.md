@@ -8,3 +8,10 @@
 * 설치 위치: 모든 EC2 노드에 직접 설치해야 합니다.
 * 특징: CPU 온도, 디스크 I/O 상세, 네트워크 인터페이스 상태 등 OS/하드웨어 수준의 데이터를 수집합니다.
 * 자동화 방법: cluster.yaml의 setup_commands에 설치 스크립트를 넣어두면 노드가 추가될 때마다 자동으로 깔립니다.
+```
+# cluster.yaml 예시
+setup_commands:
+    - wget https://github.com
+    - tar xvfz node_exporter-*.tar.gz
+    - ./node_exporter-1.7.0.linux-amd64/node_exporter &  # 백그라운드 실행
+```
