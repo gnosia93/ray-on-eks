@@ -404,7 +404,8 @@ Warning: Permanently added '10.0.2.177' (ED25519) to the list of known hosts.
 
 ### 5. 대시보드 접근 ###
 ```
-
+# 로컬 PC가 아닌 '배스천 호스트' 터미널에서 실행
+ray dashboard /home/ec2-user/cluster.yaml
 ```
 
 ### 참고 - 클러스터 삭제하기 ###
