@@ -39,8 +39,8 @@ ray.init(address="auto")
   
 # 1. 샘플 텍스트 생성 함수 (약 1KB 크기의 문장 생성)
 def generate_fake_data(batch_info):
-    # 각 배치당 10,000행 생성 (1행당 약 1KB -> 배치당 약 10MB)
-    num_rows = 10000
+    # 각 배치당 10,000행 생성 (1행당 약 1KB -> 배치당 약 1MB)
+    num_rows = 1000
     data = {
         "id": np.random.randint(0, 10**9, size=num_rows),
         "text": [''.join(np.random.choice(list(string.ascii_letters + " "), 1000)) 
@@ -49,8 +49,8 @@ def generate_fake_data(batch_info):
     }
     return pd.DataFrame(data)
 
-# 2. 100GB 목표 설정
-# 배치당 10MB이므로, 10,000개의 배치를 만들면 100GB가 됩니다.
+# 2. 10GB 목표 설정
+# 배치당 1MB이므로, 10,000개의 배치를 만들면 100GB가 됩니다.
 num_batches = 10000 
 
 # 3. Ray Data로 생성 및 저장
