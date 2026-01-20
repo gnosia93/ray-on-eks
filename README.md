@@ -16,7 +16,8 @@
 
 * C8. Fault Tolerance 체험	가동 중인 워커 노드를 강제 종료(Terminate)하고, Ray가 작업 손실 없이 새 EC2로 복구하는 과정 실측	
 
-* C9. 대규모 전처리 벤치마크	100GB급 텍스트 데이터를 30대 클러스터에서 전처리하며 Parallelism & Batch Size 최적화 값 찾기	
+* [C9. 대규모 텍스트 전처리]()
+  * Parallelism & Batch Size 최적화 값 찾기	
 
 
 ## 아키텍처별 가이드 ##
