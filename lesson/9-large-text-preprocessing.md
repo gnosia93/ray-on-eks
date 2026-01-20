@@ -163,7 +163,11 @@ ds = ray.data.read_parquet("s3://${BUCKET_NAME}/large-dataset/")
 processed_ds = ds.map_batches(
     preprocess_text,
     batch_size=1024,           # 한 번에 처리할 행(row) 수
-    concurrency=30,            # 병렬성 (워커 노드 수에 맞춰 조절)
+    #concurrency=30,            # 병렬성 (워커 노드 수에 맞춰 조절)
+    # 고정된 숫자(30) 대신 리소스를 명시하여 Ray가 가용 메모리에 맞춰 조절하게 함
+    num_cpus=1, 
+    # 혹은 액터 풀 전략 사용 시 메모리 부족을 방지하기 위해 크기 조절
+    compute=ray.data.ActorPoolStrategy(min_size=2, max_size=32) 
 )
 
 # 4. 결과 저장 (Partitioning)
