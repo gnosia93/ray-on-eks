@@ -64,6 +64,10 @@ aws iam create-instance-profile --instance-profile-name ray-instance-profile
 
 # 프로파일에 역할 추가
 aws iam add-role-to-instance-profile --instance-profile-name ray-instance-profile --role-name ray-autoscaling-role
+
+# s3 접근 권한 설정
+aws iam attach-role-policy --role-name ray-autoscaling-role \
+  --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess
 ```
 
 ### 3. ray 클러스터 설정하기 ###
