@@ -135,6 +135,8 @@ provider:
 setup_commands:
     - pip install -U "ray[default,data]" pandas pyarrow boto3
 
+max_workers: 16
+
 # 노드별 상세 사양
 available_node_types:
     # 헤드 노드
