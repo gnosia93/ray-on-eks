@@ -92,6 +92,12 @@ export ARM_AMI_ID=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux
 
 echo ${X86_AMI_ID}
 echo ${ARM_AMI_ID}
+
+export PRIV_SUBNET_ID=$(aws ec2 describe-subnets \
+    --filters "Name=tag:Name,Values=Ray-Private-Subnet" "Name=vpc-id,Values=${VPC_ID}" \
+    --query "Subnets[*].{ID:SubnetId}" --output text)
+
+echo "private subnet: ${PRIV_SUBNET_ID}"
 ```
 
 ```
