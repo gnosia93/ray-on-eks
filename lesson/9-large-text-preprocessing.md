@@ -3,7 +3,46 @@
 ### S3 버킷 생성 ###
 
 
-### 전처리 샘플 ###
+### 샘플 데이터 생성 ###
+```
+import ray
+import pandas as pd
+import numpy as np
+import string
+
+ray.init(address="auto")
+
+# 1. 샘플 텍스트 생성 함수 (약 1KB 크기의 문장 생성)
+def generate_fake_data(batch_info):
+    # 각 배치당 10,000행 생성 (1행당 약 1KB -> 배치당 약 10MB)
+    num_rows = 10000
+    data = {
+        "id": np.random.randint(0, 10**9, size=num_rows),
+        "text": [''.join(np.random.choice(list(string.ascii_letters + " "), 1000)) 
+                 for _ in range(num_rows)],
+        "label": np.random.choice(["news", "blog", "forum", "wiki"], size=num_rows)
+    }
+    return pd.DataFrame(data)
+
+# 2. 100GB 목표 설정
+# 배치당 10MB이므로, 10,000개의 배치를 만들면 100GB가 됩니다.
+num_batches = 10000 
+
+# 3. Ray Data로 생성 및 저장
+# range().map_batches를 사용하면 실제 데이터를 메모리에 다 올리지 않고 
+# 생성 즉시 S3로 스트리밍 저장합니다.
+ds = ray.data.range(num_batches) \
+    .map_batches(generate_fake_data, batch_size=1)
+
+# 4. S3 업로드 실행 (병렬 쓰기)
+# 'parallelism'을 워커 노드의 총 코어 수 정도로 설정하여 최대 속도로 업로드합니다.
+ds.write_parquet("s3://your-bucket-name/raw-100gb-data/", parallelism=100)
+
+print("100GB 샘플 데이터 생성 및 S3 업로드 완료!")
+```
+
+
+### 데이터 전처리 ###
 ```
 import ray
 import pandas as pd
