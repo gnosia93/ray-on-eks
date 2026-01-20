@@ -78,3 +78,6 @@ Shared connection to 10.0.2.177 closed.
 * upscaling_speed  
 한 번에 얼마나 공격적으로 인스턴스를 늘릴지 결정하는데 이 값이 높을수록(예: 10) 한 번에 많은 EC2를 동시에 요청한다.
 
+* Idle Timeout:
+노드에 할당된 작업이 하나도 없고, idle_timeout_minutes(예: 5분) 동안 아무 일도 하지 않으면 해당 노드를 삭제 대상으로 간주하고 노드의 수량을 줄인다.
+이때 Min Workers 이하로는 줄어들지 않는다.
