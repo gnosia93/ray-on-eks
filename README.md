@@ -1,4 +1,4 @@
-# Raydata-on-ec2
+# raydata-on-ec2
 
 ![](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/images/ray-on-ec2-workshop-1.png)
 _ray sample data - s3://ray-example-data_
