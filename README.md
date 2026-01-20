@@ -12,28 +12,17 @@
 
 * [C4. 오토 스케일링](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/4-auto-scaling.md)
 
-* [C5. 스팟 인스턴스 사용하기]()
+* [C5. 스팟 인스턴스 사용하기]() - ray 는 spot 회쉬되더라도 교체해서 잘 동작한다. 어떻게?
 
----
-* on-demand / spot 믹스하기
-* ray 는 spot 회쉬되더라도 교체해서 잘 동작한다. 어떻게?
-  
+* [C6. On-demand / Spot 함께 사용하기]
 
-```
-Ray 인프라 & 오토스케일링 딥다이브 (총 8시간)
-세션	실습 항목 (Hands-on)	내용 및 딥다이브 포인트	소요 시간
-Session 1	인프라 프로비저닝	VPC, CloudFormation Bastion, Terraform IAM Role 생성 및 EICE 보안 연동 실습	90분
-Session 2	클러스터 런칭 & 보안	배스천에서 Ray Cluster YAML 설정 후 PEM 키 없이 IAM Role 기반으로 10대(160코어) 기동	60분
-Session 3	Upscaling 폭격	480개 태스크 투하로 EC2 30대 소환. monitor.out 로그 분석을 통한 Pending Task 기반 확장 원리 파헤치기	90분
-Session 4	커스텀 자원 정밀 제어	Custom_Resource를 활용해 특정 인스턴스 타입을 골라 띄우는 Resource-specific Scaling 구현	60분
-Session 5	Fault Tolerance 체험	가동 중인 워커 노드를 강제 종료(Terminate)하고, Ray가 작업 손실 없이 새 EC2로 복구하는 과정 실측	60분
-Session 6	비용 최적화 챌린지	온디맨드 vs 스팟 인스턴스 믹스 전략 적용. idle_timeout 설정을 통한 자동 Downscaling 및 비용 절감액 계산	60분
-Session 7	대규모 전처리 벤치마크	100GB급 텍스트 데이터를 30대 클러스터에서 전처리하며 Parallelism & Batch Size 최적화 값 찾기	60분
-Wrap-up	인프라 Clean-up	ray down 및 Terraform/CfN 리소스 일괄 삭제로 클라우드 자원 관리 마무리	30분
-```
+* C7. 커스텀 자원 정밀 제어	Custom_Resource를 활용해 특정 인스턴스 타입을 골라 띄우는 Resource-specific Scaling 구현	
 
-* 오토스케일링 로그: /tmp/ray/session_latest/logs/monitor.out
-* 노드 초기화 로그: /tmp/ray/session_latest/logs/raylet.out
+* C8. Fault Tolerance 체험	가동 중인 워커 노드를 강제 종료(Terminate)하고, Ray가 작업 손실 없이 새 EC2로 복구하는 과정 실측	
+
+* C9. 대규모 전처리 벤치마크	100GB급 텍스트 데이터를 30대 클러스터에서 전처리하며 Parallelism & Batch Size 최적화 값 찾기	
+
+
 
 
 ## 아키텍처별 가이드 ##
