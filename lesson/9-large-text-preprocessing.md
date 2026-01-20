@@ -61,10 +61,10 @@ Intel/Graviton 혼합 클러스터라면 map_batches(..., resources={"Intel": 1}
 * 클러스터의 병렬성 (Parallelism)  
 Ray는 데이터를 읽을 때 클러스터의 전체 CPU 코어 수의 약 2~3배를 기본 파티션 수로 잡는 경향이 있다.
 * 파일 개수 지정 (repartition):
-```
-processed_ds.repartition(100).write_parquet("s3://bucket/path/")
-```
+    ```
+    processed_ds.repartition(100).write_parquet("s3://bucket/path/")
+    ```
 * 파일 크기 기반 조절 (min_rows_per_file):
-```
-processed_ds.write_parquet("s3://bucket/path/", min_rows_per_file=10000
-```
+    ```
+    processed_ds.write_parquet("s3://bucket/path/", min_rows_per_file=10000
+    ```
