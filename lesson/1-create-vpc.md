@@ -44,7 +44,7 @@ aws cloudformation describe-stacks \
   --output text
 ```
 
-* 참고 - 스택 삭제하기
+## vpc 삭제하기 ##
 ```
 aws cloudformation delete-stack --stack-name ray-vpc
 ```
