@@ -80,3 +80,7 @@ docker-compose up -d
 ### 주의사항 ###
 * 보안 그룹: AWS Console에서 헤드 노드의 보안 그룹 규칙에 9090과 3000 포트를 열어주어야 외부 브라우저에서 보입니다.
 * 권한: /tmp/ray 폴더의 권한 때문에 Prometheus가 파일을 못 읽는다면 chmod -R 755 /tmp/ray를 실행하세요.
+
+## 레퍼런스 ##
+* https://leehosu.github.io/kube-prometheus-stack
+
