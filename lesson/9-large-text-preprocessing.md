@@ -1,5 +1,9 @@
 이 코드는 S3에 저장된 대용량 텍스트(JSON 또는 Parquet)를 불러와 분산 환경에서 전처리하는 샘플이다.
 
+### S3 버킷 생성 ###
+
+
+### 전처리 샘플 ###
 ```
 import ray
 import pandas as pd
