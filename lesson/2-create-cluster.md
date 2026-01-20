@@ -209,7 +209,7 @@ available_node_types:
         max_workers: 0                             
     # Intel 워커 노드 (데이터 처리용)
     x86_worker_node:
-        resources: {"CPU": 4, "Intel": 1}              # 스케줄링 힌트 제공
+        resources: {"CPU": 8, "Intel": 1}              # 스케줄링 힌트 제공
         node_config:
             InstanceType: m7i.2xlarge
             ImageId: ${X86_AMI_ID}
@@ -223,7 +223,7 @@ available_node_types:
 
     # Graviton 워커 노드 (데이터 처리용)
     arm_worker_node:
-        resources: {"CPU": 4, "Graviton": 1}           # 스케줄링 힌트 제공
+        resources: {"CPU": 8, "Graviton": 1}           # 스케줄링 힌트 제공
         node_config:
             InstanceType: m8g.2xlarge
             ImageId: ${ARM_AMI_ID}                     # 헤드 노드와 동일한 이미지 사용
