@@ -43,7 +43,7 @@ OUTPUT=$(aws cloudformation describe-stacks --region ${AWS_REGION} \
   --query "Stacks[0].Outputs[?OutputKey=='BastionDNS' || OutputKey=='VSCodeURL'].OutputValue" \
   --output text)
 echo ${OUTPUT}
-echo ${OUTPUT} | cut -d -f 1 > VS_CODE
+echo ${OUTPUT} | cut -f 1 > VS_CODE
 ```
 
 ## vpc 삭제하기 ##
