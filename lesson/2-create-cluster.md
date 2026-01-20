@@ -79,7 +79,7 @@ aws iam attach-role-policy --role-name ray-autoscaling-role \
   --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess
 ```
 
-### 3. ray 클러스터 설정하기 ###
+### 3. ray 환경 설정 ###
 ray 패키지를 설치한다. 
 ```
 sudo dnf install -y python-unversioned-command
@@ -171,7 +171,7 @@ aws ec2 authorize-security-group-ingress --group-id $WORKER_SG_ID \
   --protocol tcp --port 22 --source-group $BASTION_SG_ID
 ```
 
-
+### 4. ray 컨피그 파일 생성 ###
 ```
 cat <<EOF > cluster.yaml
 cluster_name: ${CLUSTER_NAME}
@@ -244,7 +244,9 @@ EOF
 * CPU: 16 (물리적 자원) 실제 인스턴스의 하드웨어 스펙으로 태스크가 실행될 때마다 차감되며, 0이 되면 더 이상 작업이 할당되지 않는다. 
 * Graviton: 1 (논리적 태그) 사용자가 임의로 붙인 "이 노드는 그라비톤 칩셋임" 이라는 마크이다. 
 
-ray 클러스터를 생성한다. ssh-add는 SSH Key 전용 메모리 저장소인 ssh-agent에 사용자의 비밀키(.pem 등)를 등록하는 명령어로, 로컬 PC의 키를 배스천에 물리적으로 복사하지 않고도 배스천을 거쳐 내부 노드(Head/Worker)에 접속할 수 있게 인증 정보를 중계해 준다.
+
+### 5. ray 클러스터 생성 ###
+#### (주의) ray 클러스터는 로컬 PC 에서 생성해야 한다. #### 
 ```
 # 로컬 PC에서 실행
 ssh-add ~/your-aws-key.pem
@@ -261,9 +263,10 @@ ssh -A ec2-user@${VS_CODE}
  
 ray up cluster.yaml -y
 ```
+* ssh-add는 SSH Key 전용 메모리 저장소인 ssh-agent에 사용자의 비밀키(.pem 등)를 등록하는 명령어로, 로컬 PC의 키를 배스천에 물리적으로 복사하지 않고도 배스천을 거쳐 내부 노드(Head/Worker)에 접속할 수 있게 인증 정보를 중계해 준다.
 
-### 4. 클러스터 확인 ###
-#### ray status ####
+### 6. 클러스터 확인 ###
+#### ray 클러스터 상태확인 ####
 ```
 ray exec ~/cluster.yaml "ray status"
 ```
@@ -304,7 +307,7 @@ Pending Demands:
 Shared connection to 10.0.2.177 closed.
 ```
 
-#### ray list nodes --detail ####
+#### 노드 리스트 확인 ####
 ```
 ray exec ~/cluster.yaml "ray list nodes --detail"
 ```
@@ -406,12 +409,14 @@ Warning: Permanently added '10.0.2.177' (ED25519) to the list of known hosts.
 ```
 
 
-### 5. 대시보드 접근 ###
+### 7. 대시보드 접근 ###
+vs-code 터미널로 이동하여 아래 명령어를 실행한다. 
 ```
-# 로컬 PC가 아닌 '배스천 호스트' 터미널에서 실행
 ray dashboard /home/ec2-user/cluster.yaml
+```
 
-# 로컬 PC 에서 실행
+아래 터널링 명령어는 로컬 PC 에서 실행한다. 
+```
 ssh -i "키파일.pem" -L 8265:localhost:8265 ec2-user@${VS_CODE}
 ```
 로컬 PC 의 웹브라우저로 http://localhost:8265 로 접속한다. 
