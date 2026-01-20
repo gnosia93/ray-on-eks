@@ -21,13 +21,19 @@ setup_commands:
 
 ## Docker Compose 로 Prometheus 스택 설치 ###
 
-헤드 노드에 docker 를 설치한다.
+vs-code 터미널에서 ray attach 를 이용하여 헤드 노드에 접속한다.
+```
+ray attach cluster_config.yaml
+```
+아래 명령어로 헤드 노드에 docker 를 설치한다.
 ```
 sudo dnf install -y docker
+sudo dnf install -y docker-compose-plugin
 sudo systemctl enable --now docker
 sudo usermod -aG docker ec2-user
 # 재로그인 또는 현재 세션 적용
 newgrp docker
+docker compose version
 ```
 
 prometheus.yml (Ray 자동 감지 설정) - Ray가 생성하는 JSON 파일을 공유하기 위해 경로를 맞춘다.
