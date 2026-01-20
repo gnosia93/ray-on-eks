@@ -23,47 +23,18 @@
 * C9. 대규모 전처리 벤치마크	100GB급 텍스트 데이터를 30대 클러스터에서 전처리하며 Parallelism & Batch Size 최적화 값 찾기	
 
 
-
-
 ## 아키텍처별 가이드 ##
-네, 엄청난 차이가 있습니다. Ray는 분산 컴퓨팅 프레임워크이기 때문에 하드웨어 아키텍처의 특성을 아주 정직하게 타는 편입니다. 특히 님께서 선택하신 c7i(Intel)와 비교했을 때 아키텍처별로 다음과 같은 실습 포인트들이 생깁니다.
-* 1. Intel (c7i) vs AMD (c7a)
-- Intel (c7i): 가장 표준적입니다. 특히 AMX(Advanced Matrix Extensions) 가속기 덕분에 텍스트 임베딩이나 행렬 연산에서 압도적입니다. Intel Ray 가속 가이드를 참고하면 최적화 라이브러리 설정법이 나옵니다.
+
+Ray는 분산 컴퓨팅 프레임워크이기 때문에 하드웨어 아키텍처의 특성을 아주 정직하게 타는 편입니다. 
+- Intel (c7i): 가장 표준적입니다. 특히 AMX(Advanced Matrix Extensions) 가속기 덕분에 텍스트 임베딩이나 행렬 연산에서 압도적입니다. 
 - AMD (c7a): 순수 연산 속도(Raw Clock)와 가성비가 좋습니다. 단순 텍스트 정규화나 정규식 처리 위주라면 Intel보다 저렴하면서 성능은 비슷하게 나옵니다.
+- Graviton (AWS 자체 칩 - arm64)
+  - 성능/비용: 가성비 끝판왕입니다. 동일 성능 대비 비용이 약 20% 저렴합니다.
+  - 주의사항: pip install 시 arm64 전용 바이너리를 내려받아야 하므로 AMI(Amazon Machine Image) 설정이 달라집니다.
 
-* 2. Graviton (AWS 자체 칩 - arm64)
-- 성능/비용: 가성비 끝판왕입니다. 동일 성능 대비 비용이 약 20% 저렴합니다.
-- 주의사항: pip install 시 arm64 전용 바이너리를 내려받아야 하므로 AMI(Amazon Machine Image) 설정이 달라집니다.
-- 교육 포인트: "비용 절감을 위해 아키텍처를 arm64로 전환하는 실습"을 넣으면 아주 고급 컨텐츠가 됩니다. AWS Graviton 가이드를 참고하세요.
-
-
-#### [Section 8] 아키텍처 벤치마킹 실습 (추가 제안) ###
-* 교육 시간을 조금 더 쓰고 싶다면, 10대는 c7i(Intel), 10대는 c7a(AMD)로 띄워서 동일한 텍스트 전처리 속도를 비교하게 해보세요.
-* 관전 포인트: "왜 특정 작업에선 Intel이 빠르고, 다른 작업에선 AMD가 가성비가 좋을까?"
 * EC2 활용 극대화: 인스턴스 타입을 섞어 쓰기 때문에 Mixed Instances Policy를 완벽하게 실습하게 됩니다
 
-```
-키텍처	추천 인스턴스	핵심 특징 (Deep Dive)	전처리 적합도
-Intel	c7i.4xlarge	AMX 가속기 탑재. 복잡한 수치 연산 및 LLM 텍스트 임베딩 전처리에 최강. 가장 호환성이 높음.	⭐⭐⭐⭐⭐
-AMD	c7a.4xlarge	최신 젠4 기반. 단순 정규식(Regex) 처리나 대량의 문자열 파싱에서 순수 연산 속도가 뛰어남.	⭐⭐⭐⭐
-Graviton	c7g.4xlarge	AWS 전용 ARM 칩. 가격 대비 성능비(Price/Perf) 최고. 인스턴스 30대를 돌려도 비용 부담이 가장 적음.	⭐⭐⭐⭐⭐ (가성비)
-```
-
-```
-실습 시나리오 적용 팁 (강사 가이드)
-1. "Intel vs AMD" 속도 경쟁 (30분)
-실습: 5대는 c7i, 5대는 c7a로 띄워 동일한 Common Voice 텍스트 전처리를 돌립니다.
-관전 포인트: 특정 정규식 처리 속도는 AMD가 빠를 수 있으나, 라이브러리 최적화(MKL 등)가 들어간 연산은 Intel이 앞서는 모습을 Ray Dashboard로 비교합니다.
-2. "Graviton 전환" 비용 절감 세션
-내용: "비용이 20% 줄어든다면 성능을 조금 포기하시겠습니까?"라는 질문을 던집니다.
-실습: AWS Graviton 가이드를 참고해 arm64 전용 AMI로 클러스터를 다시 띄우게 합니다. (이 과정에서 아키텍처 호환성 트러블슈팅 경험치 급상승)
-3. "Mixed Instance Policy"의 정당화
-논리: "재고가 부족한 스팟 인스턴스 환경에서는 Intel, AMD를 가리지 않고 닥치는 대로(?) 가져와서 클러스터를 유지하는 능력이 실력입니다."
-방법: YAML 설정에 InstanceType: "c7i.4xlarge, c7a.4xlarge, c6i.4xlarge"를 모두 넣어 가용성을 극대화합니다.
-```
-
-
-
+* Mixed Instance Policy 
 
 
 ## 데이터 ##
@@ -89,7 +60,9 @@ aws s3 ls s3://ray-example-data/common_voice_17/parquet/
 * 이미지 전처리
 * 보이스 전처리
 
+
 ## 레퍼런스 ##
+
 * https://docs.ray.io/en/latest/ray-overview/installation.html
 * https://github.com/dmatrix/ray-core-tutorial/blob/ad5f1fa700d87a9af1e21027f06f02cfdcc937f3//ex_07_ray_data.ipynb
 * https://github.com/aws-samples/aws-samples-for-ray/tree/main/ec2
