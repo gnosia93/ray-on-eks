@@ -275,16 +275,17 @@ Loaded cached provider configuration
 If you experience issues with the cloud provider, try re-running the command with --no-config-cache.
 /home/ec2-user/.local/lib/python3.9/site-packages/boto3/compat.py:89: PythonDeprecationWarning: Boto3 will no longer support Python 3.9 starting April 29, 2026. To continue receiving service updates, bug fixes, and security updates please upgrade to Python 3.10 or later. More information can be found here: https://aws.amazon.com/blogs/developer/python-support-policy-updates-for-aws-sdks-and-tools/
   warnings.warn(warning, PythonDeprecationWarning)
-Fetched IP: 10.0.2.177
-======== Autoscaler status: 2026-01-20 02:34:48.560347 ========
+Fetched IP: 10.0.2.183
+Warning: Permanently added '10.0.2.183' (ED25519) to the list of known hosts.
+======== Autoscaler status: 2026-01-20 08:20:02.391213 ========
 Node status
 ---------------------------------------------------------------
 Active:
  (no active nodes)
 Idle:
- 1 arm_worker_node
- 1 x86_worker_node
  1 head_node
+ 1 x86_worker_node
+ 1 arm_worker_node
 Pending:
  (no pending nodes)
 Recent failures:
@@ -293,17 +294,17 @@ Recent failures:
 Resources
 ---------------------------------------------------------------
 Total Usage:
- 0.0/12.0 CPU
+ 0.0/16.0 CPU
  0.0/1.0 Graviton
  0.0/2.0 Intel
- 0B/189.07GiB memory
- 0B/76.43GiB object_store_memory
+ 0B/99.44GiB memory
+ 0B/40.69GiB object_store_memory
 
 From request_resources:
  (none)
 Pending Demands:
  (no resource demands)
-Shared connection to 10.0.2.177 closed.
+Shared connection to 10.0.2.183 closed.
 ```
 
 #### 노드 리스트 확인 ####
@@ -316,95 +317,63 @@ Loaded cached provider configuration
 If you experience issues with the cloud provider, try re-running the command with --no-config-cache.
 /home/ec2-user/.local/lib/python3.9/site-packages/boto3/compat.py:89: PythonDeprecationWarning: Boto3 will no longer support Python 3.9 starting April 29, 2026. To continue receiving service updates, bug fixes, and security updates please upgrade to Python 3.10 or later. More information can be found here: https://aws.amazon.com/blogs/developer/python-support-policy-updates-for-aws-sdks-and-tools/
   warnings.warn(warning, PythonDeprecationWarning)
-Fetched IP: 10.0.2.177
-Warning: Permanently added '10.0.2.177' (ED25519) to the list of known hosts.
+Fetched IP: 10.0.2.183
+Warning: Permanently added '10.0.2.183' (ED25519) to the list of known hosts.
 ---
--   node_id: 29a5b1bae8b5ef92dde03ffd5d53373e67550c7af77d4917985cbb30
-    node_ip: 10.0.2.138
-    is_head_node: false
-    state: ALIVE
-    state_message: null
-    node_name: 10.0.2.138
-    resources_total:
-        object_store_memory: 9.022 GiB
-        memory: 22.400 GiB
-        node:10.0.2.138: 1.0
-        Graviton: 1.0
-        CPU: 4.0
-    labels:
-        ray.io/node-id: 29a5b1bae8b5ef92dde03ffd5d53373e67550c7af77d4917985cbb30
-        ray.io/node-group: worker_node
-    start_time_ms: '2026-01-20 02:18:19.716000'
-    end_time_ms: '1970-01-01 00:00:00'
--   node_id: 6f82cca035c93590123b5198184aa7a4cf67d1e119cebb22a5df0c09
-    node_ip: 10.0.2.233
-    is_head_node: false
-    state: ALIVE
-    state_message: null
-    node_name: 10.0.2.233
-    resources_total:
-        node:10.0.2.233: 1.0
-        object_store_memory: 9.020 GiB
-        memory: 22.400 GiB
-        Graviton: 1.0
-        CPU: 4.0
-    labels:
-        ray.io/node-id: 6f82cca035c93590123b5198184aa7a4cf67d1e119cebb22a5df0c09
-        ray.io/node-group: worker_node
-    start_time_ms: '2026-01-20 02:18:37.727000'
-    end_time_ms: '1970-01-01 00:00:00'
--   node_id: cf44b45fa911750cf543d3a0c79f03eb5bf8a01902358240dd0e134d
-    node_ip: 10.0.2.191
-    is_head_node: false
-    state: ALIVE
-    state_message: null
-    node_name: 10.0.2.191
-    resources_total:
-        node:10.0.2.191: 1.0
-        object_store_memory: 9.020 GiB
-        memory: 22.400 GiB
-        Graviton: 1.0
-        CPU: 4.0
-    labels:
-        ray.io/node-id: cf44b45fa911750cf543d3a0c79f03eb5bf8a01902358240dd0e134d
-        ray.io/node-group: worker_node
-    start_time_ms: '2026-01-20 02:18:32.943000'
-    end_time_ms: '1970-01-01 00:00:00'
--   node_id: d13964359101be8ca107b6bc5cb096241c4c85efca8ef49a761b36f1
-    node_ip: 10.0.2.212
-    is_head_node: false
-    state: ALIVE
-    state_message: null
-    node_name: 10.0.2.212
-    resources_total:
-        object_store_memory: 9.022 GiB
-        memory: 22.400 GiB
-        node:10.0.2.212: 1.0
-        Graviton: 1.0
-        CPU: 4.0
-    labels:
-        ray.io/node-id: d13964359101be8ca107b6bc5cb096241c4c85efca8ef49a761b36f1
-        ray.io/node-group: worker_node
-    start_time_ms: '2026-01-20 02:18:06.619000'
-    end_time_ms: '1970-01-01 00:00:00'
--   node_id: de92eb1e441abf36ed1970f9084458d412154ad83063fad06d3e0711
-    node_ip: 10.0.2.177
+-   node_id: a5489a002772f019149a22ec65cbf917864e8ffb10ce02631f9da83e
+    node_ip: 10.0.2.183
     is_head_node: true
     state: ALIVE
     state_message: null
-    node_name: 10.0.2.177
+    node_name: 10.0.2.183
     resources_total:
-        Intel: 1.0
-        object_store_memory: 4.232 GiB
-        memory: 9.876 GiB
         node:__internal_head__: 1.0
-        node:10.0.2.177: 1.0
-        CPU: 4.0
+        memory: 9.837 GiB
+        node:10.0.2.183: 1.0
+        object_store_memory: 4.216 GiB
+        Intel: 1.0
     labels:
-        ray.io/node-id: de92eb1e441abf36ed1970f9084458d412154ad83063fad06d3e0711
         ray.io/node-group: head_node
-    start_time_ms: '2026-01-20 02:17:01.604000'
+        ray.io/node-id: a5489a002772f019149a22ec65cbf917864e8ffb10ce02631f9da83e
+    start_time_ms: '2026-01-20 08:16:24.327000'
     end_time_ms: '1970-01-01 00:00:00'
+-   node_id: dc74d1c02e1e35be5bca4c1d83d44a8f7a9c51ad9ad7d6657eec6da1
+    node_ip: 10.0.2.133
+    is_head_node: false
+    state: ALIVE
+    state_message: null
+    node_name: 10.0.2.133
+    resources_total:
+        node:10.0.2.133: 1.0
+        CPU: 8.0
+        memory: 44.800 GiB
+        Graviton: 1.0
+        object_store_memory: 18.224 GiB
+    labels:
+        ray.io/node-group: arm_worker_node
+        ray.io/node-id: dc74d1c02e1e35be5bca4c1d83d44a8f7a9c51ad9ad7d6657eec6da1
+    start_time_ms: '2026-01-20 08:17:55.672000'
+    end_time_ms: '1970-01-01 00:00:00'
+-   node_id: dc8aed121d806e30805d72f2755f2427f7ca5632579cced62d0e6b10
+    node_ip: 10.0.2.101
+    is_head_node: false
+    state: ALIVE
+    state_message: null
+    node_name: 10.0.2.101
+    resources_total:
+        CPU: 8.0
+        Intel: 1.0
+        memory: 44.800 GiB
+        object_store_memory: 18.252 GiB
+        node:10.0.2.101: 1.0
+    labels:
+        ray.io/node-group: x86_worker_node
+        ray.io/node-id: dc8aed121d806e30805d72f2755f2427f7ca5632579cced62d0e6b10
+    start_time_ms: '2026-01-20 08:17:44.758000'
+    end_time_ms: '1970-01-01 00:00:00'
+...
+
+Shared connection to 10.0.2.183 closed.
 ```
 
 
