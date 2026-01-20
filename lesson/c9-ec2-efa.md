@@ -180,6 +180,20 @@ head_node_type: head_node                              # 정의한 여러 노드
 EOF
 ```
 
+(주의) ray 클러스터는 로컬 PC 에서 생성해야 한다.
+```
+# 로컬 PC에서 실행
+ssh-add ~/your-aws-key.pem
+ssh-add -l
+# ssh-add -D  모든 키 삭제, 로그아웃시 권장
+# eval $(ssh-agent) ssh-agent 확인
+
+VS_CODE=$(cat VS_CODE) && echo ${VS_CODE}
+ssh -A ec2-user@${VS_CODE}
+ 
+ray up cluster.yaml -y
+```
+
 ### 검증 ###
 검노드 접속 후 fi_info -p efa 명령어로 EFA 장치가 인식되는지 확인한다.
 
