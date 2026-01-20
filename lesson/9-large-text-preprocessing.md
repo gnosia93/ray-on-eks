@@ -15,7 +15,7 @@ aws s3api create-bucket --bucket ${BUCKET_NAME} --region ${AWS_REGION} \
   --create-bucket-configuration LocationConstraint=${AWS_REGION}
 ```
 ```
-BUCKET_NAME=$(aws s3 ls | grep ${BUCKET_NAME})
+BUCKET_NAME=$(aws s3 ls | grep ${BUCKET_NAME} | cut -d' ' -f3) 
 echo ${BUCKET_NAME}
 ```
 [결과]
@@ -25,6 +25,11 @@ echo ${BUCKET_NAME}
 
 ### 2. 샘플 데이터 생성 ###
 ```
+cd ~
+midkr -p c9
+cd c9
+
+cat <<EOF > generate-data.py
 import ray
 import pandas as pd
 import numpy as np
@@ -56,9 +61,12 @@ ds = ray.data.range(num_batches) \
 
 # 4. S3 업로드 실행 (병렬 쓰기)
 # 'parallelism'을 워커 노드의 총 코어 수 정도로 설정하여 최대 속도로 업로드합니다.
-ds.write_parquet("s3://your-bucket-name/raw-100gb-data/", parallelism=100)
+ds.write_parquet("s3://${BUCKET_NAME}/raw-100gb-data/", parallelism=100)
 
 print("100GB 샘플 데이터 생성 및 S3 업로드 완료!")
+```
+```
+ray job submit --address http://localhost:8265 -- python generate-data.py
 ```
 
 
