@@ -20,15 +20,6 @@ _ray sample data - s3://ray-example-data_
 * [C8. 대규모 텍스트 전처리](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/8-text-preprocessing.md)
 
 
-## CPU 아키텍처 특징 ##
-
-- Intel (c7i): 가장 표준적입니다. 특히 AMX(Advanced Matrix Extensions) 가속기 덕분에 텍스트 임베딩이나 행렬 연산에서 압도적이다. 
-- AMD (c7a): 순수 연산 속도(Raw Clock)와 가성비가 좋습니다. 단순 텍스트 정규화나 정규식 처리 위주라면 Intel보다 저렴하면서 성능은 비슷하게 나온다.
-- Graviton (AWS 자체 칩 - arm64)
-  - 동일 성능 대비 비용이 최대 20% 저렴하다.
-  - arm64 전용 바이너리를 내려받아야 한다. 일부 라이브러리의 경우 환환성 문제를 일으킬 수 있다.
-
-
 ## 레퍼런스 ##
 
 * https://docs.ray.io/en/latest/ray-overview/installation.html
