@@ -178,8 +178,8 @@ auth:
     
 # 각 노드에서 실행될 설정 (Python 설치 등)
 setup_commands:
-    - sudo apt-get update
-    - sudo apt-get install -y python3-pip
+    - sudo dnf install -y python-unversioned-command
+    - sudo dnf install -y python3-pip
     - pip install -U "ray[default,data]" pandas pyarrow boto3
 
 max_workers: 16
