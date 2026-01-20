@@ -1,3 +1,5 @@
+vs_code 콘솔에서 아래 명령어를 순차적으로 실행한다. 
+
 ### 1. 환경 설정 ###
 ```
 export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
