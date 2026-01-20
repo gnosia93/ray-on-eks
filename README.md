@@ -10,7 +10,7 @@
 
 * [C3. 작업 제출 (Job Submission)](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/3-job-submission.md)
 
-* [C4. 오토 스케일링]()
+* [C4. 오토 스케일링](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/4-auto-scaling.md)
 
 
 ### 4단계: 오토 스케일링 설정 ###
