@@ -162,7 +162,8 @@ ds = ray.data.read_parquet("s3://${BUCKET_NAME}/raw-100gb-data/")
 #   배치 처리를 위해 액터 풀을 사용하여 초기화 비용 절감
 processed_ds = ds.map_batches(
     preprocess_text,
-    batch_size=1024,           # 한 번에 처리할 행(row) 수
+    batch_size=1024,            # 한 번에 처리할 행(row) 수
+    batch_format="pandas",      # 포맷을 pandas 사용
     #concurrency=30,            # 병렬성 (워커 노드 수에 맞춰 조절)
     # 고정된 숫자(30) 대신 리소스를 명시하여 Ray가 가용 메모리에 맞춰 조절하게 함
     num_cpus=1, 
