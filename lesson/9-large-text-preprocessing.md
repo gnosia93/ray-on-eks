@@ -74,6 +74,7 @@ ray job submit --address http://localhost:8265 --working-dir . -- python generat
 
 ### 3. 데이터 전처리 ###
 ```
+cat <<EOF > preprocessing.py
 import ray
 import pandas as pd
 import re
@@ -108,7 +109,7 @@ def preprocess_text(batch: pd.DataFrame) -> pd.DataFrame:
 
 # 2. 대규모 데이터 로드 (S3에서 직접 스트리밍)
 # 100GB 데이터를 로드해도 메모리에 바로 올리지 않고 메타데이터만 가져옵니다.
-ds = ray.data.read_parquet("s3://your-bucket/large-dataset/")
+ds = ray.data.read_parquet("s3://${BUCKET_NAME}/large-dataset/")
 
 # 3. 분산 처리 실행
 # - compute=ray.data.ActorPoolStrategy(min_size=10, max_size=30): 
@@ -121,9 +122,10 @@ processed_ds = ds.map_batches(
 
 # 4. 결과 저장 (Partitioning)
 # 결과를 다시 S3에 저장하며, 자동으로 여러 파일로 분할 저장됩니다.
-processed_ds.write_parquet("s3://your-bucket/preprocessed-output/")
+processed_ds.write_parquet("s3://${BUCKET_NAME}/preprocessed-output/")
 
-print("전처리 완료 및 S3 저장 성공!")
+print("전처리 완료 및 S3 저장 성공! - s3://${BUCKET_NAME}/preprocessed-output/")
+EOF
 ```
 * Resource Scheduling:  
 Intel/Graviton 혼합 클러스터라면 map_batches(..., resources={"Intel": 1}) 처럼 특정 노드에서만 전처리를 수행하게 강제하여 성능 차이를 측정할 수 있다.
@@ -142,3 +144,11 @@ Ray는 데이터를 읽을 때 클러스터의 전체 CPU 코어 수의 약 2~3�
         ```
         processed_ds.write_parquet("s3://bucket/path/", min_rows_per_file=10000
         ```
+
+데이터 전처리 병렬 프로세싱을 실행한다.
+```
+ray job submit --address http://localhost:8265 --working-dir . -- python preprocessing.py
+```
+
+
+
