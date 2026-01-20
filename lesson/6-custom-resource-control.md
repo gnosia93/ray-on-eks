@@ -15,3 +15,8 @@ processed_ds = ds.map_batches(
     resources={"Graviton": 1} 
 )
 ```
+
+### 2. Autoscaler 작동 원리 ###
+* 리소스 감시: Ray가 작업을 스케줄링하려고 할 때, 클러스터에 {"Graviton": 1} 여유분이 있는지 확인
+* 노드 요청: 여유가 없다면 Autoscaler는 available_node_types 중 {"Graviton": 1}을 리소스로 가진 노드(여기서는 arm_worker_node)를 생성하도록 AWS에 요청.
+* 격리 실행: Intel 리소스만 필요한 작업은 x86_worker_node로, Graviton 리소스가 명시된 작업은 arm_worker_node로 분리되어 실행.
