@@ -160,6 +160,9 @@ available_node_types:
             NetworkInterfaces:
                 - DeviceIndex: 0
                   InterfaceType: efa
+                  SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
+                  SecurityGroupIds:                          
+                      - ${WORKER_SG_ID}
             Placement:
                 GroupName: ray-placement-group
             BlockDeviceMappings:
@@ -167,10 +170,7 @@ available_node_types:
                   Ebs:
                       VolumeSize: 300           # GB 단위 (예: 300GB)
                       VolumeType: gp3           # 가성비 좋은 gp3 권장
-            ImageId: ${X86_AMI_ID}                     # 헤드 노드와 동일한 이미지 사용
-            SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
-            SecurityGroupIds:                          
-                - ${WORKER_SG_ID}
+            ImageId: ${X86_AMI_ID}                     # 헤드 노드와 동일한 이미지 사용         
             IamInstanceProfile:
                 Name: ray-instance-profile            
         min_workers: 1                                 # 기본 1대 실행
