@@ -63,29 +63,67 @@ aws iam add-role-to-instance-profile \
 ```
 
 ### 3. ray 클러스터 설정하기 ###
+ray 패키지를 설치한다. 
 ```
 pip install -U "ray[default]"
-
+```
+프라이빗 서브넷의 ID 값을 가져온다.
+```
 PRIV_SUBNET_ID=$(aws ec2 describe-subnets \
     --filters "Name=tag:Name,Values=Ray-Private-Subnet" "Name=vpc-id,Values=${VPC_ID}" \
     --query "Subnets[*].{ID:SubnetId}" \
     --output text)
 ```
-보안 그룹 (Security Group):
-* 헤드 노드: 8265(대시보드), 6379(GCS), 10001(Ray Client) 포트가 열려 있어야 합니다.
-* 노드 간 통신: 헤드와 워커 노드 사이에는 모든 TCP 포트가 서로 통신 가능하도록 해당 보안 그룹이 자기 자신을 소스(Self-reference)로 허용해야 합니다.
-```
-# VPC_ID와 보안 그룹 이름을 설정하세요
-VPC_ID=$(aws ec2 describe-vpcs --filters "Name=tag:Project,Values=ray-on-aws" --query "Vpcs[0].VpcId" --output text)
 
-RAY_SG_ID=$(aws ec2 create-security-group \
-  --group-name RayInternalSG \
-  --description "Allow all internal traffic between Ray nodes" \
-  --vpc-id $VPC_ID \
-  --query 'GroupId' --output text)
-
-echo "생성된 보안 그룹 ID: $RAY_SG_ID"
+시큐리티 그룹을 생성한다. 
+* 헤드 노드: 8265(대시보드), 6379(GCS), 10001(Ray Client) 포트가 열려 있어야 한다.
+* 워커 노드: 헤드와 워커 노드 사이에는 모든 TCP 포트가 서로 통신 가능하도록 해당 보안 그룹이 자기 자신을 소스(Self-reference)로 허용해야 한다.
 ```
+# 1. Head SG 생성
+HEAD_SG_ID=$(aws ec2 create-security-group \
+  --group-name RayHeadSG \
+  --description "Security group for Ray Head Node" \
+  --vpc-id $VPC_ID --query 'GroupId' --output text)
+
+# 2. Worker SG 생성
+WORKER_SG_ID=$(aws ec2 create-security-group \
+  --group-name RayWorkerSG \
+  --description "Security group for Ray Worker Nodes" \
+  --vpc-id $VPC_ID --query 'GroupId' --output text)
+
+echo "Head SG: $HEAD_SG_ID / Worker SG: $WORKER_SG_ID"
+
+
+# A. 내부 통신 허용: Head <-> Worker (모든 TCP 포트)
+aws ec2 authorize-security-group-ingress --group-id $HEAD_SG_ID \
+  --protocol tcp --port 0-65535 --source-group $WORKER_SG_ID
+
+aws ec2 authorize-security-group-ingress --group-id $WORKER_SG_ID \
+  --protocol tcp --port 0-65535 --source-group $HEAD_SG_ID
+
+# B. 자기 참조: Worker끼리 통신 허용 (데이터 셔플 등)
+aws ec2 authorize-security-group-ingress --group-id $WORKER_SG_ID \
+  --protocol tcp --port 0-65535 --source-group $WORKER_SG_ID
+
+# C. Bastion 호스트의 접근 허용 (관리용)
+BASTION_SG_ID=$(aws ec2 describe-security-groups --filters "Name=group-name,Values=BastionSG" --query "SecurityGroups[0].GroupId" --output text)
+
+# Head 노드: SSH(22), Dashboard(8265), Client(10001) 허용
+aws ec2 authorize-security-group-ingress --group-id $HEAD_SG_ID \
+  --protocol tcp --port 22 --source-group $BASTION_SG_ID
+
+aws ec2 authorize-security-group-ingress --group-id $HEAD_SG_ID \
+  --protocol tcp --port 8265 --source-group $BASTION_SG_ID
+
+aws ec2 authorize-security-group-ingress --group-id $HEAD_SG_ID \
+  --protocol tcp --port 10001 --source-group $BASTION_SG_ID
+
+# Worker 노드: SSH(22) 허용
+aws ec2 authorize-security-group-ingress --group-id $WORKER_SG_ID \
+  --protocol tcp --port 22 --source-group $BASTION_SG_ID
+```
+
+
 
 
 
