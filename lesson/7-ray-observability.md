@@ -107,6 +107,8 @@ EOF
 ```
 도커를 실행한다.
 ```
+sudo curl -SL "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m)" -o ~/docker-compose
+
 docker-compose up -d
 ```
 
