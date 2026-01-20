@@ -154,7 +154,7 @@ aws ec2 authorize-security-group-ingress --group-id $WORKER_SG_ID \
   --protocol tcp --port 0-65535 --source-group $WORKER_SG_ID
 
 # C. Bastion 호스트의 접근 허용 (관리용)
-BASTION_SG_ID=$(aws ec2 describe-security-groups --filters "Name=tag:Name,Values=BastionSG" --query "SecurityGroups[0].GroupId" --output text)
+BASTION_SG_ID=$(aws ec2 describe-security-groups --filters "Name=tag:aws:cloudformation:logical-id,Values=BastionSG" --query "SecurityGroups[0].GroupId" --output text)
 
 # Head 노드: SSH(22), Dashboard(8265), Client(10001) 허용
 aws ec2 authorize-security-group-ingress --group-id $HEAD_SG_ID \
