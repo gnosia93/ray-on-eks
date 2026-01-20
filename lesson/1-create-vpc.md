@@ -1,6 +1,8 @@
 로컬 PC 에서 워크샵을 다운로드 받는다.  
 ```
+cd ~
 git clone https://github.com/gnosia93/ray-on-ec2.git
+cd ~/ray-on-ec2
 ```
 
 ## vpc 생성 ##
