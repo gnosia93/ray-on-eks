@@ -107,11 +107,21 @@ EOF
 ```
 도커를 실행한다.
 ```
-sudo curl -SL "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m)" -o ~/docker-compose
+sudo curl -SL "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m)" \
+   -o ~/docker-compose
 sudo chmod +x ~/docker-compose
 
 ./docker-compose up -d
+docker ps
 ```
+[결과]
+```
+CONTAINER ID   IMAGE                     COMMAND                  CREATED          STATUS          PORTS                                       NAMES
+262421f78fd9   prom/prometheus:v2.45.0   "/bin/prometheus --c…"   31 seconds ago   Up 26 seconds   0.0.0.0:9090->9090/tcp, :::9090->9090/tcp   prometheus
+fb4fddb2cab1   grafana/grafana:10.0.3    "/run.sh"                31 seconds ago   Up 26 seconds   0.0.0.0:3000->3000/tcp, :::3000->3000/tcp   grafana
+```
+
+
 
 ### 대시보드 연결 ###
     * Grafana 접속: http://<HEAD_IP>:3000 (ID/PW: admin/admin)
