@@ -81,8 +81,8 @@ cluster.yaml 의 setup_commands 블록에 위의 스크립트를 입력한다.
 ### 5. node_config 수정 (EFA 활성화 및 배치 그룹) ###
 EFA를 사용하려면 NetworkInterfaces 설정에서 InterfaceType: efa를 명시해야 하며, 성능을 위해 인스턴스들이 동일한 Placement Group에 있어야 한다.
 ```
-cat <<EOF > cluster.yaml
-cluster_name: ${CLUSTER_NAME}
+cat <<EOF > cluster-efa.yaml
+cluster_name: ${CLUSTER_NAME}-efa
 
 provider:
     type: aws
@@ -124,28 +124,8 @@ available_node_types:
                 Name: ray-instance-profile            
         min_workers: 0                                 # 헤드 노드는 관리용이므로 워커 역할을 담당하지 않는다.
         max_workers: 0                             
-    # Intel 워커 노드 (데이터 처리용)
-    x86_worker_node:
-        resources: {"CPU": 8, "Intel": 1}              # 스케줄링 힌트 제공
-        node_config:
-            InstanceType: r7i.2xlarge
-            BlockDeviceMappings:
-                - DeviceName: /dev/xvda  # Amazon Linux 2023의 기본 루트 장치명
-                  Ebs:
-                      VolumeSize: 300    # GB 단위 (예: 300GB)
-                      VolumeType: gp3    # 가성비 좋은 gp3 권장
-            ImageId: ${X86_AMI_ID}
-            SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
-            SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
-                - ${WORKER_SG_ID}
-            IamInstanceProfile:
-                Name: ray-instance-profile            
-        min_workers: 1                                 # 기본 1대 실행
-        max_workers: 8                                 # 필요시 8대까지 자동 확장
-
-    # Graviton 워커 노드 (데이터 처리용)
-    arm_worker_node:
-        resources: {"CPU": 8, "Graviton": 1}           # 스케줄링 힌트 제공
+   
+    efa_worker_node:
         node_config:
             InstanceType: ${INSTANCE_TYPE}
             NetworkInterfaces:
@@ -154,18 +134,18 @@ available_node_types:
             Placement:
                 GroupName: ${PLACEMENT_GROUP_NAME} 
             BlockDeviceMappings:
-                - DeviceName: /dev/xvda  # Amazon Linux 2023의 기본 루트 장치명
+                - DeviceName: /dev/xvda         # Amazon Linux 2023의 기본 루트 장치명
                   Ebs:
-                      VolumeSize: 300    # GB 단위 (예: 300GB)
-                      VolumeType: gp3    # 가성비 좋은 gp3 권장
-            ImageId: ${ARM_AMI_ID}                     # 헤드 노드와 동일한 이미지 사용
+                      VolumeSize: 300           # GB 단위 (예: 300GB)
+                      VolumeType: gp3           # 가성비 좋은 gp3 권장
+            ImageId: ${X86_AMI_ID}                     # 헤드 노드와 동일한 이미지 사용
             SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          
                 - ${WORKER_SG_ID}
             IamInstanceProfile:
                 Name: ray-instance-profile            
         min_workers: 1                                 # 기본 1대 실행
-        max_workers: 8                                 # 필요시 8대까지 자동 확장
+        max_workers: 2                                
 
 head_node_type: head_node                              # 정의한 여러 노드 타입 중 어떤 것이 클러스터의 전체 제어를 담당할 '헤드'인지 확정
 EOF
