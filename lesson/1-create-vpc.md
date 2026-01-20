@@ -38,7 +38,7 @@ aws cloudformation describe-stacks --stack-name ray-vpc --query "Stacks[0].Stack
 
 생성 결과를 출력한다. 
 ```
-aws cloudformation describe-stacks --region ${AWS_REGION}
+aws cloudformation describe-stacks --region ${AWS_REGION} \
   --stack-name ray-vpc \
   --query "Stacks[0].Outputs[?OutputKey=='BastionDNS' || OutputKey=='VSCodeURL'].OutputValue" \
   --output text
