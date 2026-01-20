@@ -131,6 +131,10 @@ provider:
     availability_zone: ${AWS_REGION}a
     use_internal_ips: true
 
+# ssh_private_key를 명시하지 않으면 SSH Agent의 키를 자동으로 사용합니다.
+auth:
+    ssh_user: ubuntu
+    
 # 각 노드에서 실행될 설정 (Python 설치 등)
 setup_commands:
     - pip install -U "ray[default,data]" pandas pyarrow boto3
@@ -188,6 +192,10 @@ EOF
 
 클러스터를 생성한다.
 ```
+# 로컬 PC에서 실행
+ssh-add ~/.ssh/your-key.pem
+ssh -A ec2-user@bastion-public-ip
+
 ray up cluster.yaml -y
 ```
 
