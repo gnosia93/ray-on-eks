@@ -1,10 +1,39 @@
 ### 1. efa 인스턴스 조회 ###
 ```
  aws ec2 describe-instance-types \
-    --filters "Name=instance-type,Values=*7i*,*8g*" \
+    --filters "Name=instance-type,Values=*7i*,*8g*,*7a*" \
               "Name=network-info.efa-supported,Values=true" \
     --query "InstanceTypes[].[InstanceType, VCpuInfo.DefaultVCpus, VCpuInfo.DefaultCores, MemoryInfo.SizeInMiB]" \
     --output text | awk '{printf "Instance: %-18s | vCPU: %3d | Cores: %2d | Memory: %6d GiB\n", $1, $2, $3, $4/1024}'
+```
+[결과]
+```
+Instance: r7i.metal-48xl     | vCPU: 192 | Cores: 96 | Memory:   1536 GiB
+Instance: u7i-6tb.112xlarge  | vCPU: 448 | Cores: 224 | Memory:   6144 GiB
+Instance: m8g.24xlarge       | vCPU:  96 | Cores: 96 | Memory:    384 GiB
+Instance: r8g.metal-24xl     | vCPU:  96 | Cores: 96 | Memory:    768 GiB
+Instance: m8g.metal-48xl     | vCPU: 192 | Cores: 192 | Memory:    768 GiB
+Instance: c8g.48xlarge       | vCPU: 192 | Cores: 192 | Memory:    384 GiB
+Instance: c8g.metal-48xl     | vCPU: 192 | Cores: 192 | Memory:    384 GiB
+Instance: c8g.24xlarge       | vCPU:  96 | Cores: 96 | Memory:    192 GiB
+Instance: u7i-12tb.224xlarge | vCPU: 896 | Cores: 448 | Memory:  12288 GiB
+Instance: m7i.48xlarge       | vCPU: 192 | Cores: 96 | Memory:    768 GiB
+Instance: r8g.48xlarge       | vCPU: 192 | Cores: 192 | Memory:   1536 GiB
+Instance: r8g.24xlarge       | vCPU:  96 | Cores: 96 | Memory:    768 GiB
+Instance: u7in-16tb.224xlarge | vCPU: 896 | Cores: 448 | Memory:  16384 GiB
+Instance: c7i.metal-48xl     | vCPU: 192 | Cores: 96 | Memory:    384 GiB
+Instance: u7i-8tb.112xlarge  | vCPU: 448 | Cores: 224 | Memory:   8192 GiB
+Instance: m8g.48xlarge       | vCPU: 192 | Cores: 192 | Memory:    768 GiB
+Instance: i8g.48xlarge       | vCPU: 192 | Cores: 192 | Memory:   1536 GiB
+Instance: c8g.metal-24xl     | vCPU:  96 | Cores: 96 | Memory:    192 GiB
+Instance: r8g.metal-48xl     | vCPU: 192 | Cores: 192 | Memory:   1536 GiB
+Instance: i7i.metal-48xl     | vCPU: 192 | Cores: 96 | Memory:   1536 GiB
+Instance: i7i.24xlarge       | vCPU:  96 | Cores: 48 | Memory:    768 GiB
+Instance: r7i.48xlarge       | vCPU: 192 | Cores: 96 | Memory:   1536 GiB
+Instance: m8g.metal-24xl     | vCPU:  96 | Cores: 96 | Memory:    384 GiB
+Instance: i7i.48xlarge       | vCPU: 192 | Cores: 96 | Memory:   1536 GiB
+Instance: m7i.metal-48xl     | vCPU: 192 | Cores: 96 | Memory:    768 GiB
+Instance: c7i.48xlarge       | vCPU: 192 | Cores: 96 | Memory:    384 GiB
 ```
 
 
