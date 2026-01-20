@@ -61,9 +61,9 @@ aws iam add-role-to-instance-profile \
 
 ### 3. ray 클러스터 설정하기 ###
 ```
-SUBNET_IDS=$(aws ec2 describe-subnets \
+PRIV_SUBNET_ID=$(aws ec2 describe-subnets \
     --filters "Name=tag:Name,Values=Ray-Private-Subnet" "Name=vpc-id,Values=${VPC_ID}" \
-    --query "Subnets[*].{ID:SubnetId, AZ:AvailabilityZone}" \
+    --query "Subnets[*].{ID:SubnetId}" \
     --output text)
 ```
 보안 그룹 (Security Group):
@@ -106,9 +106,9 @@ available_node_types:
         node_config:
             InstanceType: m7i.xlarge
             ImageId: ami-0c9c942bd7bf113a2             # Ubuntu 22.04 (서울 리전 기준 확인 필요)
-            SubnetId: subnet-xxxxxxxxxxxxxxxxx         # 프라이빗 서브넷 ID 입력
+            SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
-                - sg-xxxxxxxxxxxxxxxxx
+              - sg-xxxxxxxxxxxxxxxxx
             IamInstanceProfile:
                 Name: ray-instance-profile            
         min_workers: 0                                 # min_workers/max_workers: 0 - 헤드 노드는 관리용이므로 스스로 워커 역할을 겸하지 않도록 설정
@@ -119,7 +119,7 @@ available_node_types:
         node_config:
             InstanceType: m7i.2xlarge
             ImageId: ami-0c9c942bd7bf113a2 # 헤드 노드와 동일한 이미지 사용
-            SubnetId: subnet-xxxxxxxxxxxxxxxxx         # 프라이빗 서브넷 ID 입력
+            SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
             IamInstanceProfile:
                 Name: ray-instance-profile            
@@ -132,8 +132,9 @@ available_node_types:
         node_config:
             InstanceType: m8i.2xlarge
             ImageId: ami-0c9c942bd7bf113a2             # 헤드 노드와 동일한 이미지 사용
-            SubnetId: subnet-xxxxxxxxxxxxxxxxx         # 프라이빗 서브넷 ID 입력
-            SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
+            SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
+            SecurityGroupIds:                          
+              - sg-xxxxxxxxxxxxxxxxx
             IamInstanceProfile:
                 Name: ray-instance-profile            
         min_workers: 4                                 # 기본 4대 실행
