@@ -81,3 +81,28 @@ Shared connection to 10.0.2.177 closed.
 * Idle Timeout:
 노드에 할당된 작업이 하나도 없고, idle_timeout_minutes(예: 5분) 동안 아무 일도 하지 않으면 해당 노드를 삭제 대상으로 간주하고 노드의 수량을 줄인다.
 이때 Min Workers 이하로는 줄어들지 않는다.
+
+[예시]
+```
+provider:
+    type: aws
+    region: ${AWS_REGION}
+    availability_zone: ${AWS_REGION}a
+    use_internal_ips: true
+
+# 1. 오토스케일링 세부 조정 (글로벌 설정)
+# ---------------------------------------------------------
+# 리소스 사용률이 90%에 도달할 때까지 신규 노드 생성을 최대한 지연 (비용 절감)
+target_utilization_fraction: 0.9
+
+# 노드 추가 속도 (1.0이 기본, 10.0은 매우 공격적)
+# 대량의 작업을 한 번에 던졌을 때 인스턴스를 동시에 여러 대 요청함
+upscaling_speed: 10.0
+
+# 작업 종료 후 노드 유지 시간 (기본 5분에서 2분으로 단축)
+idle_timeout_minutes: 2
+
+auth:
+    ssh_user: ec2-user
+```
+
