@@ -94,14 +94,12 @@ echo "private subnet: ${PRIV_SUBNET_ID}"
 * 헤드 노드: 8265(대시보드), 6379(GCS), 10001(Ray Client) 포트가 열려 있어야 한다.
 * 워커 노드: 헤드와 워커 노드 사이에는 모든 TCP 포트가 서로 통신 가능하도록 해당 보안 그룹이 자기 자신을 소스(Self-reference)로 허용해야 한다.
 ```
-# 1. Head SG 생성
-#HEAD_SG_ID=$(aws ec2 create-security-group --group-name RayHeadSG \
-#  --description "Security group for Ray Head Node" --vpc-id $VPC_ID --query 'GroupId' --output text)
-
+# 기존 Head SG ID 조회 시도
 HEAD_SG_ID=$(aws ec2 describe-security-groups \
   --filters "Name=group-name,Values=RayHeadSG" "Name=vpc-id,Values=$VPC_ID" \
   --query "SecurityGroups[0].GroupId" --output text)
 
+# 존재하지 않을 경우 생성
 if [ "$HEAD_SG_ID" == "None" ] || [ -z "$HEAD_SG_ID" ]; then
   echo "RayHeadSG가 존재하지 않아 새로 생성합니다..."
   HEAD_SG_ID=$(aws ec2 create-security-group \
@@ -115,13 +113,12 @@ fi
 
 echo "Head SG ID: $HEAD_SG_ID"
 
-
-# 1. 기존 Worker SG ID 조회 시도
+# 기존 Worker SG ID 조회 시도
 WORKER_SG_ID=$(aws ec2 describe-security-groups \
   --filters "Name=group-name,Values=RayWorkerSG" "Name=vpc-id,Values=$VPC_ID" \
   --query "SecurityGroups[0].GroupId" --output text)
 
-# 2. 존재하지 않을 경우 생성
+# 존재하지 않을 경우 생성
 if [ "$WORKER_SG_ID" == "None" ] || [ -z "$WORKER_SG_ID" ]; then
   echo "RayWorkerSG가 존재하지 않아 새로 생성합니다..."
   WORKER_SG_ID=$(aws ec2 create-security-group \
@@ -134,18 +131,10 @@ else
 fi
 
 echo "Worker SG ID: $WORKER_SG_ID"
+```
 
-
-
-
-
-# 2. Worker SG 생성
-#WORKER_SG_ID=$(aws ec2 create-security-group --group-name RayWorkerSG \
-#  --description "Security group for Ray Worker Nodes" --vpc-id $VPC_ID --query 'GroupId' --output text)
-
-#echo "Head SG: $HEAD_SG_ID / Worker SG: $WORKER_SG_ID"
-
-
+시큐리티 그룹의 세부 정책(ingress/egress)을 생성한다. 
+```
 # A. 내부 통신 허용: Head <-> Worker (모든 TCP 포트)
 aws ec2 authorize-security-group-ingress --group-id $HEAD_SG_ID \
   --protocol tcp --port 0-65535 --source-group $WORKER_SG_ID
