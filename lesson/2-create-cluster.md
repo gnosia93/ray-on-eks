@@ -385,7 +385,8 @@ ray dashboard /home/ec2-user/cluster.yaml
 
 아래 터널링 명령어는 로컬 PC 에서 실행한다. 
 ```
-ssh -i "키파일.pem" -L 8265:localhost:8265 ec2-user@${VS_CODE}
+cd ~/ray-on-ec2
+ssh -i ~/키페어.pem -L 8265:localhost:8265 ec2-user@$(cat VS_CODE)
 ```
 로컬 PC 의 웹브라우저로 http://localhost:8265 로 접속한다. 
 ![](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/images/ray-dashboard.png)
