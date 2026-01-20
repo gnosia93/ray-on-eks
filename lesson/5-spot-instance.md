@@ -19,6 +19,24 @@ echo ${X86_AMI_ID}
 echo ${ARM_AMI_ID}
 ```
 
+```
+HEAD_SG_ID=$(aws ec2 describe-security-groups \
+  --filters "Name=group-name,Values=RayHeadSG" "Name=vpc-id,Values=$VPC_ID" \
+  --query "SecurityGroups[0].GroupId" --output text)
+echo "Head SG ID: $HEAD_SG_ID"
+
+WORKER_SG_ID=$(aws ec2 describe-security-groups \
+  --filters "Name=group-name,Values=RayWorkerSG" "Name=vpc-id,Values=$VPC_ID" \
+  --query "SecurityGroups[0].GroupId" --output text)
+echo "Worker SG ID: $WORKER_SG_ID"
+
+export PRIV_SUBNET_ID=$(aws ec2 describe-subnets \
+    --filters "Name=tag:Name,Values=Ray-Private-Subnet" "Name=vpc-id,Values=${VPC_ID}" \
+    --query "Subnets[*].{ID:SubnetId}" --output text)
+echo "private subnet: ${PRIV_SUBNET_ID}"
+```
+
+
 ### 2. 클러스터 설정파일 ###
 ```
 cat <<EOF > cluster-spot.yaml
