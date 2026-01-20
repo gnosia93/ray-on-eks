@@ -23,11 +23,11 @@ ray.init(address="auto")
 
 @ray.remote(num_cpus=1)
 def heavy_task():
-    time.sleep(300) # 5분간 코어 점유
+    time.sleep(120)      # 2분간 코어 점유
     return True
 
 # 480개(30대 분량)의 작업을 한꺼번에 투척!
-ray.get([heavy_task.remote() for _ in range(480)])
+ray.get([heavy_task.remote() for _ in range(256)])
 ```
 현상 관찰:
 * Ray Status: Pending: 320 Tasks 발생 -> Autoscaler가 Launching 20 Nodes 시작.
