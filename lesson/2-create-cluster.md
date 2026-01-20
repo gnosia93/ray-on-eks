@@ -61,6 +61,8 @@ aws iam add-role-to-instance-profile \
 
 ### 3. ray 클러스터 설정하기 ###
 ```
+pip install -U "ray[default]"
+
 PRIV_SUBNET_ID=$(aws ec2 describe-subnets \
     --filters "Name=tag:Name,Values=Ray-Private-Subnet" "Name=vpc-id,Values=${VPC_ID}" \
     --query "Subnets[*].{ID:SubnetId}" \
