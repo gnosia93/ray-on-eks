@@ -75,3 +75,7 @@ docker-compose up -d
     * Grafana 접속: http://<HEAD_IP>:3000 (ID/PW: admin/admin)
     * 데이터 소스 추가: Add Data Source -> Prometheus 선택 -> URL에 http://prometheus:9090 입력 후 Save & Test.
     * 대시보드 임포트: Ray 공식 Grafana 대시보드(ID: 16098)를 임포트하면 즉시 화려한 차트가 나옵니다.
+
+### 주의사항 ###
+* 보안 그룹: AWS Console에서 헤드 노드의 보안 그룹 규칙에 9090과 3000 포트를 열어주어야 외부 브라우저에서 보입니다.
+* 권한: /tmp/ray 폴더의 권한 때문에 Prometheus가 파일을 못 읽는다면 chmod -R 755 /tmp/ray를 실행하세요.
