@@ -64,4 +64,6 @@ Pending Demands:
 Shared connection to 10.0.2.177 closed.
 ```
 
+![](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/images/dashboard-job-log.png)
+![](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/images/dashboard-job-task.png)
 
