@@ -47,18 +47,7 @@ newgrp docker
 docker compose version
 ```
 
-prometheus.yml (Ray 자동 감지 설정) - Ray가 생성하는 JSON 파일을 공유하기 위해 경로를 맞춘다.
-```
-global:
-  scrape_interval: 5s
-
-scrape_configs:
-  - job_name: 'ray-metrics'
-    file_sd_configs:
-      - files:
-          - '/tmp/ray/prom_metrics_service_discovery.json'
-```
-#### docker-compose.yml ####
+### docker-compose.yml ###
 docker-compose.yml에서 /tmp/ray를 볼륨 마운트하는 이유는 Ray가 실행되면서 생성하는 동적 설정 파일과 메트릭 정보를 Grafana나 Prometheus 같은 모니터링 도구가 읽을 수 있게 하기 위해서이다. 여기서 핵심이 되는 'Ray 지표 관련 파일'은 크게 세 가지이다.
 #### 1. Prometheus 서비스 디스커버리 파일 #### 
 Ray는 클러스터 내의 여러 노드에서 발생하는 지표를 수집하기 위해, 현재 활성화된 노드들의 주소를 담은 JSON 파일을 자동으로 생성한다.
@@ -78,6 +67,7 @@ Ray가 시작될 때, 해당 세션에 최적화된 Prometheus와 Grafana용 설
 
 요약하자면, /tmp/ray를 마운트하는 것은 "Ray가 실시간으로 만들어내는 모니터링 지도(JSON)와 설정(YAML/INI)을 컨테이너 간에 공유"하여 대시보드에 데이터가 즉시 나오게 하려는 것이다.
 ```
+cat <<EOF > docker-compose.yml 
 version: '3.8'
 
 services:
@@ -99,19 +89,26 @@ services:
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin # 초기 비번
     restart: unless-stopped
+EOF
 ```
 
-* (3) 실행 및 확인
+Ray가 생성하는 JSON 파일을 공유하기 위해 경로를 맞춘다. prometheus.yml 에서 Ray 자동 감지 설정을 한다. 
+```
+cat <<EOF > prometheus.yml
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'ray-metrics'
+    file_sd_configs:
+      - files:
+          - '/tmp/ray/prom_metrics_service_discovery.json'
+EOF
+```
+도커를 실행한다.
 ```
 docker-compose up -d
 ```
-
-
-
-
-
-
-
 
 ### 대시보드 연결 ###
     * Grafana 접속: http://<HEAD_IP>:3000 (ID/PW: admin/admin)
