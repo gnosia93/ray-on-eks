@@ -9,7 +9,7 @@ cd ~/ray-on-ec2
 ```
 export AWS_REGION="ap-northeast-1"
 export KEYPAIR_NAME="aws-kp-1"
-cd ~/ray-on-aws
+cd ~/ray-on-ec2
 pwd
 
 AMI=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64 \
