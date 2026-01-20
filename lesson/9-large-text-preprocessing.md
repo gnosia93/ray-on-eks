@@ -200,6 +200,47 @@ Ray는 데이터를 읽을 때 클러스터의 전체 CPU 코어 수의 약 2~3�
 ```
 ray job submit --address http://localhost:8265 --working-dir . -- python preprocessing.py
 ```
+[결과]
+```
+Job submission server address: http://localhost:8265
+2026-01-20 09:21:14,358 INFO dashboard_sdk.py:338 -- Uploading package gcs://_ray_pkg_d2d673d2a527ff86.zip.
+2026-01-20 09:21:14,358 INFO packaging.py:588 -- Creating a file package for local module '.'.
 
+-------------------------------------------------------
+Job 'raysubmit_6VBJDxszQc7cfr7i' submitted successfully
+-------------------------------------------------------
+
+Next steps
+  Query the logs of the job:
+    ray job logs raysubmit_6VBJDxszQc7cfr7i
+  Query the status of the job:
+    ray job status raysubmit_6VBJDxszQc7cfr7i
+  Request the job to be stopped:
+    ray job stop raysubmit_6VBJDxszQc7cfr7i
+
+Tailing logs until the job exits (disable with --no-wait):
+2026-01-20 09:21:14,366 INFO job_manager.py:568 -- Runtime env is setting up.
+2026-01-20 09:21:15,314 INFO worker.py:1691 -- Using address 10.0.2.183:6379 set in the environment variable RAY_ADDRESS
+2026-01-20 09:21:15,316 INFO worker.py:1832 -- Connecting to existing Ray cluster at address: 10.0.2.183:6379...
+2026-01-20 09:21:15,327 INFO worker.py:2003 -- Connected to Ray cluster. View the dashboard at http://10.0.2.183:8265 
+[dataset]: Run `pip install tqdm` to enable progress reporting.
+2026-01-20 09:21:17,587 INFO parquet_datasource.py:725 -- Estimated parquet encoding ratio is 1.007.
+2026-01-20 09:21:17,587 INFO parquet_datasource.py:785 -- Estimated parquet reader batch size at 131458 rows
+2026-01-20 09:21:17,687 INFO streaming_executor.py:85 -- A new progress UI is available. To enable, set `ray.data.DataContext.get_current().enable_rich_progress_bars = True`.
+2026-01-20 09:21:17,687 INFO logging.py:397 -- Registered dataset logger for dataset dataset_24_0
+2026-01-20 09:21:17,699 INFO streaming_executor.py:170 -- Starting execution of Dataset dataset_24_0. Full logs are in /tmp/ray/session_2026-01-20_08-16-22_198865_26744/logs/ray-data
+2026-01-20 09:21:17,699 INFO streaming_executor.py:171 -- Execution plan of Dataset dataset_24_0: InputDataBuffer[Input] -> TaskPoolMapOperator[ReadParquet] -> TaskPoolMapOperator[MapBatches(preprocess_text)->Write]
+2026-01-20 09:21:17,763 WARNING resource_manager.py:134 -- ⚠️  Ray's object store is configured to use only 40.8% of available memory (77.2GiB out of 189.0GiB total). For optimal Ray Data performance, we recommend setting the object store to at least 50% of available memory. You can do this by setting the 'object_store_memory' parameter when calling ray.init() or by setting the RAY_DEFAULT_OBJECT_STORE_MEMORY_PROPORTION environment variable.
+(autoscaler +4s) Tip: use `ray status` to view detailed cluster status. To disable these messages, set RAY_SCHEDULER_EVENTS=0.
+(autoscaler +4s) Adding 1 node(s) of type x86_worker_node.
+(autoscaler +4s) Resized to 40 CPUs.
+2026-01-20 09:21:37,254 INFO streaming_executor.py:298 -- ✔️  Dataset dataset_24_0 execution finished in 19.55 seconds
+2026-01-20 09:21:37,340 INFO dataset.py:5106 -- Data sink Parquet finished. 10000000 rows and 20.3GB data written.
+전처리 완료 및 S3 저장 성공! - s3://ray-on-aws-1768897738/preprocessed-output/
+
+------------------------------------------
+Job 'raysubmit_6VBJDxszQc7cfr7i' succeeded
+------------------------------------------
+```
 
 
