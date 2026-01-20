@@ -142,6 +142,16 @@ ssh -i ~/aws-kp-1.pem -L 3000:10.0.2.183:3000 ec2-user@ec2-13-230-210-195.ap-nor
 $ docker exec -it prometheus ls /tmp/ray
 prom_metrics_service_discovery.json       session_2026-01-20_08-16-22_198865_26744  session_latest
 ray_current_cluster                       session_2026-01-20_09-45-23_031654_35719
+
+$ docker exec -it prometheus cat /etc/prometheus/prometheus.yml
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'ray-metrics'
+    file_sd_configs:
+      - files:
+          - '/tmp/ray/prom_metrics_service_discovery.json'
 ```
 
 
