@@ -133,7 +133,7 @@ provider:
 
 # ssh_private_key를 명시하지 않으면 SSH Agent의 키를 자동으로 사용합니다.
 auth:
-    ssh_user: ubuntu
+    ssh_user: ec2-user
     
 # 각 노드에서 실행될 설정 (Python 설치 등)
 setup_commands:
