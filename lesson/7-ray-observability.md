@@ -20,7 +20,8 @@ setup_commands:
 ```
 
 ## Docker Compose 로 Prometheus 스택 설치 ###
-* 사전 준비 (헤드 노드)
+
+헤드 노드에 docker 를 설치한다.
 ```
 sudo dnf install -y docker
 sudo systemctl enable --now docker
@@ -29,8 +30,7 @@ sudo usermod -aG docker ec2-user
 newgrp docker
 ```
 
-* (1) prometheus.yml (Ray 자동 감지 설정)
-Ray가 생성하는 JSON 파일을 공유하기 위해 경로를 맞춘다.
+prometheus.yml (Ray 자동 감지 설정) - Ray가 생성하는 JSON 파일을 공유하기 위해 경로를 맞춘다.
 ```
 global:
   scrape_interval: 5s
@@ -41,8 +41,25 @@ scrape_configs:
       - files:
           - '/tmp/ray/prom_metrics_service_discovery.json'
 ```
-* (2) docker-compose.yml
-Ray의 지표 파일이 있는 /tmp/ray를 컨테이너 안으로 볼륨 마운트하는 것이 핵심입니다.
+#### docker-compose.yml ####
+docker-compose.yml에서 /tmp/ray를 볼륨 마운트하는 이유는 Ray가 실행되면서 생성하는 동적 설정 파일과 메트릭 정보를 Grafana나 Prometheus 같은 모니터링 도구가 읽을 수 있게 하기 위해서이다. 여기서 핵심이 되는 'Ray 지표 관련 파일'은 크게 세 가지이다.
+#### 1. Prometheus 서비스 디스커버리 파일 #### 
+Ray는 클러스터 내의 여러 노드에서 발생하는 지표를 수집하기 위해, 현재 활성화된 노드들의 주소를 담은 JSON 파일을 자동으로 생성한다.
+* 경로: /tmp/ray/prom_metrics_service_discovery.json
+* 역할: Prometheus가 이 파일을 읽어 어떤 노드에서 지표(metrics)를 긁어올지(scrape) 스스로 찾아낼 수 있다. 
+
+#### 2. 자동 생성된 모니터링 설정 파일 ####
+Ray가 시작될 때, 해당 세션에 최적화된 Prometheus와 Grafana용 설정 파일을 /tmp/ray/session_latest/metrics/ 폴더 안에 생성한다. 
+* Prometheus 설정: /tmp/ray/session_latest/metrics/prometheus/prometheus.yml
+* Grafana 설정: /tmp/ray/session_latest/metrics/grafana/grafana.ini
+별도의 복잡한 설정 없이도 Ray 대시보드와 지표가 연동되도록 미리 정의된 환경 값을 제공한다. 
+
+#### 3. 세션 로그 및 임시 데이터 ####
+지표 외에도 문제 해결을 위한 시스템 로그들이 저장된다.
+* 경로: /tmp/ray/session_latest/logs/
+* 역할: 워커 노드의 상태나 에러 로그를 확인하는 데 사용된다. 
+
+요약하자면, /tmp/ray를 마운트하는 것은 "Ray가 실시간으로 만들어내는 모니터링 지도(JSON)와 설정(YAML/INI)을 컨테이너 간에 공유"하여 대시보드에 데이터가 즉시 나오게 하려는 것이다.
 ```
 version: '3.8'
 
@@ -72,7 +89,14 @@ services:
 docker-compose up -d
 ```
 
-* (4) 대시보드 연결
+
+
+
+
+
+
+
+### 대시보드 연결 ###
     * Grafana 접속: http://<HEAD_IP>:3000 (ID/PW: admin/admin)
     * 데이터 소스 추가: Add Data Source -> Prometheus 선택 -> URL에 http://prometheus:9090 입력 후 Save & Test.
     * 대시보드 임포트: Ray 공식 Grafana 대시보드(ID: 16098)를 임포트하면 즉시 화려한 차트가 나옵니다.
