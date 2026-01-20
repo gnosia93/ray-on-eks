@@ -48,18 +48,14 @@ cat <<EOF > ray-autoscaling-policy.json
 }
 EOF
 
-aws iam put-role-policy \
-  --role-name ray-autoscaling-role \
-  --policy-name ray-autoscaling-policy \
+aws iam put-role-policy --role-name ray-autoscaling-role --policy-name ray-autoscaling-policy \
   --policy-document file://ray-autoscaling-policy.json
 
 # 인스턴스 프로파일 생성
 aws iam create-instance-profile --instance-profile-name ray-instance-profile
 
 # 프로파일에 역할 추가
-aws iam add-role-to-instance-profile \
-  --instance-profile-name ray-instance-profile \
-  --role-name ray-autoscaling-role
+aws iam add-role-to-instance-profile --instance-profile-name ray-instance-profile --role-name ray-autoscaling-role
 ```
 
 ### 3. ray 클러스터 설정하기 ###
@@ -71,8 +67,7 @@ pip install -U "ray[default]"
 ```
 PRIV_SUBNET_ID=$(aws ec2 describe-subnets \
     --filters "Name=tag:Name,Values=Ray-Private-Subnet" "Name=vpc-id,Values=${VPC_ID}" \
-    --query "Subnets[*].{ID:SubnetId}" \
-    --output text)
+    --query "Subnets[*].{ID:SubnetId}" --output text)
 ```
 
 시큐리티 그룹을 생성한다. 
@@ -80,16 +75,12 @@ PRIV_SUBNET_ID=$(aws ec2 describe-subnets \
 * 워커 노드: 헤드와 워커 노드 사이에는 모든 TCP 포트가 서로 통신 가능하도록 해당 보안 그룹이 자기 자신을 소스(Self-reference)로 허용해야 한다.
 ```
 # 1. Head SG 생성
-HEAD_SG_ID=$(aws ec2 create-security-group \
-  --group-name RayHeadSG \
-  --description "Security group for Ray Head Node" \
-  --vpc-id $VPC_ID --query 'GroupId' --output text)
+HEAD_SG_ID=$(aws ec2 create-security-group --group-name RayHeadSG \
+  --description "Security group for Ray Head Node" --vpc-id $VPC_ID --query 'GroupId' --output text)
 
 # 2. Worker SG 생성
-WORKER_SG_ID=$(aws ec2 create-security-group \
-  --group-name RayWorkerSG \
-  --description "Security group for Ray Worker Nodes" \
-  --vpc-id $VPC_ID --query 'GroupId' --output text)
+WORKER_SG_ID=$(aws ec2 create-security-group --group-name RayWorkerSG \
+  --description "Security group for Ray Worker Nodes" --vpc-id $VPC_ID --query 'GroupId' --output text)
 
 echo "Head SG: $HEAD_SG_ID / Worker SG: $WORKER_SG_ID"
 
@@ -106,7 +97,7 @@ aws ec2 authorize-security-group-ingress --group-id $WORKER_SG_ID \
   --protocol tcp --port 0-65535 --source-group $WORKER_SG_ID
 
 # C. Bastion 호스트의 접근 허용 (관리용)
-BASTION_SG_ID=$(aws ec2 describe-security-groups --filters "Name=aws:cloudformation:logical-id,Values=BastionSG" --query "SecurityGroups[0].GroupId" --output text)
+BASTION_SG_ID=$(aws ec2 describe-security-groups --filters "Name=tag:Name,Values=BastionSG" --query "SecurityGroups[0].GroupId" --output text)
 
 # Head 노드: SSH(22), Dashboard(8265), Client(10001) 허용
 aws ec2 authorize-security-group-ingress --group-id $HEAD_SG_ID \
@@ -122,10 +113,6 @@ aws ec2 authorize-security-group-ingress --group-id $HEAD_SG_ID \
 aws ec2 authorize-security-group-ingress --group-id $WORKER_SG_ID \
   --protocol tcp --port 22 --source-group $BASTION_SG_ID
 ```
-
-
-
-
 
 
 ```
@@ -145,18 +132,18 @@ setup_commands:
 available_node_types:
     # 헤드 노드
     head_node:
-        resources: {"CPU": 4}                          # 스케줄링 힌트 제공
+        resources: {"CPU": 4, "Intel": 1}              # 스케줄링 힌트 제공
         node_config:
             InstanceType: m7i.xlarge
             ImageId: ${X86_AMI_ID}                     # amazon linux 2023
             SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
-              - sg-xxxxxxxxxxxxxxxxx
+                - ${HEAD_SG_ID}
             IamInstanceProfile:
                 Name: ray-instance-profile            
-        min_workers: 0                                 # min_workers/max_workers: 0 - 헤드 노드는 관리용이므로 스스로 워커 역할을 겸하지 않도록 설정
+        min_workers: 0                                 # 헤드 노드는 관리용이므로 워커 역할을 담당하지 않는다.
         max_workers: 0                             
-    # 워커 노드 (데이터 처리용)
+    # Intel 워커 노드 (데이터 처리용)
     worker_node:
         resources: {"CPU": 4, "Intel": 1}              # 스케줄링 힌트 제공
         node_config:
@@ -164,12 +151,13 @@ available_node_types:
             ImageId: ${ARM_AMI_ID}
             SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
+                - ${WORKER_SG_ID}
             IamInstanceProfile:
                 Name: ray-instance-profile            
         min_workers: 4                                 # 기본 4대 실행
         max_workers: 8                                 # 필요시 8대까지 자동 확장
 
-    # 워커 노드 (데이터 처리용)
+    # Graviton 워커 노드 (데이터 처리용)
     worker_node:
         resources: {"CPU": 4, "Graviton": 1}           # 스케줄링 힌트 제공
         node_config:
@@ -177,7 +165,7 @@ available_node_types:
             ImageId: ${AMI_ID}                         # 헤드 노드와 동일한 이미지 사용
             SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          
-              - sg-xxxxxxxxxxxxxxxxx
+                - ${WORKER_SG_ID}
             IamInstanceProfile:
                 Name: ray-instance-profile            
         min_workers: 4                                 # 기본 4대 실행
