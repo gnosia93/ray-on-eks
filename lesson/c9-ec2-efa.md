@@ -127,12 +127,12 @@ available_node_types:
    
     efa_worker_node:
         node_config:
-            InstanceType: ${INSTANCE_TYPE}
+            InstanceType: i7i.24xlarge
             NetworkInterfaces:
                 - DeviceIndex: 0
                   InterfaceType: efa
             Placement:
-                GroupName: ${PLACEMENT_GROUP_NAME} 
+                GroupName: ray-placement-group
             BlockDeviceMappings:
                 - DeviceName: /dev/xvda         # Amazon Linux 2023의 기본 루트 장치명
                   Ebs:
