@@ -8,7 +8,7 @@
 
 * [C2. ray 클러스터 생성](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/2-create-cluster.md)
 
-* [C3. 작업 제출 (Job Submission)]()
+* [C3. 작업 제출 (Job Submission)](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/3-job-submission.md)
 
 
 ```
