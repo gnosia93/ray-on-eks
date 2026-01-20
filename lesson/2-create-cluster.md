@@ -117,6 +117,7 @@ aws ec2 authorize-security-group-ingress --group-id $WORKER_SG_ID \
 
 
 ```
+cat <<EOF > cluster.yaml
 cluster_name: ${CLUSTER_NAME}
 
 provider:
@@ -149,7 +150,7 @@ available_node_types:
         resources: {"CPU": 4, "Intel": 1}              # 스케줄링 힌트 제공
         node_config:
             InstanceType: m7i.2xlarge
-            ImageId: ${ARM_AMI_ID}
+            ImageId: ${X86_AMI_ID}
             SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
                 - ${WORKER_SG_ID}
@@ -163,7 +164,7 @@ available_node_types:
         resources: {"CPU": 4, "Graviton": 1}           # 스케줄링 힌트 제공
         node_config:
             InstanceType: m8g.2xlarge
-            ImageId: ${AMI_ID}                         # 헤드 노드와 동일한 이미지 사용
+            ImageId: ${ARM_AMI_ID}                     # 헤드 노드와 동일한 이미지 사용
             SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          
                 - ${WORKER_SG_ID}
@@ -173,11 +174,10 @@ available_node_types:
         max_workers: 8                                 # 필요시 8대까지 자동 확장
 
 head_node_type: head_node                              # 정의한 여러 노드 타입 중 어떤 것이 클러스터의 전체 제어를 담당할 '헤드'인지 확정
+EOF
 ```
-* CPU: 16 (물리적 자원): 실제 인스턴스의 하드웨어 스펙입니다. 태스크가 실행될 때마다 이 숫자가 차감되며, 0이 되면 더 이상 작업을 받지 않습니다.
-* intel: 1 (논리적 태그): 사용자가 임의로 붙인 "이 노드는 인텔 칩셋임"이라는 인증 마크입니다. 물리적인 개수와 상관없이, 이 노드의 정체성을 나타내는 '입장권'이 1장 있다고 선언하는 것입니다.
-ray 에서 하나의 task 는 하나의 코어를 점유한다.
-
+* CPU: 16 (물리적 자원) 실제 인스턴스의 하드웨어 스펙으로 태스크가 실행될 때마다 차감되며, 0이 되면 더 이상 작업이 할당되지 않는다. 
+* Graviton: 1 (논리적 태그) 사용자가 임의로 붙인 "이 노드는 그라비톤 칩셋임" 이라는 마크이다. 
 
 클러스터를 생성한다.
 ```
