@@ -1,7 +1,7 @@
 ## 오토 스케일링 ##
 vs-code 콘솔에서 실행한다. 
 ```
-cat <<EOF > stress.py
+cat <<EOF > stress-job.py
 import ray, time
 ray.init(address="auto")
 
@@ -16,7 +16,7 @@ EOF
 ```
 
 ```
-ray run 
+ray job submit --address http://localhost:8265 --working-dir . -- python stress-job.py
 ```
 * Ray Status: Pending Tasks 발생 -> Autoscaler가 Launching 20 Nodes 시작.
 * AWS Console: EC2 인스턴스 페이지에 인스턴스 생성을 관찰.
