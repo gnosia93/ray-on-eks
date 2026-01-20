@@ -254,11 +254,7 @@ ssh-add -l
 # ssh-add -D  모든 키 삭제, 로그아웃시 권장
 # eval $(ssh-agent) ssh-agent 확인
 
-VS_CODE=$(aws ec2 describe-instances --region ${AWS_REGION} \
-  --filters "Name=tag:Name,Values=Ray-Bastion-VSCode" "Name=instance-state-name,Values=running" \
-  --query "Reservations[].Instances[0].PublicDnsName" --output text)
-echo ${VS_CODE}
-
+VS_CODE=$(cat VS_CODE) && echo ${VS_CODE}
 ssh -A ec2-user@${VS_CODE}
  
 ray up cluster.yaml -y
