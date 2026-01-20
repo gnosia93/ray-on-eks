@@ -126,6 +126,6 @@ ray job submit으로 작업을 제출하면 기본적으로 실패한 태스크�
 데이터 처리 작업처럼 유연하게 중단 및 재시작이 가능한 워크로드의 경우, 스팟 인스턴스를 사용하면 On-Demand 대비 최대 70~90%까지 비용을 절감할 수 있다.
 
 #### State Reconstruction (상태 재구성) #### 
-* Ray는 작업의 계보(Lineage)를 기록하는데 특정 노드가 죽으면 해당 노드에서 실행 중이던 객체(Object)가 사라졌음을 감지하고, 다른 노드에서 해당 작업을 재실행(Re-execution)한다. 
-* 메모리가 부족하거나 노드가 사라질 것에 대비해 데이터를 S3 등에 백업해두는 체크 포인팅 기능을 활용하면 작업 내역을 보존할 수 있다. 
+* Ray는 작업의 계보(Lineage)를 기록하는데 특정 노드가 죽으면 해당 노드에서 실행 중이던 객체(Object)가 사라졌음을 감지하고, 다른 노드에서 해당 작업을 재실행(Re-execution)한다. 이는 Ray의 기본 결함 허용(Fault Tolerance) 메커니즘이다.
+* 체크포인팅(ray.data.Dataset.checkpoint())은 중간 계산 결과를 메모리가 아닌 영구 저장소(Persistent Storage, 예: S3, 디스크)에 물리적인 파일로 저장하여, 재실행에 필요한 계산량 자체를 줄이는 역할을 한다.
 * AWS로부터 Spot Termination Notice를 받으면, Ray Autoscaler는 즉시 새로운 인스턴스(Spot 혹은 On-demand)를 보충하도록 설계되어 있다.
