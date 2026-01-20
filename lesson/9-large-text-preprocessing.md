@@ -11,6 +11,17 @@ ray.init(address="auto")
 def preprocess_text(batch: pd.DataFrame) -> pd.DataFrame:
     """
     각 워커 노드에서 실행될 배치 단위 전처리 함수
+
+    * re.sub(r"[^a-zA-Z0-9\s]", "", text)
+       [^ ... ] (부정 조건): 괄호 안에 있는 문자가 아닌(NOT) 것들을 찾으라는 의미.
+       a-zA-Z: 모든 영문자(대소문자).
+       0-9: 모든 숫자.
+       \s: 공백(Space, Tab, Newline 등).
+
+    💡 예시 결과
+       입력: "Hello, World!!! 2026 @Ray_Data#"
+       출력: "Hello World 2026 RayData"
+       쉼표(,), 느낌표(!), 골뱅이(@), 샵(#), 언더바(_) 등이 모두 삭제.
     """
     def clean(text):
         # 특수문자 제거 및 소문자화 (LLM 학습 전처리 예시)
