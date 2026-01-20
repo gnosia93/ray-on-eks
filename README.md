@@ -16,7 +16,7 @@
 
 * C8. Fault Tolerance 체험	가동 중인 워커 노드를 강제 종료(Terminate)하고, Ray가 작업 손실 없이 새 EC2로 복구하는 과정 실측	
 
-* [C9. 대규모 텍스트 전처리]()
+* [C9. 대규모 텍스트 전처리](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/9-large-text-preprocessing.md)
   * Parallelism & Batch Size 최적화 값 찾기	
 
 
