@@ -10,6 +10,13 @@ export X86_AMI_ID=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux
   --region ${AWS_REGION} --query "Parameters[0].Value" --output text)
 export ARM_AMI_ID=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-arm64 \
   --region ${AWS_REGION} --query "Parameters[0].Value" --output text)
+
+echo ${AWS_REGION}
+echo ${AWS_ACCOUNT}
+echo ${CLUSTER_NAME}
+echo ${VPC_ID}
+echo ${X86_AMI_ID}
+echo ${ARM_AMI_ID}
 ```
 
 
