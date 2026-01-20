@@ -194,7 +194,7 @@ EOF
 ```
 # 로컬 PC에서 실행
 ssh-add ~/.ssh/your-key.pem
-ssh -A ec2-user@bastion-public-ip
+ssh -A ec2-user@52.195.235.216
 
 ray up cluster.yaml -y
 ```
