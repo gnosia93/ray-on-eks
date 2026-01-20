@@ -198,7 +198,10 @@ ray up cluster-efa.yaml -y
 ray exec ~/cluster-efa.yaml "tail -f /tmp/ray/session_latest/logs/monitor.out"
 ```
 
-검노드 접속 후 fi_info -p efa 명령어로 EFA 장치가 인식되는지 확인한다.
+```
+ray exec ~/cluster.yaml "ray status"
+```
+
 
 
 
