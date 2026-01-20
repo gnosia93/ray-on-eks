@@ -26,4 +26,4 @@ Ray는 파이썬 코드를 수백 대의 서버로 즉시 확장해 주는 분�
 ## 레퍼런스 ##
 
 * https://docs.ray.io/en/latest/ray-overview/installation.html
-* https://github.com/dmatrix/ray-core-tutorial/blob/ad5f1fa700d87a9af1e21027f06f02cfdcc937f3//ex_07_ray_data.ipynb
+* [introduction to Ray datasets APIs](https://github.com/dmatrix/ray-core-tutorial/blob/ad5f1fa700d87a9af1e21027f06f02cfdcc937f3//ex_07_ray_data.ipynb)
