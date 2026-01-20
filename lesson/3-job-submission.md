@@ -27,5 +27,5 @@ pwd
 
 Job 을 제출한다. 동시에 ray 는 해당 디렉토리에 있는 파일을 전부 압축하여 클러스터로 업로드 한다. (업로드 제한 용량 100MB)
 ```
-ray job submit --address http://localhost:8265 --working-dir . -- python test_job.py
+ray job submit --address http://localhost:8265 --working-dir . -- python test-job.py
 ````
