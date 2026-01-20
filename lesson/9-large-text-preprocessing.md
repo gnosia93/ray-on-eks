@@ -242,5 +242,7 @@ Tailing logs until the job exits (disable with --no-wait):
 Job 'raysubmit_6VBJDxszQc7cfr7i' succeeded
 ------------------------------------------
 ```
+전처리 결과가 S3 에 저장되었다.
+![](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/images/raydata-s3-preprocessing.png)
 
 
