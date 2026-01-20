@@ -3,7 +3,7 @@
 export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 export CLUSTER_NAME="ray-on-aws"
-export VPC_ID=$(aws ec2 describe-vpcs --filters Name=tag:Name,Values="${CLUSTER_NAME}" --query "Vpcs[].VpcId" --output text)
+export VPC_ID=$(aws ec2 describe-vpcs --filters Name=tag:Name,Values="RayVPC" --query "Vpcs[].VpcId" --output text)
 
 pip install -U "ray[default]"
 ```
@@ -67,6 +67,23 @@ SUBNET_IDS=$(aws ec2 describe-subnets \
     --query "Subnets[*].{ID:SubnetId, AZ:AvailabilityZone}" \
     --output text)
 ```
+보안 그룹 (Security Group):
+* 헤드 노드: 8265(대시보드), 6379(GCS), 10001(Ray Client) 포트가 열려 있어야 합니다.
+* 노드 간 통신: 헤드와 워커 노드 사이에는 모든 TCP 포트가 서로 통신 가능하도록 해당 보안 그룹이 자기 자신을 소스(Self-reference)로 허용해야 합니다.
+```
+# VPC_ID와 보안 그룹 이름을 설정하세요
+VPC_ID=$(aws ec2 describe-vpcs --filters "Name=tag:Project,Values=ray-on-aws" --query "Vpcs[0].VpcId" --output text)
+
+RAY_SG_ID=$(aws ec2 create-security-group \
+  --group-name RayInternalSG \
+  --description "Allow all internal traffic between Ray nodes" \
+  --vpc-id $VPC_ID \
+  --query 'GroupId' --output text)
+
+echo "생성된 보안 그룹 ID: $RAY_SG_ID"
+```
+
+
 
 
 ```
