@@ -59,3 +59,7 @@ Tailing logs until the job exits (disable with --no-wait):
 Job 'raysubmit_6vDFyXzaJWbhY2Bi' succeeded
 ------------------------------------------
 ```
+실행된 Job 리스트와 상세 정보를 확인한다.
+![](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/images/dashboard-job-list.png)
+
+![](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/images/dashboard-job-detail.png)
