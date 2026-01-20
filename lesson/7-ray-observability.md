@@ -110,7 +110,7 @@ EOF
 sudo curl -SL "https://github.com/docker/compose/releases/latest/download/docker-compose-linux-$(uname -m)" -o ~/docker-compose
 sudo chmod +x ~/docker-compose
 
-docker-compose up -d
+./docker-compose up -d
 ```
 
 ### 대시보드 연결 ###
