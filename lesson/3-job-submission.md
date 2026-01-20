@@ -1,3 +1,4 @@
+### 테스트 Job 실행 ###
 vs-code 에서 새로운 터미널을 하나 더 열고 아래 명령어를 실행한다.   
 ```
 cd ~
@@ -57,6 +58,8 @@ Tailing logs until the job exits (disable with --no-wait):
 ------------------------------------------
 Job 'raysubmit_JN23e5DV1hcthHta' succeeded
 ```
+
+### 대시보드 확인 ###
 실행된 Job 잡과 해당 Job 의 상세 정보를 확인한다.
 ![](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/images/dashboard-job-list.png)
 
