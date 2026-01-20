@@ -261,6 +261,9 @@ ray up cluster.yaml -y
 ```
 * ssh-add는 SSH Key 전용 메모리 저장소인 ssh-agent에 사용자의 비밀키(.pem 등)를 등록하는 명령어로, 로컬 PC의 키를 배스천에 물리적으로 복사하지 않고도 배스천을 거쳐 내부 노드(Head/Worker)에 접속할 수 있게 인증 정보를 중계해 준다.
 
+![](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/images/ray-headnode.png)
+콘솔에서 Head 노드가 생성된 것을 확인한다.
+
 ### 6. 클러스터 확인 ###
 #### ray 클러스터 상태확인 ####
 ```
