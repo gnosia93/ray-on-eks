@@ -392,7 +392,8 @@ ssh -i ~/키페어.pem -L 8265:localhost:8265 ec2-user@$(cat VS_CODE)
 ![](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/images/ray-dashboard.png)
 
 
-### 참고 - 클러스터 삭제하기 ###
+## 클러스터 삭제하기 ##
+클러스터 삭제는 vs_code 터미널에서 수행한다. 
 ```
 ray down cluster.yaml -y
 ```
