@@ -64,6 +64,7 @@ ds = ray.data.range(num_batches) \
 ds.write_parquet("s3://${BUCKET_NAME}/raw-100gb-data/", parallelism=100)
 
 print("100GB 샘플 데이터 생성 및 S3 업로드 완료! - ${BUCKET_NAME}")
+EOF
 ```
 ```
 ray job submit --address http://localhost:8265 -- python generate-data.py
