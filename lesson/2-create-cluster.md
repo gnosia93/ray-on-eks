@@ -3,9 +3,12 @@
 export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 export VPC_ID=$(aws ec2 describe-vpcs --filters Name=tag:Name,Values="RayVPC" --query "Vpcs[].VpcId" --output text)
-export AMI_ID=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64 \
+export X86_AMI_ID=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64 \
+  --region ${AWS_REGION} --query "Parameters[0].Value" --output text)
+export ARM_AMI_ID=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-arm64 \
   --region ${AWS_REGION} --query "Parameters[0].Value" --output text)
 ```
+
 
 ### 2. ray Role 생성 ###
 Ray Head 노드가 Worker 노드들을 생성/삭제할 수 있도록 ray-instance-profile을 생성한다.
@@ -107,7 +110,7 @@ available_node_types:
         resources: {"CPU": 4}                          # 스케줄링 힌트 제공
         node_config:
             InstanceType: m7i.xlarge
-            ImageId: ami-0c9c942bd7bf113a2             # Ubuntu 22.04 (서울 리전 기준 확인 필요)
+            ImageId: ${X86_AMI_ID}                     # amazon linux 2023
             SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
               - sg-xxxxxxxxxxxxxxxxx
@@ -120,7 +123,7 @@ available_node_types:
         resources: {"CPU": 4, "Intel": 1}              # 스케줄링 힌트 제공
         node_config:
             InstanceType: m7i.2xlarge
-            ImageId: ami-0c9c942bd7bf113a2 # 헤드 노드와 동일한 이미지 사용
+            ImageId: ${ARM_AMI_ID}
             SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
             IamInstanceProfile:
@@ -132,8 +135,8 @@ available_node_types:
     worker_node:
         resources: {"CPU": 4, "Graviton": 1}           # 스케줄링 힌트 제공
         node_config:
-            InstanceType: m8i.2xlarge
-            ImageId: ami-0c9c942bd7bf113a2             # 헤드 노드와 동일한 이미지 사용
+            InstanceType: m8g.2xlarge
+            ImageId: ${AMI_ID}                         # 헤드 노드와 동일한 이미지 사용
             SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          
               - sg-xxxxxxxxxxxxxxxxx
