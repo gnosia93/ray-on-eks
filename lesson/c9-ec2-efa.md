@@ -73,20 +73,10 @@ aws ec2 authorize-security-group-egress --group-id ${WORKER_SG_ID} \
 Amazon Linux 2023 환경에서 EFA 드라이버와 통신 라이브러리(libfabric)를 설치해야 한다.
 ```
 curl -O https://efa-installer.amazonaws.com/aws-efa-installer-1.45.1.tar.gz
-$ tar -xf aws-efa-installer-1.45.1.tar.gz && cd aws-efa-installer
-sudo ./efa_installer.sh -y
-
-setup_commands:
-    # ... 기존 명령어 유지 ...
-    - |
-      sudo dnf install -y gcc kernel-devel-$(uname -r)
-      curl -O https://efa-installer.amazonaws.com
-      tar -xf aws-efa-installer-latest.tar.gz
-      cd aws-efa-installer && sudo ./efa_installer.sh -y
-      # 환경 변수 로드
-      source /etc/profile.d/efa.sh
-    - pip install -U "ray[default,data]" pandas pyarrow boto3
+tar -xf aws-efa-installer-1.45.1.tar.gz
+cd aws-efa-installer && sudo ./efa_installer.sh -y
 ```
+cluster.yaml 의 setup_commands 블록에 위의 스크립트를 입력한다. 
 
 ### 5. node_config 수정 (EFA 활성화 및 배치 그룹) ###
 EFA를 사용하려면 NetworkInterfaces 설정에서 InterfaceType: efa를 명시해야 하며, 성능을 위해 인스턴스들이 동일한 Placement Group에 있어야 한다.
