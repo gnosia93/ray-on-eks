@@ -72,6 +72,10 @@ aws ec2 authorize-security-group-egress --group-id ${WORKER_SG_ID} \
 ### 4. EFA 드라이버 설치 ###
 Amazon Linux 2023 환경에서 EFA 드라이버와 통신 라이브러리(libfabric)를 설치해야 한다.
 ```
+curl -O https://efa-installer.amazonaws.com/aws-efa-installer-1.45.1.tar.gz
+$ tar -xf aws-efa-installer-1.45.1.tar.gz && cd aws-efa-installer
+sudo ./efa_installer.sh -y
+
 setup_commands:
     # ... 기존 명령어 유지 ...
     - |
@@ -108,6 +112,9 @@ available_node_types:
 검노드 접속 후 fi_info -p efa 명령어로 EFA 장치가 인식되는지 확인한다.
 
 
+
+## 레퍼런스 ##
+* https://docs.aws.amazon.com/ko_kr/AWSEC2/latest/UserGuide/efa-start.html#efa-start-enable
 
 
 
