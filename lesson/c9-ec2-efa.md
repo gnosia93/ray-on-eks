@@ -160,9 +160,8 @@ available_node_types:
             NetworkInterfaces:
                 - DeviceIndex: 0
                   InterfaceType: efa
+                  Groups: ["${WORKER_SG_ID}"]                # SecurityGroupIds 대신 여기서 설정
                   SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
-                  SecurityGroupIds:                          
-                      - ${WORKER_SG_ID}
             Placement:
                 GroupName: ray-placement-group
             BlockDeviceMappings:
