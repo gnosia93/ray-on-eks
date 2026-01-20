@@ -133,6 +133,70 @@ EOF
 ```
 ray up cluster-spot.yaml -y
 ```
+[결과]
+```
+Cluster: ray-on-aws
+
+Checking AWS environment settings
+/home/ec2-user/.local/lib/python3.9/site-packages/boto3/compat.py:89: PythonDeprecationWarning: Boto3 will no longer support Python 3.9 starting April 29, 2026. To continue receiving service updates, bug fixes, and security updates please upgrade to Python 3.10 or later. More information can be found here: https://aws.amazon.com/blogs/developer/python-support-policy-updates-for-aws-sdks-and-tools/
+  warnings.warn(warning, PythonDeprecationWarning)
+AWS config
+  IAM Profile: ray-instance-profile
+  EC2 Key pair (all available node types): ray-autoscaler_1_ap-northeast-1 [default]
+  VPC Subnets (all available node types): subnet-0624daf24debfc5de, subnet-0483c355addb47285 [default]
+  EC2 Security groups (head_node): sg-0dd9628c2d0251c64
+  EC2 Security groups (x86_worker_node): sg-0a6f304e7fe78fd1a
+  EC2 Security groups (arm_worker_node): sg-0a6f304e7fe78fd1a
+  EC2 AMI (head_node): ami-03d1820163e6b9f5d
+  EC2 AMI (x86_worker_node): ami-03d1820163e6b9f5d
+  EC2 AMI (arm_worker_node): ami-0a68dd57c124abef3
+
+Updating cluster configuration and running full setup.
+Cluster Ray runtime will be restarted. Confirm [y/N]: y [automatic, due to --yes]
+
+Usage stats collection is enabled. To disable this, add `--disable-usage-stats` to the command that starts the cluster, or run the following command: `ray disable-usage-stats` before starting the cluster. See https://docs.ray.io/en/master/cluster/usage-stats.html for more details.
+
+<1/1> Setting up head node
+  Prepared bootstrap config
+  Autoscaler v2 is now enabled by default (since Ray 2.50.0). To switch back to v1, set RAY_UP_enable_autoscaler_v2=0. This message can be suppressed by setting RAY_UP_enable_autoscaler_v2 explicitly.
+  New status: waiting-for-ssh
+  [1/7] Waiting for SSH to become available
+    Running `uptime` as a test.
+    Fetched IP: 10.0.2.183
+ 09:45:09 up  1:30,  2 users,  load average: 0.07, 0.17, 0.08
+Shared connection to 10.0.2.183 closed.
+    Success.
+/home/ec2-user/.local/lib/python3.9/site-packages/boto3/compat.py:89: PythonDeprecationWarning: Boto3 will no longer support Python 3.9 starting April 29, 2026. To continue receiving service updates, bug fixes, and security updates please upgrade to Python 3.10 or later. More information can be found here: https://aws.amazon.com/blogs/developer/python-support-policy-updates-for-aws-sdks-and-tools/
+  warnings.warn(warning, PythonDeprecationWarning)
+  Updating cluster configuration. [hash=47f54d0b3cfc2b2e581da2003ca06a9591a15f6b]
+  New status: syncing-files
+  [2/7] Processing file mounts
+Shared connection to 10.0.2.183 closed.
+Shared connection to 10.0.2.183 closed.
+  [3/7] No worker file mounts to sync
+  New status: setting-up
+  [4/7] No initialization commands to run.
+  [5/7] Initializing command runner
+  [6/7] Running setup commands
+    (0/6) sudo growpart /dev/xvda 1 || t...
+NOCHANGE: partition 1 is size 16752607. it cannot be grown
+Shared connection to 10.0.2.183 closed.
+    (1/6) sudo xfs_growfs -d / || true
+meta-data=/dev/nvme0n1p1         isize=512    agcount=2, agsize=1047040 blks
+         =                       sectsz=4096  attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=0, rmapbt=0
+         =                       reflink=0    bigtime=1 inobtcount=1 nrext64=0
+         =                       exchange=0  
+data     =                       bsize=4096   blocks=2094075, imaxpct=25
+         =                       sunit=128    swidth=128 blks
+naming   =version 2              bsize=16384  ascii-ci=0, ftype=1, parent=0
+log      =internal log           bsize=4096   blocks=16384, version=2
+         =                       sectsz=4096  sunit=4 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+...
+
+```
+
 
 ### 주의사항 및 고려사항 ###
 * 헤드 노드는 On-Demand 사용
