@@ -194,7 +194,7 @@ setup_commands:
     - sudo dnf install -y python3-pip
     - pip install -U "ray[default,data]" pandas pyarrow boto3
 
-max_workers: 16
+max_workers: 128
 
 # 노드별 상세 사양
 available_node_types:
@@ -215,7 +215,7 @@ available_node_types:
     x86_worker_node:
         resources: {"CPU": 8, "Intel": 1}              # 스케줄링 힌트 제공
         node_config:
-            InstanceType: m7i.2xlarge
+            InstanceType: r7i.2xlarge
             ImageId: ${X86_AMI_ID}
             SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
@@ -229,7 +229,7 @@ available_node_types:
     arm_worker_node:
         resources: {"CPU": 8, "Graviton": 1}           # 스케줄링 힌트 제공
         node_config:
-            InstanceType: m8g.2xlarge
+            InstanceType: r8g.2xlarge
             ImageId: ${ARM_AMI_ID}                     # 헤드 노드와 동일한 이미지 사용
             SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          
