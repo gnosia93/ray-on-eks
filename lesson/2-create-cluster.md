@@ -79,29 +79,55 @@ setup_commands:
 available_node_types:
     # 헤드 노드
     head_node:
+        resources: {"CPU": 4}                          # 스케줄링 힌트 제공
         node_config:
-            InstanceType: m6i.xlarge
+            InstanceType: m7i.xlarge
             ImageId: ami-0c9c942bd7bf113a2             # Ubuntu 22.04 (서울 리전 기준 확인 필요)
             SubnetId: subnet-xxxxxxxxxxxxxxxxx         # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
                 - sg-xxxxxxxxxxxxxxxxx
+            IamInstanceProfile:
+                Name: ray-instance-profile            
         min_workers: 0                                 # min_workers/max_workers: 0 - 헤드 노드는 관리용이므로 스스로 워커 역할을 겸하지 않도록 설정
         max_workers: 0                             
     # 워커 노드 (데이터 처리용)
     worker_node:
+        resources: {"CPU": 4, "Intel": 1}              # 스케줄링 힌트 제공
         node_config:
-            InstanceType: m6i.2xlarge
+            InstanceType: m7i.2xlarge
             ImageId: ami-0c9c942bd7bf113a2 # 헤드 노드와 동일한 이미지 사용
             SubnetId: subnet-xxxxxxxxxxxxxxxxx         # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
+            IamInstanceProfile:
+                Name: ray-instance-profile            
         min_workers: 4                                 # 기본 4대 실행
-        max_workers: 4                                 # 필요시 8대까지 자동 확장
+        max_workers: 8                                 # 필요시 8대까지 자동 확장
+
+    # 워커 노드 (데이터 처리용)
+    worker_node:
+        resources: {"CPU": 4, "Graviton": 1}           # 스케줄링 힌트 제공
+        node_config:
+            InstanceType: m8i.2xlarge
+            ImageId: ami-0c9c942bd7bf113a2             # 헤드 노드와 동일한 이미지 사용
+            SubnetId: subnet-xxxxxxxxxxxxxxxxx         # 프라이빗 서브넷 ID 입력
+            SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
+            IamInstanceProfile:
+                Name: ray-instance-profile            
+        min_workers: 4                                 # 기본 4대 실행
+        max_workers: 8                                 # 필요시 8대까지 자동 확장
 
 head_node_type: head_node                              # 정의한 여러 노드 타입 중 어떤 것이 클러스터의 전체 제어를 담당할 '헤드'인지 확정
 ```
 * CPU: 16 (물리적 자원): 실제 인스턴스의 하드웨어 스펙입니다. 태스크가 실행될 때마다 이 숫자가 차감되며, 0이 되면 더 이상 작업을 받지 않습니다.
 * intel: 1 (논리적 태그): 사용자가 임의로 붙인 "이 노드는 인텔 칩셋임"이라는 인증 마크입니다. 물리적인 개수와 상관없이, 이 노드의 정체성을 나타내는 '입장권'이 1장 있다고 선언하는 것입니다.
 ray 에서 하나의 task 는 하나의 코어를 점유한다.
+
+보안 그룹 (Security Group):
+헤드 노드: 8265(대시보드), 6379(GCS), 10001(Ray Client) 포트가 열려 있어야 합니다.
+노드 간 통신: 헤드와 워커 노드 사이에는 모든 TCP 포트가 서로 통신 가능하도록 해당 보안 그룹이 자기 자신을 소스(Self-reference)로 허용해야 합니다.
+
+
+
 
 클러스터를 생성한다.
 ```
