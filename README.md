@@ -1,14 +1,3 @@
-* 1교시 - AWS EC2 포트폴리오 소개 / CPU 별 특징 소개
-* 2교시 - ray data / 데이터 전처리 이론 교육
-    * 머신 러닝 데이터 전처리
-    * LLM text 데이터 전처리
-    * spark ETL 대체   
-* 3교시 / 4교시 - ray 실습
-* engage strategy
-   * 신규 니즈 발굴
-   * 단독 워크샵 형태
-   * ML 워크샵시 컨텐츠 소개 
-
 # ray-on-ec2
 
 * [C1. VPC 생성](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/1-create-vpc.md)
@@ -42,6 +31,18 @@ Ray는 분산 컴퓨팅 프레임워크이기 때문에 하드웨어 아키텍�
 * EC2 활용 극대화: 인스턴스 타입을 섞어 쓰기 때문에 Mixed Instances Policy를 완벽하게 실습하게 됩니다
 
 * Mixed Instance Policy 
+
+## 교육 내용 ##
+* 1교시 - AWS EC2 포트폴리오 소개 / CPU 별 특징 소개
+* 2교시 - ray data / 데이터 전처리 이론 교육
+    * 머신 러닝 데이터 전처리
+    * LLM text 데이터 전처리
+    * spark ETL 대체   
+* 3교시 / 4교시 - ray 실습
+* engage strategy
+   * 신규 니즈 발굴
+   * 단독 워크샵 형태
+   * ML 워크샵시 컨텐츠 소개 
 
 
 ## 데이터 ##
