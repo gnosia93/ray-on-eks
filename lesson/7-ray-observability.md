@@ -132,9 +132,18 @@ ssh -i "your-key.pem" -L 3000:<헤드노드_사설_IP>:3000 ec2-user@<베스천_
 ssh -i ~/aws-kp-1.pem -L 3000:10.0.2.183:3000 ec2-user@ec2-13-230-210-195.ap-northeast-1.compute.amazonaws.com
 ```
     
-    * Grafana 접속: http://<HEAD_IP>:3000 (ID/PW: admin/admin)
-    * 데이터 소스 추가: Add Data Source -> Prometheus 선택 -> URL에 http://prometheus:9090 입력 후 Save & Test.
-    * 대시보드 임포트: Ray 공식 Grafana 대시보드(ID: 16098)를 임포트하면 즉시 화려한 차트가 나옵니다.
+* Grafana 접속: http://<HEAD_IP>:3000 (ID/PW: admin/admin)
+* 데이터 소스 추가: Add Data Source -> Prometheus 선택 -> URL에 http://prometheus:9090 입력 후 Save & Test.
+* 대시보드 임포트: Ray 공식 Grafana 대시보드(ID: 16098)를 임포트하면 즉시 화려한 차트가 나옵니다.
+
+
+### 디버깅 ###
+```
+$ docker exec -it prometheus ls /tmp/ray
+prom_metrics_service_discovery.json       session_2026-01-20_08-16-22_198865_26744  session_latest
+ray_current_cluster                       session_2026-01-20_09-45-23_031654_35719
+```
+
 
 ### 주의사항 ###
 * 보안 그룹: AWS Console에서 헤드 노드의 보안 그룹 규칙에 9090과 3000 포트를 열어주어야 외부 브라우저에서 보입니다.
