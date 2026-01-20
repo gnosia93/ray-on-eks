@@ -218,7 +218,7 @@ available_node_types:
                 - ${WORKER_SG_ID}
             IamInstanceProfile:
                 Name: ray-instance-profile            
-        min_workers: 4                                 # 기본 4대 실행
+        min_workers: 1                                 # 기본 1대 실행
         max_workers: 8                                 # 필요시 8대까지 자동 확장
 
     # Graviton 워커 노드 (데이터 처리용)
@@ -232,7 +232,7 @@ available_node_types:
                 - ${WORKER_SG_ID}
             IamInstanceProfile:
                 Name: ray-instance-profile            
-        min_workers: 4                                 # 기본 4대 실행
+        min_workers: 1                                 # 기본 1대 실행
         max_workers: 8                                 # 필요시 8대까지 자동 확장
 
 head_node_type: head_node                              # 정의한 여러 노드 타입 중 어떤 것이 클러스터의 전체 제어를 담당할 '헤드'인지 확정
@@ -276,8 +276,8 @@ Node status
 Active:
  (no active nodes)
 Idle:
- 4 arm_worker_node
- 4 x86_worker_node
+ 1 arm_worker_node
+ 1 x86_worker_node
  1 head_node
 Pending:
  (no pending nodes)
@@ -287,9 +287,9 @@ Recent failures:
 Resources
 ---------------------------------------------------------------
 Total Usage:
- 0.0/36.0 CPU
- 0.0/4.0 Graviton
- 0.0/5.0 Intel
+ 0.0/12.0 CPU
+ 0.0/1.0 Graviton
+ 0.0/2.0 Intel
  0B/189.07GiB memory
  0B/76.43GiB object_store_memory
 
