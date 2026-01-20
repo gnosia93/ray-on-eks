@@ -1,3 +1,12 @@
+### 1. efa 인스턴스 조회 ###
+```
+ aws ec2 describe-instance-types \
+    --filters "Name=instance-type,Values=*7i*,*8g*" \
+              "Name=network-info.efa-supported,Values=true" \
+    --query "InstanceTypes[].[InstanceType, VCpuInfo.DefaultVCpus, VCpuInfo.DefaultCores, MemoryInfo.SizeInMiB]" \
+    --output text | awk '{printf "Instance: %-18s | vCPU: %3d | Cores: %2d | Memory: %6d GiB\n", $1, $2, $3, $4/1024}'
+```
+
 
 ### 1. node_config 수정 (EFA 활성화 및 배치 그룹) ###
 EFA를 사용하려면 NetworkInterfaces 설정에서 InterfaceType: efa를 명시해야 하며, 성능을 위해 인스턴스들이 동일한 Placement Group에 있어야 한다.
