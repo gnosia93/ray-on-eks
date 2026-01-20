@@ -22,6 +22,8 @@ Ray는 파이썬 코드를 수백 대의 서버로 즉시 확장해 주는 분�
 
 * [C8. 대규모 텍스트 처리](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/8-text-preprocessing.md)
 
+* [C9. EC2 EFA 설정]()
+  
 
 ## 레퍼런스 ##
 
