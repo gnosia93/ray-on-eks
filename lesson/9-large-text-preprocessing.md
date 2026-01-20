@@ -20,7 +20,7 @@ echo ${BUCKET_NAME}
 ```
 [결과]
 ```
-2026-01-20 05:42:36 ray-on-aws-1768887754
+ray-on-aws-1768888873
 ```
 
 ### 2. 샘플 데이터 생성 ###
@@ -63,7 +63,7 @@ ds = ray.data.range(num_batches) \
 # 'parallelism'을 워커 노드의 총 코어 수 정도로 설정하여 최대 속도로 업로드합니다.
 ds.write_parquet("s3://${BUCKET_NAME}/raw-100gb-data/", parallelism=100)
 
-print("100GB 샘플 데이터 생성 및 S3 업로드 완료!")
+print("100GB 샘플 데이터 생성 및 S3 업로드 완료! - ${BUCKET_NAME}")
 ```
 ```
 ray job submit --address http://localhost:8265 -- python generate-data.py
