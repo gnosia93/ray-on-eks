@@ -134,7 +134,7 @@ ssh -i ~/aws-kp-1.pem -L 3000:10.0.2.183:3000 ec2-user@ec2-13-230-210-195.ap-nor
 * 데이터 소스 추가: Add Data Source -> Prometheus 선택 -> URL에 http://prometheus:9090 입력 후 Save & Test.
 * 대시보드 임포트: Ray 공식 Grafana 대시보드(ID: 16098)를 임포트하면 즉시 화려한 차트가 나옵니다.
 
-### 그라파나 대시보드에 데이터가 나오지 않음 ###
+### 트러블 슈팅 - 그라파나 대시보드에 데이터가 나오지 않음 ###
 ```
 $ docker exec -it prometheus ls /tmp/ray
 prom_metrics_service_discovery.json       session_2026-01-20_08-16-22_198865_26744  session_latest
