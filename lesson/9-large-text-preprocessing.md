@@ -15,7 +15,8 @@ aws s3api create-bucket --bucket ${BUCKET_NAME} --region ${AWS_REGION} \
   --create-bucket-configuration LocationConstraint=${AWS_REGION}
 ```
 ```
-aws s3 ls | grep ${BUCKET_NAME}
+BUCKET_NAME=$(aws s3 ls | grep ${BUCKET_NAME})
+echo ${BUCKET_NAME}
 ```
 [결과]
 ```
