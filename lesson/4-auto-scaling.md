@@ -64,6 +64,9 @@ Pending Demands:
 Shared connection to 10.0.2.177 closed.
 ```
 
+실행한 Job 의 상세 정보를 대시보드에서 조회한다. 
 ![](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/images/dashboard-job-log.png)
+
+해당 Job에서 실행중인 태스크도 관찰할 수 있다.
 ![](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/images/dashboard-job-task.png)
 
