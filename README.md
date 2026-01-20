@@ -8,6 +8,7 @@
 
 * [C2. ray 클러스터 생성](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/2-create-cluster.md)
 
+* [C3. 잡 실행하기]()
 
 
 ```
