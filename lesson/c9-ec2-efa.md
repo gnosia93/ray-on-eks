@@ -54,7 +54,7 @@ aws ec2 create-placement-group --group-name ray-placement-group --strategy clust
 ```
 
 
-### 2. node_config 수정 (EFA 활성화 및 배치 그룹) ###
+### 3. node_config 수정 (EFA 활성화 및 배치 그룹) ###
 EFA를 사용하려면 NetworkInterfaces 설정에서 InterfaceType: efa를 명시해야 하며, 성능을 위해 인스턴스들이 동일한 Placement Group에 있어야 한다.
 ```
 ...
@@ -74,7 +74,7 @@ available_node_types:
 ...
 ```
 
-### 3. setup_commands 수정 (EFA 드라이버 설치) ###
+### 4. setup_commands 수정 (EFA 드라이버 설치) ###
 Amazon Linux 2023 환경에서 EFA 드라이버와 통신 라이브러리(libfabric)를 설치해야 한다.
 ```
 setup_commands:
@@ -89,7 +89,7 @@ setup_commands:
     - pip install -U "ray[default,data]" pandas pyarrow boto3
 ```
 
-### 4. 보안 그룹(Security Group) 필수 설정 ###
+### 5. 보안 그룹(Security Group) 필수 설정 ###
 EFA가 작동하려면 동일한 보안 그룹 내의 모든 인바운드/아웃바운드 트래픽(All Traffic)이 자기 자신(Self-reference)을 대상으로 허용되어야 합니다. 기존 WORKER_SG 에 아래 내용을 추가한다. 
 ```
 Type: All Traffic
@@ -97,7 +97,7 @@ Protocol: All
 Source: ${WORKER_SG_ID} (자기 자신의 보안 그룹 ID)
 ```
 
-### 5. 검증 ###
+### 6. 검증 ###
 
 검노드 접속 후 fi_info -p efa 명령어로 EFA 장치가 인식되는지 확인한다.
 
