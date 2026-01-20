@@ -251,6 +251,7 @@ ray up cluster.yaml -y
 ```
 
 ### 4. 클러스터 확인 ###
+#### ray status ####
 ```
 ray exec /home/ec2-user/cluster.yaml "ray status"
 ```
@@ -292,6 +293,7 @@ Pending Demands:
 Shared connection to 10.0.2.177 closed.
 ```
 
+#### ray list nodes --detail ####
 ```
 ray exec /home/ec2-user/cluster.yaml "ray list nodes --detail"
 ```
