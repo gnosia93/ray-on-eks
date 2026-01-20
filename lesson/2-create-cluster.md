@@ -189,6 +189,9 @@ auth:
     
 # 각 노드에서 실행될 설정 (Python 설치 등)
 setup_commands:
+    - sudo growpart /dev/xvda 1 || true
+    - sudo xfs_growfs -d / || true
+    # - sudo resize2fs /dev/xvda1 || true
     - sudo dnf install -y python-unversioned-command
     - sudo dnf install -y python3-pip
     - pip install -U "ray[default,data]" pandas pyarrow boto3
