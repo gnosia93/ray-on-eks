@@ -25,6 +25,17 @@ vs-code 터미널에서 ray attach 를 이용하여 헤드 노드에 접속한�
 ```
 ray attach cluster_config.yaml
 ```
+[결과]
+```
+ray attach cluster.yaml
+Loaded cached provider configuration
+If you experience issues with the cloud provider, try re-running the command with --no-config-cache.
+/home/ec2-user/.local/lib/python3.9/site-packages/boto3/compat.py:89: PythonDeprecationWarning: Boto3 will no longer support Python 3.9 starting April 29, 2026. To continue receiving service updates, bug fixes, and security updates please upgrade to Python 3.10 or later. More information can be found here: https://aws.amazon.com/blogs/developer/python-support-policy-updates-for-aws-sdks-and-tools/
+  warnings.warn(warning, PythonDeprecationWarning)
+Fetched IP: 10.0.2.183
+[ec2-user@ip-10-0-2-183 ~]$ 
+```
+
 아래 명령어로 헤드 노드에 docker 를 설치한다.
 ```
 sudo dnf install -y docker
