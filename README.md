@@ -11,7 +11,7 @@
 
 * [C5. 스팟 인스턴스 사용하기](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/5-spot-instance.md)
 
-* [C7. 커스텀 자원 정밀 제어]
+* [C6. 커스텀 자원 정밀 제어]
    * Custom_Resource를 활용해 특정 인스턴스 타입을 골라 띄우는 Resource-specific Scaling 구현	
 
 * C8. Fault Tolerance 체험	가동 중인 워커 노드를 강제 종료(Terminate)하고, Ray가 작업 손실 없이 새 EC2로 복구하는 과정 실측	
