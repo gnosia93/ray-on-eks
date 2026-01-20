@@ -6,7 +6,7 @@
 * 3교시 / 4교시 - ray 실습
 
 
-# ray-on-aws
+# ray-on-ec2
 
 * [C1. VPC 생성](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/1-create-vpc.md)
 
