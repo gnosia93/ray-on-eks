@@ -247,6 +247,7 @@ ssh-add -l
 VS_CODE=$(aws ec2 describe-instances --region ${AWS_REGION} \
   --filters "Name=tag:Name,Values=Ray-Bastion-VSCode" "Name=instance-state-name,Values=running" \
   --query "Reservations[].Instances[0].PublicDnsName" --output text)
+echo ${VS_CODE}
 
 ssh -A ec2-user@${VS_CODE}
  
