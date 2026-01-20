@@ -241,11 +241,19 @@ EOF
 * CPU: 16 (물리적 자원) 실제 인스턴스의 하드웨어 스펙으로 태스크가 실행될 때마다 차감되며, 0이 되면 더 이상 작업이 할당되지 않는다. 
 * Graviton: 1 (논리적 태그) 사용자가 임의로 붙인 "이 노드는 그라비톤 칩셋임" 이라는 마크이다. 
 
-ray 클러스터를 생성한다.
+ray 클러스터를 생성한다. ssh-add는 SSH Key 전용 메모리 저장소인 ssh-agent에 사용자의 비밀키(.pem 등)를 등록하는 명령어로, 로컬 PC의 키를 배스천에 물리적으로 복사하지 않고도 배스천을 거쳐 내부 노드(Head/Worker)에 접속할 수 있게 인증 정보를 중계해 준다.
 ```
 # 로컬 PC에서 실행
-ssh-add ~/.ssh/your-key.pem
-ssh -A ec2-user@52.195.235.216
+ssh-add ~/your-aws-key.pem
+ssh-add -l
+# ssh-add -D  모든 키 삭제, 로그아웃시 권장
+# eval $(ssh-agent) ssh-agent 확인
+
+VS_CODE=$(aws ec2 describe-instances \
+  --filters "Name=tag:Name,Values=Ray-Bastion-VSCode" "Name=instance-state-name,Values=running" \
+  --query "Reservations[].Instances[0].PublicDnsName" --output text)
+
+ssh -A ec2-user@${VS_CODE}
  
 ray up cluster.yaml -y
 ```
