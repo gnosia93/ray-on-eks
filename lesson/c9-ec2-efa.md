@@ -63,7 +63,10 @@ WORKER_SG_ID=$(aws ec2 describe-security-groups \
   --query "SecurityGroups[0].GroupId" --output text)
 
 aws ec2 authorize-security-group-ingress --group-id ${WORKER_SG_ID} \
-  --protocol all --port 0-65535 --source-group ${WORKER_SG_ID}
+  --protocol -1 --source-group ${WORKER_SG_ID}
+
+aws ec2 authorize-security-group-egress --group-id ${WORKER_SG_ID} \
+  --protocol -1 --source-group ${WORKER_SG_ID}
 ```
 
 ### 4. EFA 드라이버 설치 ###
