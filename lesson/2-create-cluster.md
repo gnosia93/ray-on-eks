@@ -257,20 +257,19 @@ ray exec /home/ec2-user/cluster.yaml "ray status"
 ```
 [결과]
 ```
-ray exec /home/ec2-user/cluster.yaml "ray status"
 Loaded cached provider configuration
 If you experience issues with the cloud provider, try re-running the command with --no-config-cache.
 /home/ec2-user/.local/lib/python3.9/site-packages/boto3/compat.py:89: PythonDeprecationWarning: Boto3 will no longer support Python 3.9 starting April 29, 2026. To continue receiving service updates, bug fixes, and security updates please upgrade to Python 3.10 or later. More information can be found here: https://aws.amazon.com/blogs/developer/python-support-policy-updates-for-aws-sdks-and-tools/
   warnings.warn(warning, PythonDeprecationWarning)
 Fetched IP: 10.0.2.177
-Warning: Permanently added '10.0.2.177' (ED25519) to the list of known hosts.
-======== Autoscaler status: 2026-01-20 02:23:20.270669 ========
+======== Autoscaler status: 2026-01-20 02:34:48.560347 ========
 Node status
 ---------------------------------------------------------------
 Active:
  (no active nodes)
 Idle:
- 4 worker_node
+ 4 arm_worker_node
+ 4 x86_worker_node
  1 head_node
 Pending:
  (no pending nodes)
@@ -280,11 +279,11 @@ Recent failures:
 Resources
 ---------------------------------------------------------------
 Total Usage:
- 0.0/20.0 CPU
+ 0.0/36.0 CPU
  0.0/4.0 Graviton
- 0.0/1.0 Intel
- 0B/99.48GiB memory
- 0B/40.32GiB object_store_memory
+ 0.0/5.0 Intel
+ 0B/189.07GiB memory
+ 0B/76.43GiB object_store_memory
 
 From request_resources:
  (none)
