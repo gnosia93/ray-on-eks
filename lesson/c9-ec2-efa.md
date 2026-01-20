@@ -191,7 +191,7 @@ ssh-add -l
 VS_CODE=$(cat VS_CODE) && echo ${VS_CODE}
 ssh -A ec2-user@${VS_CODE}
  
-ray up cluster.yaml -y
+ray up cluster-efa.yaml -y
 ```
 
 ### 검증 ###
