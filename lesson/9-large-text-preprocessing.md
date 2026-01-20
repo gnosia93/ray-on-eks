@@ -70,7 +70,51 @@ EOF
 ```
 ray job submit --address http://localhost:8265 --working-dir . -- python generate-data.py
 ```
+[결과]
+```
+Job submission server address: http://localhost:8265
+2026-01-20 08:56:30,411 INFO dashboard_sdk.py:338 -- Uploading package gcs://_ray_pkg_20e56bc7ef94aec4.zip.
+2026-01-20 08:56:30,412 INFO packaging.py:588 -- Creating a file package for local module '.'.
 
+-------------------------------------------------------
+Job 'raysubmit_eMq6km2Wugix36gk' submitted successfully
+-------------------------------------------------------
+
+Next steps
+  Query the logs of the job:
+    ray job logs raysubmit_eMq6km2Wugix36gk
+  Query the status of the job:
+    ray job status raysubmit_eMq6km2Wugix36gk
+  Request the job to be stopped:
+    ray job stop raysubmit_eMq6km2Wugix36gk
+
+Tailing logs until the job exits (disable with --no-wait):
+2026-01-20 08:56:30,421 INFO job_manager.py:568 -- Runtime env is setting up.
+2026-01-20 08:56:31,366 INFO worker.py:1691 -- Using address 10.0.2.183:6379 set in the environment variable RAY_ADDRESS
+2026-01-20 08:56:31,369 INFO worker.py:1832 -- Connecting to existing Ray cluster at address: 10.0.2.183:6379...
+2026-01-20 08:56:31,378 INFO worker.py:2003 -- Connected to Ray cluster. View the dashboard at http://10.0.2.183:8265 
+2026-01-20 08:56:32,137 INFO streaming_executor.py:85 -- A new progress UI is available. To enable, set `ray.data.DataContext.get_current().enable_rich_progress_bars = True`.
+2026-01-20 08:56:32,137 INFO logging.py:397 -- Registered dataset logger for dataset dataset_14_0
+2026-01-20 08:56:32,147 INFO streaming_executor.py:170 -- Starting execution of Dataset dataset_14_0. Full logs are in /tmp/ray/session_2026-01-20_08-16-22_198865_26744/logs/ray-data
+2026-01-20 08:56:32,147 INFO streaming_executor.py:171 -- Execution plan of Dataset dataset_14_0: InputDataBuffer[Input] -> TaskPoolMapOperator[ReadRange] -> TaskPoolMapOperator[MapBatches(generate_fake_data)] -> AllToAllOperator[Repartition] -> TaskPoolMapOperator[Write]
+[dataset]: Run `pip install tqdm` to enable progress reporting.
+2026-01-20 08:56:32,176 WARNING resource_manager.py:134 -- ⚠️  Ray's object store is configured to use only 40.9% of available memory (40.7GiB out of 99.4GiB total). For optimal Ray Data performance, we recommend setting the object store to at least 50% of available memory. You can do this by setting the 'object_store_memory' parameter when calling ray.init() or by setting the RAY_DEFAULT_OBJECT_STORE_MEMORY_PROPORTION environment variable.
+(autoscaler +55s) Tip: use `ray status` to view detailed cluster status. To disable these messages, set RAY_SCHEDULER_EVENTS=0.
+(autoscaler +55s) Adding 1 node(s) of type x86_worker_node.
+(autoscaler +55s) Resized to 32 CPUs.
+(autoscaler +2m27s) Adding 1 node(s) of type x86_worker_node.
+(autoscaler +2m27s) Resized to 40 CPUs.
+(autoscaler +3m44s) Adding 1 node(s) of type x86_worker_node.
+(autoscaler +3m44s) Adding 1 node(s) of type arm_worker_node.
+(autoscaler +3m44s) Resized to 56 CPUs.
+2026-01-20 09:00:19,947 INFO streaming_executor.py:298 -- ✔️  Dataset dataset_14_0 execution finished in 227.80 seconds
+2026-01-20 09:00:19,994 INFO dataset.py:5106 -- Data sink Parquet finished. 10000000 rows and 10.5GB data written.
+100GB 샘플 데이터 생성 및 S3 업로드 완료! - ray-on-aws-1768897738
+
+------------------------------------------
+Job 'raysubmit_eMq6km2Wugix36gk' succeeded
+------------------------------------------
+```
 
 ### 3. 데이터 전처리 ###
 ```
