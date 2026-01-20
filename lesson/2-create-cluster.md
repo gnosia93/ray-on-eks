@@ -406,6 +406,9 @@ Warning: Permanently added '10.0.2.177' (ED25519) to the list of known hosts.
 ```
 # 로컬 PC가 아닌 '배스천 호스트' 터미널에서 실행
 ray dashboard /home/ec2-user/cluster.yaml
+
+# 로컬 PC 에서 실행
+ssh -i "키파일.pem" -L 8265:localhost:8265 ec2-user@${VS_CODE}
 ```
 
 ### 참고 - 클러스터 삭제하기 ###
