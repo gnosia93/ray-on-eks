@@ -1,5 +1,25 @@
 ## 스팟 인스턴스 사용하기 ##
 
+### 1. 환경 설정 ###
+```
+export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
+export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+export CLUSTER_NAME="ray-on-aws"
+export VPC_ID=$(aws ec2 describe-vpcs --filters Name=tag:Name,Values="RayVPC" --query "Vpcs[].VpcId" --output text)
+export X86_AMI_ID=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64 \
+  --region ${AWS_REGION} --query "Parameters[0].Value" --output text)
+export ARM_AMI_ID=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-arm64 \
+  --region ${AWS_REGION} --query "Parameters[0].Value" --output text)
+
+echo ${AWS_REGION}
+echo ${AWS_ACCOUNT_ID}
+echo ${CLUSTER_NAME}
+echo ${VPC_ID}
+echo ${X86_AMI_ID}
+echo ${ARM_AMI_ID}
+```
+
+### 2. 클러스터 설정파일 ###
 ```
 cat <<EOF > cluster-spot.yaml
 cluster_name: ${CLUSTER_NAME}
@@ -90,6 +110,7 @@ available_node_types:
 head_node_type: head_node                              # 정의한 여러 노드 타입 중 어떤 것이 클러스터의 전체 제어를 담당할 '헤드'인지 확정
 EOF
 ```
+### 3. 실행하기 ###
 ```
 ray up -f cluster-spot.yaml -y
 ```
