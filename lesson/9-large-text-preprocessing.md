@@ -40,3 +40,9 @@ processed_ds.write_parquet("s3://your-bucket/preprocessed-output/")
 
 print("전처리 완료 및 S3 저장 성공!")
 ```
+* Resource Scheduling:  
+Intel/Graviton 혼합 클러스터라면 map_batches(..., resources={"Intel": 1}) 처럼 특정 노드에서만 전처리를 수행하게 강제하여 성능 차이를 측정할 수 있습니다.
+* Parallelism 최적화:   
+100GB 데이터라면 파일 개수가 수천 개일 수 있습니다. read_parquet(..., parallelism=200) 설정을 통해 초기에 데이터를 몇 개의 조각으로 나눌지 결정하는 것이 성능의 관건입니다.
+* Object Spilling:  
+메모리가 부족하면 Ray는 자동으로 로컬 디스크나 S3로 데이터를 흘려보냅니다(Spilling). 대규모 벤치마크 시 이 현상이 발생하는지 대시보드에서 관찰하는 것도 좋은 교육 포인트입니다.
