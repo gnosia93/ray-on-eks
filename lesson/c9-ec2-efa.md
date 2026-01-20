@@ -100,6 +100,9 @@ setup_commands:
     - sudo growpart /dev/xvda 1 || true
     - sudo xfs_growfs -d / || true
     # - sudo resize2fs /dev/xvda1 || true
+    - curl -O https://efa-installer.amazonaws.com/aws-efa-installer-1.45.1.tar.gz
+    - tar -xf aws-efa-installer-1.45.1.tar.gz
+    - cd aws-efa-installer && sudo ./efa_installer.sh -y
     - sudo dnf install -y python-unversioned-command
     - sudo dnf install -y python3-pip
     - pip install -U "ray[default,data]" pandas pyarrow boto3
