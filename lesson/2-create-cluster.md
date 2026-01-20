@@ -27,9 +27,8 @@ cat <<EOF > ray-trust-policy.json
 }
 EOF
 
-aws iam create-role \
-  --role-name ray-autoscaling-role \
-  --assume-role-policy-document file://ray-trust-policy.json
+aws iam create-role --role-name ray-autoscaling-role --assume-role-policy-document file://ray-trust-policy.json
+
 cat <<EOF > ray-autoscaling-policy.json
 {
   "Version": "2012-10-17",
