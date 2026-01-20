@@ -1,5 +1,8 @@
 * 1교시 - AWS EC2 포트폴리오 소개 / CPU 별 특징 소개
-* 2교시 - ray data / 데이터 전처리 이론 교육 
+* 2교시 - ray data / 데이터 전처리 이론 교육
+    * 머신 러닝 데이터 전처리
+    * LLM text 데이터 전처리
+    * spark ETL 대체   
 * 3교시 / 4교시 - 실습
 
 # ray-on-aws
