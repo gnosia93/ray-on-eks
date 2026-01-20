@@ -35,7 +35,7 @@ import pandas as pd
 import numpy as np
 import string
 
-ray.init(address="auto")
+ray.init(address="auto", resources={"head_node": 1})         # YAML에서 설정한 리소스명
 
 # 1. 샘플 텍스트 생성 함수 (약 1KB 크기의 문장 생성)
 def generate_fake_data(batch_info):
