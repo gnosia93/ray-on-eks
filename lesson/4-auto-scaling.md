@@ -1,4 +1,6 @@
 ## 오토 스케일링 ##
+
+### 1. Job 실행하기 ###
 vs-code 콘솔에서 실행한다. 
 ```
 cat <<EOF > stress-job.py
@@ -20,5 +22,46 @@ EOF
 ```
 ray job submit --address http://localhost:8265 --working-dir . -- python stress-job.py
 ```
-* Ray Status: Pending Tasks 발생 -> Autoscaler가 Launching 20 Nodes 시작.
-* AWS Console: EC2 인스턴스 페이지에 인스턴스 생성을 관찰.
+
+### 2. 스케일링 관찰하기 ###
+```
+ray exec ~/cluster.yaml "ray status"
+```
+[결과]
+```
+Loaded cached provider configuration
+If you experience issues with the cloud provider, try re-running the command with --no-config-cache.
+/home/ec2-user/.local/lib/python3.9/site-packages/boto3/compat.py:89: PythonDeprecationWarning: Boto3 will no longer support Python 3.9 starting April 29, 2026. To continue receiving service updates, bug fixes, and security updates please upgrade to Python 3.10 or later. More information can be found here: https://aws.amazon.com/blogs/developer/python-support-policy-updates-for-aws-sdks-and-tools/
+  warnings.warn(warning, PythonDeprecationWarning)
+Fetched IP: 10.0.2.177
+======== Autoscaler status: 2026-01-20 04:28:21.914768 ========
+Node status
+---------------------------------------------------------------
+Active:
+ 8 x86_worker_node
+ 8 arm_worker_node
+ 1 head_node
+Idle:
+ (no idle nodes)
+Pending:
+ (no pending nodes)
+Recent failures:
+ (no failures)
+
+Resources
+---------------------------------------------------------------
+Total Usage:
+ 68.0/68.0 CPU
+ 0.0/8.0 Graviton
+ 0.0/9.0 Intel
+ 0B/368.27GiB memory
+ 0B/148.62GiB object_store_memory
+
+From request_resources:
+ (none)
+Pending Demands:
+ {'CPU': 1.0}: 408+ pending tasks/actors
+Shared connection to 10.0.2.177 closed.
+```
+
+
