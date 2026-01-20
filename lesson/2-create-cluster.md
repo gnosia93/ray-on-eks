@@ -208,7 +208,7 @@ available_node_types:
         min_workers: 0                                 # 헤드 노드는 관리용이므로 워커 역할을 담당하지 않는다.
         max_workers: 0                             
     # Intel 워커 노드 (데이터 처리용)
-    worker_node:
+    x86_worker_node:
         resources: {"CPU": 4, "Intel": 1}              # 스케줄링 힌트 제공
         node_config:
             InstanceType: m7i.2xlarge
@@ -222,7 +222,7 @@ available_node_types:
         max_workers: 8                                 # 필요시 8대까지 자동 확장
 
     # Graviton 워커 노드 (데이터 처리용)
-    worker_node:
+    arm_worker_node:
         resources: {"CPU": 4, "Graviton": 1}           # 스케줄링 힌트 제공
         node_config:
             InstanceType: m8g.2xlarge
