@@ -2,6 +2,7 @@
 ```
 export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+export CLUSTER_NAME="ray-on-aws"
 export VPC_ID=$(aws ec2 describe-vpcs --filters Name=tag:Name,Values="RayVPC" --query "Vpcs[].VpcId" --output text)
 export X86_AMI_ID=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64 \
   --region ${AWS_REGION} --query "Parameters[0].Value" --output text)
@@ -176,12 +177,6 @@ head_node_type: head_node                              # 정의한 여러 노드
 * CPU: 16 (물리적 자원): 실제 인스턴스의 하드웨어 스펙입니다. 태스크가 실행될 때마다 이 숫자가 차감되며, 0이 되면 더 이상 작업을 받지 않습니다.
 * intel: 1 (논리적 태그): 사용자가 임의로 붙인 "이 노드는 인텔 칩셋임"이라는 인증 마크입니다. 물리적인 개수와 상관없이, 이 노드의 정체성을 나타내는 '입장권'이 1장 있다고 선언하는 것입니다.
 ray 에서 하나의 task 는 하나의 코어를 점유한다.
-
-보안 그룹 (Security Group):
-헤드 노드: 8265(대시보드), 6379(GCS), 10001(Ray Client) 포트가 열려 있어야 합니다.
-노드 간 통신: 헤드와 워커 노드 사이에는 모든 TCP 포트가 서로 통신 가능하도록 해당 보안 그룹이 자기 자신을 소스(Self-reference)로 허용해야 합니다.
-
-
 
 
 클러스터를 생성한다.
