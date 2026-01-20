@@ -117,15 +117,15 @@ ray up cluster.yaml -y
 ```
 
 ### 주의사항 및 고려사항 ###
-* 헤드 노드는 On-Demand 사용:
+* 헤드 노드는 On-Demand 사용
 헤드 노드는 클러스터의 관리 센터 역할을 하므로, 갑자기 중단되면 전체 클러스터 작업이 실패한다.
-
-* 스팟 인스턴스 중단 대비:
+* 스팟 인스턴스 중단 대비
 스팟 인스턴스는 AWS의 여유 용량에 따라 언제든지 중단(Interrupt)될 수 있다. Ray는 이러한 중단에 대응하기 위해 작업 재시도(Task Retries) 및 액터 재시작(Actor Restarting) 기능을 내장하고 있다.
 ray job submit으로 작업을 제출하면 기본적으로 실패한 태스크를 자동으로 재시도한다.
-
-* 비용 절감:
+* 비용 절감
 데이터 처리 작업처럼 유연하게 중단 및 재시작이 가능한 워크로드의 경우, 스팟 인스턴스를 사용하면 On-Demand 대비 최대 70~90%까지 비용을 절감할 수 있다.
 
-
-[C5] Spot 인스턴스 회수 시 Ray의 동작 원리 질문하신 "어떻게 잘 동작하나?"에 대한 교육 포인트는 다음과 같습니다. State Reconstruction (상태 재구성): Ray는 작업의 계보(Lineage)를 기록합니다. 특정 노드가 죽으면 해당 노드에서 실행 중이던 객체(Object)가 사라졌음을 감지하고, 다른 노드에서 해당 작업을 재실행(Re-execution)합니다. Object Spilling (객체 유출): 메모리가 부족하거나 노드가 사라질 것에 대비해 데이터를 S3 등에 백업해두는 기능을 활용합니다. Autoscaler 연동: AWS로부터 Spot Termination Notice를 받으면, Ray Autoscaler는 즉시 새로운 인스턴스(Spot 혹은 On-demand)를 보충하도록 설계되어 있습니다.
+#### State Reconstruction (상태 재구성) #### 
+* Ray는 작업의 계보(Lineage)를 기록하는데 특정 노드가 죽으면 해당 노드에서 실행 중이던 객체(Object)가 사라졌음을 감지하고, 다른 노드에서 해당 작업을 재실행(Re-execution)한다. 
+* 메모리가 부족하거나 노드가 사라질 것에 대비해 데이터를 S3 등에 백업해두는 기능을 활용한다. 
+* AWS로부터 Spot Termination Notice를 받으면, Ray Autoscaler는 즉시 새로운 인스턴스(Spot 혹은 On-demand)를 보충하도록 설계되어 있다.
