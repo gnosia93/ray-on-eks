@@ -4,7 +4,10 @@
     * LLM text 데이터 전처리
     * spark ETL 대체   
 * 3교시 / 4교시 - ray 실습
-
+* engage strategy
+   * 신규 니즈 발굴
+   * 단독 워크샵 형태
+   * ML 워크샵시 컨텐츠 소개 
 
 # ray-on-ec2
 
