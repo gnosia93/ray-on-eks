@@ -70,3 +70,11 @@ Shared connection to 10.0.2.177 closed.
 해당 Job에서 실행중인 태스크도 관찰할 수 있다.
 ![](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/images/dashboard-job-task.png)
 
+### 3. 세부 조정 파라미터 (YAML) ###
+
+* target_utilization_fraction (기본값 0.8)    
+클러스터 전체 자원 사용률이 이 수치를 넘으면 미리 여유분을 준비한다. 예를 들어 160코어 중 128코어(80%)만 써도 EC2 노드를 신규로 프러비저닝 한다. 
+
+* upscaling_speed  
+한 번에 얼마나 공격적으로 인스턴스를 늘릴지 결정하는데 이 값이 높을수록(예: 10) 한 번에 많은 EC2를 동시에 요청한다.
+
