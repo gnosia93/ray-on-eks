@@ -60,7 +60,8 @@ ds = ray.data.range(num_batches) \
     .map_batches(generate_fake_data, batch_size=1)
 
 # 4. S3 업로드 실행 (병렬 쓰기)
-# 'parallelism'을 워커 노드의 총 코어 수 정도로 설정하여 최대 속도로 업로드합니다.
+# parallelism은 100GB라는 전체 데이터를 최종적으로 몇 개의 조각(파일)으로 나누어 저장할 것인가를 결정하는 설정
+# parallelism을 워커 노드의 총 코어 수 정도로 설정하면 최대 속도로 업로드할 수 있다.
 ds.write_parquet("s3://${BUCKET_NAME}/raw-100gb-data/", parallelism=100)
 
 print("100GB 샘플 데이터 생성 및 S3 업로드 완료! - ${BUCKET_NAME}")
