@@ -29,19 +29,6 @@ _ray sample data - s3://ray-example-data_
   - arm64 전용 바이너리를 내려받아야 한다. 일부 라이브러리의 경우 환환성 문제를 일으킬 수 있다.
 
 
-## 교육 내용 ##
-* 1교시 - AWS EC2 포트폴리오 소개 / CPU 별 특징 소개
-* 2교시 - ray data / 데이터 전처리 이론 교육
-    * 머신 러닝 데이터 전처리
-    * LLM text 데이터 전처리
-    * spark ETL 대체   
-* 3교시 / 4교시 - ray 실습
-* engage strategy
-   * 신규 니즈 발굴
-   * 단독 워크샵 형태
-   * ML 워크샵시 컨텐츠 소개 
-
-
 ## 레퍼런스 ##
 
 * https://docs.ray.io/en/latest/ray-overview/installation.html
