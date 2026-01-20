@@ -128,7 +128,7 @@ cluster_name: ${CLUSTER_NAME}
 provider:
     type: aws
     region: ${AWS_REGION}                              
-    availability_zone: ${AWS_REGION}"a"
+    availability_zone: ${AWS_REGION}a
     use_internal_ips: true
 
 # 각 노드에서 실행될 설정 (Python 설치 등)
