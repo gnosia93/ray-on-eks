@@ -1,6 +1,7 @@
-이 코드는 S3에 저장된 대용량 텍스트(JSON 또는 Parquet)를 불러와 분산 환경에서 전처리하는 샘플이다.
+이 코드는 S3에 저장된 대용량 텍스트(JSON 또는 Parquet)를 불러와 분산 환경에서 전처리하는 샘플이다. 
+vs-code 터미널에서 아래 내용을 실행한다.
 
-### S3 버킷 생성 ###
+### 1. S3 버킷 생성 ###
 ```
 export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
@@ -16,8 +17,12 @@ aws s3api create-bucket --bucket ${BUCKET_NAME} --region ${AWS_REGION} \
 ```
 aws s3 ls | grep ${BUCKET_NAME}
 ```
+[결과]
+```
+2026-01-20 05:42:36 ray-on-aws-1768887754
+```
 
-### 샘플 데이터 생성 ###
+### 2. 샘플 데이터 생성 ###
 ```
 import ray
 import pandas as pd
@@ -56,7 +61,7 @@ print("100GB 샘플 데이터 생성 및 S3 업로드 완료!")
 ```
 
 
-### 데이터 전처리 ###
+### 3. 데이터 전처리 ###
 ```
 import ray
 import pandas as pd
