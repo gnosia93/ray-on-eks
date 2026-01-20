@@ -1,6 +1,7 @@
 vs-code 서버의 터미널에서 아래 명령어를 실행한다.   
 
 ```
+cd ~
 mkdir -p my-ray
 cd my-ray
 
