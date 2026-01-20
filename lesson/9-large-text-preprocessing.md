@@ -53,18 +53,19 @@ processed_ds.write_parquet("s3://your-bucket/preprocessed-output/")
 print("전처리 완료 및 S3 저장 성공!")
 ```
 * Resource Scheduling:  
-Intel/Graviton 혼합 클러스터라면 map_batches(..., resources={"Intel": 1}) 처럼 특정 노드에서만 전처리를 수행하게 강제하여 성능 차이를 측정할 수 있습니다.
+Intel/Graviton 혼합 클러스터라면 map_batches(..., resources={"Intel": 1}) 처럼 특정 노드에서만 전처리를 수행하게 강제하여 성능 차이를 측정할 수 있다.
 * Parallelism 최적화:   
-100GB 데이터라면 파일 개수가 수천 개일 수 있습니다. read_parquet(..., parallelism=200) 설정을 통해 초기에 데이터를 몇 개의 조각으로 나눌지 결정하는 것이 성능의 관건입니다.
+예를들어 100GB 데이터라면 파일 개수가 수천 개일 수 있는데, read_parquet(..., parallelism=200) 설정을 통해 초기에 데이터를 몇 개의 조각으로 나눌지 결정하는 것이 성능의 좌우한다.
 * Object Spilling:  
-메모리가 부족하면 Ray는 자동으로 로컬 디스크나 S3로 데이터를 흘려보냅니다(Spilling). 대규모 벤치마크 시 이 현상이 발생하는지 대시보드에서 관찰하는 것도 좋은 교육 포인트입니다.
+메모리가 부족하면 Ray는 자동으로 로컬 디스크나 S3로 데이터를 흘려보낸다(Spilling). 대규모 벤치마크 시 이 현상이 발생하는지 대시보드에서 관찰하는 것도 좋다.
 * 클러스터의 병렬성 (Parallelism)  
-Ray는 데이터를 읽을 때 클러스터의 전체 CPU 코어 수의 약 2~3배를 기본 파티션 수로 잡는 경향이 있다.
-* 파일 개수 지정 (repartition):
-    ```
-    processed_ds.repartition(100).write_parquet("s3://bucket/path/")
-    ```
-* 파일 크기 기반 조절 (min_rows_per_file):
-    ```
-    processed_ds.write_parquet("s3://bucket/path/", min_rows_per_file=10000
-    ```
+Ray는 데이터를 읽을 때 클러스터의 전체 CPU 코어 수의 약 2~3배를 기본 파티션 수로 잡는 경향이 있고, 연산 후 이 파티션 갯수만큼 결과 파일이 생긴다.
+* 연산 결과 파일의 개수는 repartiton 또는 min_row_per_file 함수로 조정할 수 있다.
+    * 파일 개수 지정 (repartition):
+        ```
+        processed_ds.repartition(100).write_parquet("s3://bucket/path/")
+        ```
+    * 파일 크기 기반 조절 (min_rows_per_file):
+        ```
+        processed_ds.write_parquet("s3://bucket/path/", min_rows_per_file=10000
+        ```
