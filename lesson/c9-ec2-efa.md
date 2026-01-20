@@ -57,6 +57,10 @@ aws ec2 create-placement-group --group-name ray-placement-group --strategy clust
 EFA가 작동하려면 동일한 보안 그룹 내의 모든 인바운드/아웃바운드 트래픽(All Traffic)이 자기 자신(Self-reference)을 대상으로 허용되어야 한다.
 기존 워커노드 시큐리티 그룹에 추가한다.
 ```
+HEAD_SG_ID=$(aws ec2 describe-security-groups \
+  --filters "Name=group-name,Values=RayHeadSG" "Name=vpc-id,Values=$VPC_ID" \
+  --query "SecurityGroups[0].GroupId" --output text)
+
 # 기존 Worker SG ID 조회 시도
 WORKER_SG_ID=$(aws ec2 describe-security-groups \
   --filters "Name=group-name,Values=RayWorkerSG" "Name=vpc-id,Values=$VPC_ID" \
