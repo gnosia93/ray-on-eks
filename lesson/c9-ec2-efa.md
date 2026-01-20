@@ -107,7 +107,7 @@ setup_commands:
     - sudo dnf install -y python3-pip
     - pip install -U "ray[default,data]" pandas pyarrow boto3
 
-max_workers: 128
+max_workers: 96
 
 # 노드별 상세 사양
 available_node_types:
