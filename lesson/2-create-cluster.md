@@ -215,6 +215,11 @@ available_node_types:
         resources: {"CPU": 8, "Intel": 1}              # 스케줄링 힌트 제공
         node_config:
             InstanceType: r7i.2xlarge
+            BlockDeviceMappings:
+                - DeviceName: /dev/xvda  # Amazon Linux 2023의 기본 루트 장치명
+                  Ebs:
+                      VolumeSize: 300    # GB 단위 (예: 300GB)
+                      VolumeType: gp3    # 가성비 좋은 gp3 권장
             ImageId: ${X86_AMI_ID}
             SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
@@ -229,6 +234,11 @@ available_node_types:
         resources: {"CPU": 8, "Graviton": 1}           # 스케줄링 힌트 제공
         node_config:
             InstanceType: r8g.2xlarge
+            BlockDeviceMappings:
+                - DeviceName: /dev/xvda  # Amazon Linux 2023의 기본 루트 장치명
+                  Ebs:
+                      VolumeSize: 300    # GB 단위 (예: 300GB)
+                      VolumeType: gp3    # 가성비 좋은 gp3 권장
             ImageId: ${ARM_AMI_ID}                     # 헤드 노드와 동일한 이미지 사용
             SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
             SecurityGroupIds:                          
