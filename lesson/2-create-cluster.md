@@ -200,7 +200,7 @@ max_workers: 16
 available_node_types:
     # 헤드 노드
     head_node:
-        resources: {"CPU": 4, "Intel": 1}              # 스케줄링 힌트 제공
+        resources: {"CPU": 0, "Intel": 1}              # "물리적으론 4코어지만, CPU 갯수를 0 으로 설정하여 Ray 가 워커로드로 쓰는 것을 방지함.
         node_config:
             InstanceType: m7i.xlarge
             ImageId: ${X86_AMI_ID}                     # amazon linux 2023
