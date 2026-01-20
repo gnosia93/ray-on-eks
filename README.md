@@ -1,7 +1,7 @@
 # ray-on-ec2
-_ray sample data - s3://ray-example-data_
 
 ![](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/images/ray-on-ec2-workshop.png)
+_ray sample data - s3://ray-example-data_
 
 * [C1. VPC 생성](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/1-create-vpc.md)
 
