@@ -19,18 +19,15 @@ _ray sample data - s3://ray-example-data_
 
 * [C8. 대규모 텍스트 전처리](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/9-large-text-preprocessing.md)
 
-## 아키텍처별 가이드 ##
 
-Ray는 분산 컴퓨팅 프레임워크이기 때문에 하드웨어 아키텍처의 특성을 아주 정직하게 타는 편입니다. 
+## CPU 아키텍처 특징 ##
+
 - Intel (c7i): 가장 표준적입니다. 특히 AMX(Advanced Matrix Extensions) 가속기 덕분에 텍스트 임베딩이나 행렬 연산에서 압도적입니다. 
 - AMD (c7a): 순수 연산 속도(Raw Clock)와 가성비가 좋습니다. 단순 텍스트 정규화나 정규식 처리 위주라면 Intel보다 저렴하면서 성능은 비슷하게 나옵니다.
 - Graviton (AWS 자체 칩 - arm64)
   - 성능/비용: 가성비 끝판왕입니다. 동일 성능 대비 비용이 약 20% 저렴합니다.
   - 주의사항: pip install 시 arm64 전용 바이너리를 내려받아야 하므로 AMI(Amazon Machine Image) 설정이 달라집니다.
 
-* EC2 활용 극대화: 인스턴스 타입을 섞어 쓰기 때문에 Mixed Instances Policy를 완벽하게 실습하게 됩니다
-
-* Mixed Instance Policy 
 
 ## 교육 내용 ##
 * 1교시 - AWS EC2 포트폴리오 소개 / CPU 별 특징 소개
