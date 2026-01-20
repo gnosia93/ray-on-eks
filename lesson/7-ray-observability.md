@@ -153,7 +153,7 @@ scrape_configs:
       - files:
           - '/tmp/ray/prom_metrics_service_discovery.json'
 
-docker exec -it prometheus cat /tmp/ray/prom_metrics_service_discovery.json
+$ docker exec -it prometheus cat /tmp/ray/prom_metrics_service_discovery.json
 [{"labels": {"job": "ray"}, "targets": ["10.0.2.73:63191", "10.0.2.183:51777", "10.0.2.133:54793", "10.0.2.183:44217", "10.0.2.183:44227"]}]
 ```
 
