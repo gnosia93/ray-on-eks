@@ -26,7 +26,7 @@ ray-on-aws-1768888873
 ### 2. 샘플 데이터 생성 ###
 ```
 cd ~
-midkr -p c9
+mkdir -p c9
 cd c9
 
 cat <<EOF > generate-data.py
