@@ -124,6 +124,14 @@ fb4fddb2cab1   grafana/grafana:10.0.3    "/run.sh"                31 seconds ago
 
 
 ### 대시보드 연결 ###
+로컬 PC 에서 ssh 터널링 만든다.
+```
+ssh -i "your-key.pem" -L 3000:<헤드노드_사설_IP>:3000 ec2-user@<베스천_공인_IP>
+```
+```
+ssh -i ~/aws-kp-1.pem -L 3000:10.0.2.183:3000 ec2-user@ec2-13-230-210-195.ap-northeast-1.compute.amazonaws.com
+```
+    
     * Grafana 접속: http://<HEAD_IP>:3000 (ID/PW: admin/admin)
     * 데이터 소스 추가: Add Data Source -> Prometheus 선택 -> URL에 http://prometheus:9090 입력 후 Save & Test.
     * 대시보드 임포트: Ray 공식 Grafana 대시보드(ID: 16098)를 임포트하면 즉시 화려한 차트가 나옵니다.
