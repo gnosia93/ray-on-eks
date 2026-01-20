@@ -15,7 +15,7 @@ _ray sample data - s3://ray-example-data_
 
 * [C6. 커스텀 자원 정밀 제어](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/6-custom-resource-control.md)
 
-* [C7. 모니터링](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/7-ray-observability.md)
+* [C7. 모니터링](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/7-ray-observability.md) - 작성중 ...
 
 * [C8. 대규모 텍스트 전처리](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/8-text-preprocessing.md)
 
