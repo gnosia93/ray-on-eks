@@ -3,7 +3,7 @@
 export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
 export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 export VPC_ID=$(aws ec2 describe-vpcs --filters Name=tag:Name,Values="RayVPC" --query "Vpcs[].VpcId" --output text)
-export AMI=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64 \
+export AMI_ID=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64 \
   --region ${AWS_REGION} --query "Parameters[0].Value" --output text)
 ```
 
