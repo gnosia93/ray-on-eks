@@ -110,9 +110,10 @@ available_node_types:
 head_node_type: head_node                              # 정의한 여러 노드 타입 중 어떤 것이 클러스터의 전체 제어를 담당할 '헤드'인지 확정
 EOF
 ```
-### 3. 실행하기 ###
+
+### 3. 클러스터 Update ###
 ```
-ray up -f cluster-spot.yaml -y
+ray up cluster.yaml -y
 ```
 
 ### 주의사항 및 고려사항 ###
