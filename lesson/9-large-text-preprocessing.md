@@ -154,7 +154,7 @@ def preprocess_text(batch: pd.DataFrame) -> pd.DataFrame:
     return batch
 
 # 2. 대규모 데이터 로드 (S3에서 직접 스트리밍)
-# 100GB 데이터를 로드해도 메모리에 바로 올리지 않고 메타데이터만 가져옵니다.
+# 10GB 데이터를 로드해도 메모리에 바로 올리지 않고 메타데이터만 가져옵니다.
 ds = ray.data.read_parquet("s3://${BUCKET_NAME}/large-dataset/")
 
 # 3. 분산 처리 실행
