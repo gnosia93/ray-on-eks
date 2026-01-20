@@ -71,6 +71,8 @@ pip install -U "ray[default]"
 PRIV_SUBNET_ID=$(aws ec2 describe-subnets \
     --filters "Name=tag:Name,Values=Ray-Private-Subnet" "Name=vpc-id,Values=${VPC_ID}" \
     --query "Subnets[*].{ID:SubnetId}" --output text)
+
+echo "private subnet: ${PRIV_SUBNET_ID}"
 ```
 
 시큐리티 그룹을 생성한다. 
