@@ -250,10 +250,148 @@ ssh -A ec2-user@52.195.235.216
 ray up cluster.yaml -y
 ```
 
-### 4.작업 제출 (Python 스크립트 실행): ###
+### 4. 클러스터 확인 ###
 ```
-ray job submit --address http://<헤드노드_사설IP>:8265 -- python data_job.py
+ray exec /home/ec2-user/cluster.yaml "ray status"
 ```
+[결과]
+```
+ray exec /home/ec2-user/cluster.yaml "ray status"
+Loaded cached provider configuration
+If you experience issues with the cloud provider, try re-running the command with --no-config-cache.
+/home/ec2-user/.local/lib/python3.9/site-packages/boto3/compat.py:89: PythonDeprecationWarning: Boto3 will no longer support Python 3.9 starting April 29, 2026. To continue receiving service updates, bug fixes, and security updates please upgrade to Python 3.10 or later. More information can be found here: https://aws.amazon.com/blogs/developer/python-support-policy-updates-for-aws-sdks-and-tools/
+  warnings.warn(warning, PythonDeprecationWarning)
+Fetched IP: 10.0.2.177
+Warning: Permanently added '10.0.2.177' (ED25519) to the list of known hosts.
+======== Autoscaler status: 2026-01-20 02:23:20.270669 ========
+Node status
+---------------------------------------------------------------
+Active:
+ (no active nodes)
+Idle:
+ 4 worker_node
+ 1 head_node
+Pending:
+ (no pending nodes)
+Recent failures:
+ (no failures)
+
+Resources
+---------------------------------------------------------------
+Total Usage:
+ 0.0/20.0 CPU
+ 0.0/4.0 Graviton
+ 0.0/1.0 Intel
+ 0B/99.48GiB memory
+ 0B/40.32GiB object_store_memory
+
+From request_resources:
+ (none)
+Pending Demands:
+ (no resource demands)
+Shared connection to 10.0.2.177 closed.
+```
+
+```
+ray exec /home/ec2-user/cluster.yaml "ray list nodes --detail"
+```
+[결과]
+```
+Loaded cached provider configuration
+If you experience issues with the cloud provider, try re-running the command with --no-config-cache.
+/home/ec2-user/.local/lib/python3.9/site-packages/boto3/compat.py:89: PythonDeprecationWarning: Boto3 will no longer support Python 3.9 starting April 29, 2026. To continue receiving service updates, bug fixes, and security updates please upgrade to Python 3.10 or later. More information can be found here: https://aws.amazon.com/blogs/developer/python-support-policy-updates-for-aws-sdks-and-tools/
+  warnings.warn(warning, PythonDeprecationWarning)
+Fetched IP: 10.0.2.177
+Warning: Permanently added '10.0.2.177' (ED25519) to the list of known hosts.
+---
+-   node_id: 29a5b1bae8b5ef92dde03ffd5d53373e67550c7af77d4917985cbb30
+    node_ip: 10.0.2.138
+    is_head_node: false
+    state: ALIVE
+    state_message: null
+    node_name: 10.0.2.138
+    resources_total:
+        object_store_memory: 9.022 GiB
+        memory: 22.400 GiB
+        node:10.0.2.138: 1.0
+        Graviton: 1.0
+        CPU: 4.0
+    labels:
+        ray.io/node-id: 29a5b1bae8b5ef92dde03ffd5d53373e67550c7af77d4917985cbb30
+        ray.io/node-group: worker_node
+    start_time_ms: '2026-01-20 02:18:19.716000'
+    end_time_ms: '1970-01-01 00:00:00'
+-   node_id: 6f82cca035c93590123b5198184aa7a4cf67d1e119cebb22a5df0c09
+    node_ip: 10.0.2.233
+    is_head_node: false
+    state: ALIVE
+    state_message: null
+    node_name: 10.0.2.233
+    resources_total:
+        node:10.0.2.233: 1.0
+        object_store_memory: 9.020 GiB
+        memory: 22.400 GiB
+        Graviton: 1.0
+        CPU: 4.0
+    labels:
+        ray.io/node-id: 6f82cca035c93590123b5198184aa7a4cf67d1e119cebb22a5df0c09
+        ray.io/node-group: worker_node
+    start_time_ms: '2026-01-20 02:18:37.727000'
+    end_time_ms: '1970-01-01 00:00:00'
+-   node_id: cf44b45fa911750cf543d3a0c79f03eb5bf8a01902358240dd0e134d
+    node_ip: 10.0.2.191
+    is_head_node: false
+    state: ALIVE
+    state_message: null
+    node_name: 10.0.2.191
+    resources_total:
+        node:10.0.2.191: 1.0
+        object_store_memory: 9.020 GiB
+        memory: 22.400 GiB
+        Graviton: 1.0
+        CPU: 4.0
+    labels:
+        ray.io/node-id: cf44b45fa911750cf543d3a0c79f03eb5bf8a01902358240dd0e134d
+        ray.io/node-group: worker_node
+    start_time_ms: '2026-01-20 02:18:32.943000'
+    end_time_ms: '1970-01-01 00:00:00'
+-   node_id: d13964359101be8ca107b6bc5cb096241c4c85efca8ef49a761b36f1
+    node_ip: 10.0.2.212
+    is_head_node: false
+    state: ALIVE
+    state_message: null
+    node_name: 10.0.2.212
+    resources_total:
+        object_store_memory: 9.022 GiB
+        memory: 22.400 GiB
+        node:10.0.2.212: 1.0
+        Graviton: 1.0
+        CPU: 4.0
+    labels:
+        ray.io/node-id: d13964359101be8ca107b6bc5cb096241c4c85efca8ef49a761b36f1
+        ray.io/node-group: worker_node
+    start_time_ms: '2026-01-20 02:18:06.619000'
+    end_time_ms: '1970-01-01 00:00:00'
+-   node_id: de92eb1e441abf36ed1970f9084458d412154ad83063fad06d3e0711
+    node_ip: 10.0.2.177
+    is_head_node: true
+    state: ALIVE
+    state_message: null
+    node_name: 10.0.2.177
+    resources_total:
+        Intel: 1.0
+        object_store_memory: 4.232 GiB
+        memory: 9.876 GiB
+        node:__internal_head__: 1.0
+        node:10.0.2.177: 1.0
+        CPU: 4.0
+    labels:
+        ray.io/node-id: de92eb1e441abf36ed1970f9084458d412154ad83063fad06d3e0711
+        ray.io/node-group: head_node
+    start_time_ms: '2026-01-20 02:17:01.604000'
+    end_time_ms: '1970-01-01 00:00:00'
+```
+
 
 ### 5. 대시보드 접근 ###
 ```
