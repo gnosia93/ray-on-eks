@@ -113,7 +113,7 @@ EOF
 
 ### 3. 클러스터 Update ###
 ```
-ray up cluster.yaml -y
+ray up cluster-spot.yaml -y
 ```
 
 ### 주의사항 및 고려사항 ###
