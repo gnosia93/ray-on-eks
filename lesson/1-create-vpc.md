@@ -17,7 +17,7 @@ AMI=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023
 MY_IP="$(curl -s https://checkip.amazonaws.com)""/32"
 echo ${AMI} ${MY_IP}
 
-# sed -i "s/\${AMI}/$AMI/g" $(pwd)/cf/ray-vpc.yaml
+#sed -i "s/\${AMI}/$AMI/g" $(pwd)/cf/ray-vpc.yaml
 sed -i "" "s|\${AMI}|$AMI|g" $(pwd)/cf/ray-vpc.yaml
 sed -i "" "s|\${MY_IP}|$MY_IP|g" $(pwd)/cf/ray-vpc.yaml
 ```
