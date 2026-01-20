@@ -35,8 +35,8 @@ import pandas as pd
 import numpy as np
 import string
 
-ray.init(address="auto", resources={"head_node": 1})         # YAML에서 설정한 리소스명
-
+ray.init(address="auto")
+  
 # 1. 샘플 텍스트 생성 함수 (약 1KB 크기의 문장 생성)
 def generate_fake_data(batch_info):
     # 각 배치당 10,000행 생성 (1행당 약 1KB -> 배치당 약 10MB)
