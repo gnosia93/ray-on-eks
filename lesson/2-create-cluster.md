@@ -65,6 +65,7 @@ sudo dnf install -y python-unversioned-command
 sudo dnf install -y python3-pip
 
 pip install -U "ray[default]"
+pip install boto3
 ```
 프라이빗 서브넷의 ID 값을 가져온다.
 ```
