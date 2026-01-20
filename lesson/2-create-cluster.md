@@ -174,6 +174,7 @@ provider:
     region: ${AWS_REGION}                              
     availability_zone: ${AWS_REGION}a
     use_internal_ips: true
+    cache_stopped_nodes: False              # ray down 시 인스턴스 모두 삭제
 
 # ssh_private_key를 명시하지 않으면 SSH Agent의 키를 자동으로 사용합니다.
 auth:
