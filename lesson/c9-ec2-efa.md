@@ -81,21 +81,91 @@ cluster.yaml 의 setup_commands 블록에 위의 스크립트를 입력한다.
 ### 5. node_config 수정 (EFA 활성화 및 배치 그룹) ###
 EFA를 사용하려면 NetworkInterfaces 설정에서 InterfaceType: efa를 명시해야 하며, 성능을 위해 인스턴스들이 동일한 Placement Group에 있어야 한다.
 ```
-...
+cat <<EOF > cluster.yaml
+cluster_name: ${CLUSTER_NAME}
+
+provider:
+    type: aws
+    region: ${AWS_REGION}                              
+    availability_zone: ${AWS_REGION}a
+    use_internal_ips: true
+    cache_stopped_nodes: False              # ray down 시 인스턴스 모두 삭제
+
+# ssh_private_key를 명시하지 않으면 SSH Agent의 키를 자동으로 사용합니다.
+auth:
+    ssh_user: ec2-user
+    
+# 각 노드에서 실행될 설정 (Python 설치 등)
+setup_commands:
+    - sudo growpart /dev/xvda 1 || true
+    - sudo xfs_growfs -d / || true
+    # - sudo resize2fs /dev/xvda1 || true
+    - sudo dnf install -y python-unversioned-command
+    - sudo dnf install -y python3-pip
+    - pip install -U "ray[default,data]" pandas pyarrow boto3
+
+max_workers: 128
+
+# 노드별 상세 사양
 available_node_types:
+    # 헤드 노드
+    head_node:
+        resources: {"CPU": 0, "Intel": 1}              # "물리적으론 4코어지만, CPU 갯수를 0 으로 설정하여 Ray 가 워커로드로 쓰는 것을 방지함.
+        node_config:
+            InstanceType: m7i.xlarge
+            ImageId: ${X86_AMI_ID}                     # amazon linux 2023
+            SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
+            SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
+                - ${HEAD_SG_ID}
+            IamInstanceProfile:
+                Name: ray-instance-profile            
+        min_workers: 0                                 # 헤드 노드는 관리용이므로 워커 역할을 담당하지 않는다.
+        max_workers: 0                             
+    # Intel 워커 노드 (데이터 처리용)
     x86_worker_node:
+        resources: {"CPU": 8, "Intel": 1}              # 스케줄링 힌트 제공
+        node_config:
+            InstanceType: r7i.2xlarge
+            BlockDeviceMappings:
+                - DeviceName: /dev/xvda  # Amazon Linux 2023의 기본 루트 장치명
+                  Ebs:
+                      VolumeSize: 300    # GB 단위 (예: 300GB)
+                      VolumeType: gp3    # 가성비 좋은 gp3 권장
+            ImageId: ${X86_AMI_ID}
+            SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
+            SecurityGroupIds:                          # 필요한 경우 보안 그룹 ID도 명시
+                - ${WORKER_SG_ID}
+            IamInstanceProfile:
+                Name: ray-instance-profile            
+        min_workers: 1                                 # 기본 1대 실행
+        max_workers: 8                                 # 필요시 8대까지 자동 확장
+
+    # Graviton 워커 노드 (데이터 처리용)
+    arm_worker_node:
+        resources: {"CPU": 8, "Graviton": 1}           # 스케줄링 힌트 제공
         node_config:
             InstanceType: ${INSTANCE_TYPE}
             NetworkInterfaces:
                 - DeviceIndex: 0
                   InterfaceType: efa
-                  Groups: ["${WORKER_SG_ID}"] # SecurityGroupIds 대신 여기서 설정
-                  SubnetId: ${PRIV_SUBNET_ID}
-                  DeleteOnTermination: true
-            # Placement Group 추가 (미리 생성된 그룹 이름 입력)
             Placement:
                 GroupName: ${PLACEMENT_GROUP_NAME} 
-...
+            BlockDeviceMappings:
+                - DeviceName: /dev/xvda  # Amazon Linux 2023의 기본 루트 장치명
+                  Ebs:
+                      VolumeSize: 300    # GB 단위 (예: 300GB)
+                      VolumeType: gp3    # 가성비 좋은 gp3 권장
+            ImageId: ${ARM_AMI_ID}                     # 헤드 노드와 동일한 이미지 사용
+            SubnetId: ${PRIV_SUBNET_ID}                # 프라이빗 서브넷 ID 입력
+            SecurityGroupIds:                          
+                - ${WORKER_SG_ID}
+            IamInstanceProfile:
+                Name: ray-instance-profile            
+        min_workers: 1                                 # 기본 1대 실행
+        max_workers: 8                                 # 필요시 8대까지 자동 확장
+
+head_node_type: head_node                              # 정의한 여러 노드 타입 중 어떤 것이 클러스터의 전체 제어를 담당할 '헤드'인지 확정
+EOF
 ```
 
 ### 6. 검증 ###
