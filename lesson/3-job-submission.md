@@ -21,6 +21,8 @@ def run_on_arm():
 
 print("결과 확인:", ray.get([run_on_intel.remote(), run_on_arm.remote()]))
 EOF
+
+pwd
 ```
 
 Job 을 제출한다. 동시에 ray 는 해당 디렉토리에 있는 파일을 전부 압축하여 클러스터로 업로드 한다. (업로드 제한 용량 100MB)
