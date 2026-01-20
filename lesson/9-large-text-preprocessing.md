@@ -115,6 +115,8 @@ Tailing logs until the job exits (disable with --no-wait):
 Job 'raysubmit_eMq6km2Wugix36gk' succeeded
 ------------------------------------------
 ```
+파케이 형식으로 10기가 raw 데이터 파일들이 생성되었다.
+![](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/images/raydata-s3.png)
 
 ### 3. 데이터 전처리 ###
 ```
