@@ -1,4 +1,7 @@
-# 배스천에서 실행 (stress.py)
+## 오토 스케일링 ##
+이제 160코어의 한계를 시험하며 EC2 자원을 최대치로 땡기는 핵심 실습입니다.
+
+vs-code 콘솔에서 실행한다. 
 ```
 cat <<EOF > stress.py
 import ray, time
