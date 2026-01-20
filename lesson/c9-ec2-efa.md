@@ -85,12 +85,18 @@ cluster.yaml 의 setup_commands 블록에 위의 스크립트를 입력한다.
 ### 5. node_config 수정 (EFA 활성화 및 배치 그룹) ###
 EFA를 사용하려면 NetworkInterfaces 설정에서 InterfaceType: efa를 명시해야 하며, 성능을 위해 인스턴스들이 동일한 Placement Group에 있어야 한다.
 ```
+export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
+export AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+export CLUSTER_NAME="ray-on-aws"
 export VPC_ID=$(aws ec2 describe-vpcs --filters Name=tag:Name,Values="RayVPC" --query "Vpcs[].VpcId" --output text)
 export X86_AMI_ID=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64 \
   --region ${AWS_REGION} --query "Parameters[0].Value" --output text)
 export ARM_AMI_ID=$(aws ssm get-parameters --names /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-arm64 \
   --region ${AWS_REGION} --query "Parameters[0].Value" --output text)
 
+echo ${AWS_REGION}
+echo ${AWS_ACCOUNT_ID}
+echo ${CLUSTER_NAME}
 echo ${VPC_ID}
 echo ${X86_AMI_ID}
 echo ${ARM_AMI_ID}
