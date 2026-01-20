@@ -15,3 +15,63 @@ setup_commands:
     - tar xvfz node_exporter-*.tar.gz
     - ./node_exporter-1.7.0.linux-amd64/node_exporter &  # 백그라운드 실행
 ```
+
+---
+
+### Prometheus 스택 설치 ###
+* 사전 준비 (헤드 노드)
+```
+sudo dnf install -y docker
+sudo systemctl enable --now docker
+sudo usermod -aG docker ec2-user
+# 재로그인 또는 현재 세션 적용
+newgrp docker
+```
+
+* (1) prometheus.yml (Ray 자동 감지 설정)
+Ray가 생성하는 JSON 파일을 공유하기 위해 경로를 맞춘다.
+```
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'ray-metrics'
+    file_sd_configs:
+      - files:
+          - '/tmp/ray/prom_metrics_service_discovery.json'
+```
+* (2) docker-compose.yml
+Ray의 지표 파일이 있는 /tmp/ray를 컨테이너 안으로 볼륨 마운트하는 것이 핵심입니다.
+```
+version: '3.8'
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.45.0
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - /tmp/ray:/tmp/ray:ro  # Ray 지표 파일 마운트
+    ports:
+      - "9090:9090"
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:10.0.3
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin # 초기 비번
+    restart: unless-stopped
+```
+
+* (3) 실행 및 확인
+```
+docker-compose up -d
+```
+
+* (4) 대시보드 연결
+    * Grafana 접속: http://<HEAD_IP>:3000 (ID/PW: admin/admin)
+    * 데이터 소스 추가: Add Data Source -> Prometheus 선택 -> URL에 http://prometheus:9090 입력 후 Save & Test.
+    * 대시보드 임포트: Ray 공식 Grafana 대시보드(ID: 16098)를 임포트하면 즉시 화려한 차트가 나옵니다.
