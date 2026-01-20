@@ -12,27 +12,11 @@
 
 * [C4. 오토 스케일링](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/4-auto-scaling.md)
 
-
-### 4단계: 오토 스케일링 설정 ###
-* 세부 조절 파라미터 (YAML 설정)
-  * 단순히 쌓인다고 바로 뜨는 게 아니라, YAML에 설정한 값에 따라 속도가 조절됩니다.
-  * target_utilization_fraction (기본값 0.8):
-  * 클러스터 전체 자원 사용률이 이 수치를 넘으면 미리 여유분을 준비하려 합니다. 160코어 중 128코어(80%)만 써도 "슬슬 더 뽑아야겠는데?"라고 준비하는 기준입니다.
-  * upscaling_speed:
-    한 번에 얼마나 공격적으로 늘릴지 결정합니다. 이 값이 높을수록(예: 10) 한 번에 많은 EC2를 동시에 요청합니다.
-
-축소(Downscaling)의 기준
-* 늘리는 것만큼 줄이는 기준도 중요합니다.
-* Idle Timeout: 특정 노드에 할당된 작업이 하나도 없고, YAML에 설정한 idle_timeout_minutes(예: 5분) 동안 아무 일도 하지 않으면 해당 노드를 삭제 대상으로 간주합니다.
-* Min Workers: 아무리 일이 없어도 min_workers 설정값 이하로는 줄이지 않습니다.
-
+* [C5. 스팟 인스턴스 사용하기]()
 
 ---
-* static
-* 오토 스케일링 설정
-* spot 사용하기
 * on-demand / spot 믹스하기
-* ray 는 spot 회쉬되더라도 교체해서 동작한다. 어떻게?
+* ray 는 spot 회쉬되더라도 교체해서 잘 동작한다. 어떻게?
   
 
 ```
