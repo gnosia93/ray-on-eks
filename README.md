@@ -1,3 +1,7 @@
+* 1교시 - AWS EC2 포트폴리오 소개
+* 2교시 - ray data
+* 3교시 / 4교시 - 실습
+
 # ray-on-aws (EC2 bimonthly workshop)
 
 * [C1. VPC 생성](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/1-create-vpc.md)
