@@ -17,7 +17,7 @@ _ray sample data - s3://ray-example-data_
 
 * [C7. 모니터링]()
 
-* [C8. 대규모 텍스트 전처리](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/9-large-text-preprocessing.md)
+* [C8. 대규모 텍스트 전처리](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/8-text-preprocessing.md)
 
 
 ## CPU 아키텍처 특징 ##
