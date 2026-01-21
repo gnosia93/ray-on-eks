@@ -17,7 +17,7 @@ Ray는 파이썬 코드를 수백 대의 서버로 즉시 확장해 주는 분�
 
 * [C5. 스팟 인스턴스 사용하기](https://github.com/gnosia93/ray-on-aws/blob/main/lesson/5-spot-instance.md)
 
-* [C6. 커스텀 자원 정밀 제어](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/6-custom-resource-control.md)
+* [C6. 커스텀 자원 제어와 오브젝트 스필링](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/6-custom-resource-control.md)
 
 * [C7. 모니터링](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/7-ray-observability.md) - 작성중 ...
 
