@@ -1,3 +1,5 @@
+## 커스텀 자원 제어 ##
+
 ### 1. 코드에서 Custom Resource 요청 ###
 ray.remote나 map_batches 호출 시, resources 인자에 YAML에서 정의한 키 값을 명시한다.
 
