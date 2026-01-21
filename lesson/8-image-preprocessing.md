@@ -29,30 +29,29 @@
 ```
 import ray
 from torchvision import transforms
-from PIL import Image
+import numpy as np
 
-# 1. 학습용 증강 파이프라인
-train_transform = transforms.Compose([
-    transforms.RandomResizedCrop(224),
-    transforms.RandomHorizontalFlip(),
-    transforms.RandAugment(num_ops=2, magnitude=9), # ViT 논문 추천 설정
-    transforms.ToTensor(),
-    transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5]) # ViT는 보통 0.5 중심 정규화 사용
-])
+def preprocess_for_storage(batch):
+    # 1. Augmentation 정의 (이미지 변형까지만)
+    transform = transforms.Compose([
+        transforms.Resize((224, 224)),
+        transforms.RandomHorizontalFlip(),
+        transforms.RandAugment(), 
+    ])
+    
+    # 2. PIL 이미지를 변형 후 넘파이 배열로 변환 (저장 용이성)
+    # 텐서로 바꾸지 않고 넘파이(uint8)로 유지하여 용량 최소화
+    processed_images = [np.array(transform(img)) for img in batch["image"]]
+    
+    return {"image": processed_images}
 
-def preprocess_batch(batch):
-    # 'image'는 PIL Image 리스트 형태
-    batch["image"] = [train_transform(img) for img in batch["image"]]
-    return batch
+# 데이터 로드
+ds = ray.data.read_images("./my_jpg_folder/")
 
-# 2. 데이터 로드 및 분산 전처리
-# 수십만 장의 경우 Parquet이나 WebDataset 형식을 쓰면 더 빠르지만, 일반 이미지 폴더도 지원합니다.
-ds = ray.data.read_images("s3://your-dataset-path/")
+# 분산 전처리 실행
+processed_ds = ds.map_batches(preprocess_for_storage, compute=ray.data.ActorPoolStrategy(size=8))
 
-# 분산 처리 실행 (CPU 코어 8개 이상 권장)
-processed_ds = ds.map_batches(
-    preprocess_batch, 
-    compute=ray.data.ActorPoolStrategy(min_size=2, max_size=8),
-    batch_size=128
-)
+# 3. Parquet 형식으로 저장 (수십만 장 처리에 최적)
+# 나중에 파이토치에서 ray.data.read_parquet()으로 초고속 로드 가능
+processed_ds.write_parquet("./preprocessed_data/")
 ```
