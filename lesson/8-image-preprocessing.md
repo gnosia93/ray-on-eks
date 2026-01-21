@@ -24,3 +24,27 @@
 학습 데이터가 부족할 때 기존 데이터를 변형시켜 모델의 일반화 성능을 높인다. 
 * 기하학적 변형: 좌우/상하 반전(Flipping), 회전(Rotation), 크롭(Cropping), 아핀 변환(Affine Transform).
 * 픽셀 레벨 변형: 밝기(Brightness) 조절, 채도(Saturation) 조정, 가우시안 노이즈 추가
+
+## ViT 이미지 Augumentation ##
+```
+import ray
+from torchvision import transforms
+
+# 1. 강력한 Augmentation 정의
+transform = transforms.Compose([
+    transforms.RandomResizedCrop(224),
+    transforms.RandomHorizontalFlip(),
+    transforms.RandAugment(), # ViT 학습의 핵심
+    transforms.ToTensor(),
+    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+])
+
+def preprocess_for_vit(batch):
+    # 배치 단위로 Augmentation 적용
+    batch["image"] = [transform(img) for img in batch["image"]]
+    return batch
+
+# 2. Ray Data로 대용량 데이터 로드 및 분산 처리
+ds = ray.data.read_images("s3://your-massive-dataset")
+train_ds = ds.map_batches(preprocess_for_vit, compute=ray.data.ActorPoolStrategy(size=4))
+```
