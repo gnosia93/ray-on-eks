@@ -70,4 +70,11 @@ python preprocess_s3.py
 ray job submit --address http://<HEAD_NODE_IP>:8265 --working-dir . -- python preprocess.py
 ```
 
+#### 참고 - 클러스터 지정 ####
+* 1. 기본 동작: 로컬(Local) Ray 클러스터
+만약 명령어를 실행하는 현재 머신에 Ray 클러스터가 이미 실행 중이라면(ray start --head 명령어로 띄워져 있는 상태), ray job submit은 기본적으로 자신의 로컬 머신(localhost:8265)에 떠 있는 클러스터 사용한다.
+
+* 2. 특정 클러스터 지정: --address 옵션 사용
+원격 Ray 클러스터(예: AWS EC2 인스턴스 여러 대로 구성된 클러스터)에 작업을 보내고 싶다면, Head Node의 주소를 명시적으로 지정해야 한다.
+
 
