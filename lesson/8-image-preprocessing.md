@@ -29,37 +29,37 @@
 [preprocess.py]
 ```
 import ray
-from torchvision import transforms
 import numpy as np
+from torchvision import transforms
 
-# S3 접근을 위한 설정 (환경변수에 AWS 인증 정보가 있어야 함)
-# 혹은 ray.init(runtime_env={"env_vars": {"AWS_ACCESS_KEY_ID": "...", "AWS_SECRET_ACCESS_KEY": "..."}})
-
-def preprocess_and_serialize(batch):
-    # 텐서 변환 전, 이미지 변형까지만 수행 (저장 효율성)
+def preprocess_safe_center(batch):
+    # 사물을 놓치지 않기 위한 안전한 전략
     transform = transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.RandAugment(num_ops=2, magnitude=9),
+        # 1. 짧은 축을 256으로 리사이즈 (비율 유지)
+        transforms.Resize(256),       
+        # 2. 중앙을 기준으로 224x224 자르기 (사물 보존 확률 극대화)
+        transforms.CenterCrop(224),   
     ])
     
-    # PIL 이미지를 처리 후 numpy(uint8)로 변환 -> 용량과 호환성 최적화
+    # 처리 후 넘파이 배열(uint8)로 변환
     processed_images = [np.array(transform(img)) for img in batch["image"]]
     return {"image": processed_images}
 
-# 1. S3에서 직접 읽기
-# 병렬 연결(concurrency)을 높여 S3 I/O 속도 최적화
+# Ray 초기화 및 S3 읽기
+# concurrency는 네트워크 상황에 따라 10~20 사이로 조절하세요.
 ds = ray.data.read_images("s3://my-input-bucket/images/", concurrency=10)
 
-# 2. 분산 전처리
+# 분산 전처리 실행
+# RandAugment는 학습 시 실시간으로 적용하기 위해 여기선 제외했습니다.
 processed_ds = ds.map_batches(
-    preprocess_and_serialize,
+    preprocess_safe_center,
     batch_size=128,
     compute=ray.data.ActorPoolStrategy(min_size=2, max_size=8)
 )
 
-# 3. S3에 Parquet으로 저장
-# 이 방식은 나중에 PyTorch에서 읽을 때 index가 있어 매우 빠릅니다.
-processed_ds.write_parquet("s3://my-output-bucket/preprocessed_data/")
+# S3에 Parquet으로 저장
+# 나중에 파이토치에서 읽기 가장 좋은 포맷입니다.
+processed_ds.write_parquet("s3://my-output-bucket/preprocessed_data_224/")
 ```
 아래 명령어로 ray 클러스터에 작업을 던진다.
 ```
