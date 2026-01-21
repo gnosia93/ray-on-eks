@@ -24,7 +24,7 @@ processed_ds = ds.map_batches(
 * 격리 실행: Intel 리소스만 필요한 작업은 x86_worker_node로, Graviton 리소스가 명시된 작업은 arm_worker_node로 분리되어 실행.
 
 ## 오브젝트 스필링(Object Spilling) ##
-오브젝트 스필링(Object Spilling)은 Ray의 공유 메모리가 꽉 찼을 때, 데이터를 삭제하는 대신 로컬 디스크(SSD 등)로 잠시 옮겨두는 기능이다. 수십만 장의 이미지를 처리하다 보면 메모리 부족(OOM)으로 작업이 터지기 쉬운데, 이를 방지하는 '안전장치' 이다.
+오브젝트 스필링(Object Spilling)은 Ray의 공유 메모리가 꽉 찼을 때, 데이터를 삭제하는 대신 로컬 디스크(SSD 등)로 잠시 옮겨두는 기능이다. 수십만 장의 이미지를 처리하다 보면 메모리 부족(OOM)으로 작업이 터지기 쉬운데, 이를 방지하는 '안전장치' 이다. EC2의 로컬 SSD(Instance Store)를 스필링 경로로 지정하면 속도 저하도 최소화할 수 있다. 
 설정 방법은 크게 두 가지인데,
 
 ### 1. ray.init() 코드 내 설정 ###
