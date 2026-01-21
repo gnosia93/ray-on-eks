@@ -1,3 +1,5 @@
+<< 클러스터 생성시 efa 인스톨 부분을 수정해야 한다. --> 현재는 efa 가 제대로 안까리는 상황 ..계속 리부팅/인스턴스 재생성 과정에 있음.>>
+
 ### 1. 환경설정 ###
 ```
 export AWS_REGION=$(aws ec2 describe-availability-zones --query 'AvailabilityZones[0].RegionName' --output text)
