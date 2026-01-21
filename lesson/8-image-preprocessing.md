@@ -25,7 +25,7 @@
 * 기하학적 변형: 좌우/상하 반전(Flipping), 회전(Rotation), 크롭(Cropping), 아핀 변환(Affine Transform).
 * 픽셀 레벨 변형: 밝기(Brightness) 조절, 채도(Saturation) 조정, 가우시안 노이즈 추가
 
-## 이미지 Augmentation ##
+## 이미지 전처리 ##
 
 ### 1. 이미지 수집하기 ###
 * https://www.robots.ox.ac.uk/~vgg/data/pets/
@@ -81,7 +81,7 @@ if __name__ == "__main__":
 python upload_pets_to_s3.py
 ```
 
-### 2. 이미지 전처리 하기 ###
+### 2. 데이터 증강 (Augmentation) ###
 [preprocess.py]
 ```
 import ray
