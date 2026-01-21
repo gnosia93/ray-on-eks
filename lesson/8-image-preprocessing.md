@@ -63,5 +63,11 @@ processed_ds.write_parquet("s3://my-output-bucket/preprocessed_data_224/")
 ```
 아래 명령어로 ray 클러스터에 작업을 던진다.
 ```
+# 로컬에서 실행 시
+python preprocess_s3.py
+
+# Ray 클러스터에 제출 시 (권장)
 ray job submit --address http://<HEAD_NODE_IP>:8265 --working-dir . -- python preprocess.py
 ```
+
+
