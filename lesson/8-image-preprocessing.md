@@ -29,8 +29,57 @@
 
 ### 1. 이미지 수집하기 ###
 * https://www.robots.ox.ac.uk/~vgg/data/pets/
+```
+import tarfile
+import requests
+import boto3
+import io
+from concurrent.futures import ThreadPoolExecutor
 
+# --- 설정 구간 ---
+S3_BUCKET_NAME = "your-my-input-bucket"  # 본인의 버킷명으로 수정
+S3_PREFIX = "images/"                    # 저장할 폴더 경로
+PET_DATA_URL = "https://www.robots.ox.ac.uk"
+# ----------------
 
+s3_client = boto3.client('s3')
+
+def upload_to_s3(args):
+    filename, file_content = args
+    s3_key = f"{S3_PREFIX}{filename}"
+    s3_client.put_object(Bucket=S3_BUCKET_NAME, Key=s3_key, Body=file_content)
+    print(f"Uploaded: {filename}")
+
+def main():
+    print("다운로드 시작... (시간이 다소 소요될 수 있습니다)")
+    response = requests.get(PET_DATA_URL, stream=True)
+    
+    # 메모리에서 타르 파일 읽기
+    with tarfile.open(fileobj=io.BytesIO(response.content), mode="r:gz") as tar:
+        # JPG 파일만 필터링
+        jpg_files = [m for m in tar.getmembers() if m.name.endswith(".jpg")]
+        print(f"총 {len(jpg_files)}개의 이미지를 발견했습니다. 업로드 시작...")
+
+        # 병렬 업로드를 위한 데이터 준비 (파일객체 추출)
+        upload_tasks = []
+        for member in jpg_files:
+            f = tar.extractfile(member)
+            if f:
+                # 파일명만 추출 (경로 제외)
+                clean_name = member.name.split("/")[-1]
+                upload_tasks.append((clean_name, f.read()))
+
+        # ThreadPool을 사용하여 S3로 고속 병렬 업로드
+        with ThreadPoolExecutor(max_size=10) as executor:
+            executor.map(upload_to_s3, upload_tasks)
+
+if __name__ == "__main__":
+    main()
+```
+
+```
+python upload_pets_to_s3.py
+```
 
 ### 2. 이미지 전처리 하기 ###
 [preprocess.py]
