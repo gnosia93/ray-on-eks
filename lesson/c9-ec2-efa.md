@@ -193,16 +193,42 @@ ssh -A ec2-user@${VS_CODE}
 ray up cluster-efa.yaml -y
 ```
 
-### 로그 확인 ###
+### 클러스터 생성 로그 확인 ###
 ```
 ray exec ~/cluster-efa.yaml "tail -f /tmp/ray/session_latest/logs/monitor.out"
 ```
+[결과]
+```
+```
 
-클러스터 상태를 확인한다.
+### 클러스터 상태 확인 ###
 ```
 ray exec ~/cluster-efa.yaml "ray status"
 ```
+[결과]
+```
+```
 
+
+## 클러스터 삭제 ##
+```
+ray down cluster-efa.yaml 
+```
+[결과]
+```
+Loaded cached provider configuration
+If you experience issues with the cloud provider, try re-running the command with --no-config-cache.
+Destroying cluster. Confirm [y/N]: y
+/home/ec2-user/.local/lib/python3.9/site-packages/boto3/compat.py:89: PythonDeprecationWarning: Boto3 will no longer support Python 3.9 starting April 29, 2026. To continue receiving service updates, bug fixes, and security updates please upgrade to Python 3.10 or later. More information can be found here: https://aws.amazon.com/blogs/developer/python-support-policy-updates-for-aws-sdks-and-tools/
+  warnings.warn(warning, PythonDeprecationWarning)
+Fetched IP: 10.0.2.231
+Warning: Permanently added '10.0.2.231' (ED25519) to the list of known hosts.
+Stopped all 6 Ray processes.
+Shared connection to 10.0.2.231 closed.
+Requested 2 nodes to shut down. [interval=1s]
+0 nodes remaining after 5 second(s).
+No nodes remaining.
+```
 
 
 
