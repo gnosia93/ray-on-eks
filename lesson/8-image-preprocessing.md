@@ -26,6 +26,13 @@
 * 픽셀 레벨 변형: 밝기(Brightness) 조절, 채도(Saturation) 조정, 가우시안 노이즈 추가
 
 ## ViT 이미지 Augmentation ##
+
+### 1. 이미지 수집하기 ###
+* https://www.robots.ox.ac.uk/~vgg/data/pets/
+
+
+
+### 2. 이미지 전처리 하기 ###
 [preprocess.py]
 ```
 import ray
