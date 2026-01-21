@@ -21,8 +21,10 @@ Ray는 파이썬 코드를 수백 대의 서버로 즉시 확장해 주는 분�
 
 * [C7. 모니터링](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/7-ray-observability.md) - 작성중 ...
 
-* [C8. 대규모 텍스트 처리](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/8-text-preprocessing.md)
-
+* C8. 대규모 데이터 전처리 
+  * [텍스트 전처리](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/8-text-preprocessing.md)
+  * [이미지 데이터 증강](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/8-image-preprocessing.md)
+  
 * [C9. EFA 지원 클러스터 생성](https://github.com/gnosia93/ray-on-ec2/blob/main/lesson/c9-ec2-efa.md) - 작성중 ...
   
 
