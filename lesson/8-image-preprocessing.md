@@ -26,6 +26,7 @@
 * 픽셀 레벨 변형: 밝기(Brightness) 조절, 채도(Saturation) 조정, 가우시안 노이즈 추가
 
 ## ViT 이미지 Augmentation ##
+[preprocess.py]
 ```
 import ray
 from torchvision import transforms
@@ -59,4 +60,8 @@ processed_ds = ds.map_batches(
 # 3. S3에 Parquet으로 저장
 # 이 방식은 나중에 PyTorch에서 읽을 때 index가 있어 매우 빠릅니다.
 processed_ds.write_parquet("s3://my-output-bucket/preprocessed_data/")
+```
+아래 명령어로 ray 클러스터에 작업을 던진다.
+```
+ray job submit --address http://<HEAD_NODE_IP>:8265 --working-dir . -- python preprocess.py
 ```
