@@ -29,22 +29,30 @@
 ```
 import ray
 from torchvision import transforms
+from PIL import Image
 
-# 1. 강력한 Augmentation 정의
-transform = transforms.Compose([
+# 1. 학습용 증강 파이프라인
+train_transform = transforms.Compose([
     transforms.RandomResizedCrop(224),
     transforms.RandomHorizontalFlip(),
-    transforms.RandAugment(), # ViT 학습의 핵심
+    transforms.RandAugment(num_ops=2, magnitude=9), # ViT 논문 추천 설정
     transforms.ToTensor(),
-    transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+    transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5]) # ViT는 보통 0.5 중심 정규화 사용
 ])
 
-def preprocess_for_vit(batch):
-    # 배치 단위로 Augmentation 적용
-    batch["image"] = [transform(img) for img in batch["image"]]
+def preprocess_batch(batch):
+    # 'image'는 PIL Image 리스트 형태
+    batch["image"] = [train_transform(img) for img in batch["image"]]
     return batch
 
-# 2. Ray Data로 대용량 데이터 로드 및 분산 처리
-ds = ray.data.read_images("s3://your-massive-dataset")
-train_ds = ds.map_batches(preprocess_for_vit, compute=ray.data.ActorPoolStrategy(size=4))
+# 2. 데이터 로드 및 분산 전처리
+# 수십만 장의 경우 Parquet이나 WebDataset 형식을 쓰면 더 빠르지만, 일반 이미지 폴더도 지원합니다.
+ds = ray.data.read_images("s3://your-dataset-path/")
+
+# 분산 처리 실행 (CPU 코어 8개 이상 권장)
+processed_ds = ds.map_batches(
+    preprocess_batch, 
+    compute=ray.data.ActorPoolStrategy(min_size=2, max_size=8),
+    batch_size=128
+)
 ```
