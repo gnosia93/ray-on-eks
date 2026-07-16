@@ -1,4 +1,9 @@
-#### ... endpoint 로... training script 던지기 ####
+- RayJob으로 학습 스크립트 제출 (namespace/toleration 격리)
+- Ray Train vs native(torchrun/DDP) 언제 무엇을 (5번 문서 내용 활용)
+- Spot 인스턴스 + 체크포인팅으로 학습 비용 절감
+- ✅ 체크포인트: 학습이 고객 전용 GPU 노드에만 스케줄되는지 검증
+
+### 훈련하기 ###
 
 ```
 apiVersion: ray.io/v1
