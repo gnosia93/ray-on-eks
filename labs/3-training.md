@@ -1,3 +1,5 @@
+## Lab 3. 모델 학습 하기 ##
+
 - RayJob으로 학습 스크립트 제출 (namespace/toleration 격리)
 - Ray Train vs native(torchrun/DDP) 언제 무엇을 (5번 문서 내용 활용)
 - Spot 인스턴스 + 체크포인팅으로 학습 비용 절감
