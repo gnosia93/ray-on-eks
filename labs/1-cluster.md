@@ -1,10 +1,5 @@
-
-* eks 클러스터 생성
-* karpenter 설치.
-* gittea 설치
-* argo cd 설치
-* ray 설치용 yaml 준비..
-  - k8s namespace
-  - ray serve
-  - karpenter nodepool
- 
+- EKS 클러스터 생성
+- Karpenter 설치 + NodePool 설계 (CPU/GPU 분리, Spot vs On-Demand, 고객별 taint)
+- KubeRay Operator 설치
+- GitOps 토대: Gitea + ArgoCD 설치
+- ✅ 체크포인트: 노드가 taint/label로 고객별 격리되는지 확인
