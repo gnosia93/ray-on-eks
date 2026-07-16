@@ -10,4 +10,4 @@ Who builds ML models for their end customers and hosts them using Ray on EKS. Th
 
 ### Labs ###
 
-* [1. EKS 클러스터 생성]()
+* [1. EKS 클러스터 생성](https://github.com/gnosia93/ray-on-eks/blob/main/labs/1-cluster-setup.md)
