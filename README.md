@@ -1,5 +1,7 @@
 # ray-on-eks
 
+![](https://github.com/gnosia93/ray-on-eks/blob/main/images/logical.png)
+
 ### Request Details and Expected Outcome ###
 
 Who builds ML models for their end customers and hosts them using Ray on EKS. They are looking for guidance on,
