@@ -1,3 +1,5 @@
+## Lab 2. Ray 클러스터 프로비저닝 ##
+
 - Gitea repo 생성 (API/tea CLI)
 - 템플릿에서 customer-a 클러스터 복사 → commit → push
 - ArgoCD 자동 동기화 관찰
