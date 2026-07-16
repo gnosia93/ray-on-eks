@@ -1,5 +1,11 @@
- Ray Train이 편의성은 확실히 있지만 공짜는 아니에요. "native"를 torchrun/PyTorch DDP·FSDP 직접
-  구동 또는 Slurm+MPI 같은 전통 HPC 스택이라고 보고 약점을 정리하겠습니다.
+## Lab 4. 갱 스케줄링 & 대규모 GPU 확보 ##
+- 부분 스케줄링(partial scheduling) = idle GPU 과금 문제 실습
+- KubeRay + Volcano 갱 스케줄링 (PodGroup all-or-nothing)
+- Karpenter × 갱 스케줄러 타이밍 충돌 이해
+- Kueue + ProvisioningRequest(원자적 용량 확보) / 사전 용량 예약 전략
+
+
+### ray 의 단점 ###
 
   1. 성능/오버헤드 측면
 
