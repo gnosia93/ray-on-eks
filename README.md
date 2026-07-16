@@ -1,6 +1,6 @@
 # ray-on-eks
 
-![](https://github.com/gnosia93/ray-on-eks/blob/main/images/logical.png)
+![](https://github.com/gnosia93/ray-on-eks/blob/main/images/kuberay-archi.png)
 
 ### Request Details and Expected Outcome ###
 
