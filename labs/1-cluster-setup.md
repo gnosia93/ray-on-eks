@@ -1,3 +1,5 @@
+## Lab 1. 기반 인프라 구축 ##
+
 - EKS 클러스터 생성
 - Karpenter 설치 + NodePool 설계 (CPU/GPU 분리, Spot vs On-Demand, 고객별 taint)
 - KubeRay Operator 설치
