@@ -1,3 +1,9 @@
+- Gitea repo 생성 (API/tea CLI)
+- 템플릿에서 customer-a 클러스터 복사 → commit → push
+- ArgoCD 자동 동기화 관찰
+- 🔑 베스트 프랙티스: 고객 온보딩을 "폴더 복사 + PR"로 표준화
+
+
 
 Phase 1. API를 이용해 원격으로 Gitea에 Repo 생성하기 (curl)
 ```
